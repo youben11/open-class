@@ -7,6 +7,9 @@ ADD requirements.txt /
 RUN pip install -r requirements.txt
 RUN rm requirements.txt
 #adding the django project
+EXPOSE 8000
 ADD $app_dir_name $app_path
 
-EXPOSE 8000
+WORKDIR $app_path
+CMD python manage.py runserver 0.0.0.0:8000
+
