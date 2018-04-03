@@ -8,3 +8,5 @@ RUN pip install -r requirements.txt
 RUN rm requirements.txt
 #adding the django project
 ADD $app_dir_name $app_path
+
+EXPOSE 8000
