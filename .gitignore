@@ -1,2 +1,4 @@
 __pycache__/
 OpenClass/db.sqlite3
+.data/
+TODO
