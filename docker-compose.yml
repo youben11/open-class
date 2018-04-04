@@ -9,7 +9,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      -"db"
+      - "db"
   db:
     image: postgres:alpine
     environment:
