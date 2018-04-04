@@ -15,3 +15,8 @@ services:
     environment:
       - POSTGRES_PASSWORD=openclass
       - POSTGRES_USER=openclass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
