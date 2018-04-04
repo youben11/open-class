@@ -19,4 +19,5 @@ COPY $app_dir_name $app_path
 WORKDIR $app_path
 VOLUME $app_path
 
-CMD python manage.py runserver 0.0.0.0:8000
+#replace it with something that check when the db start
+CMD sleep 10; python manage.py runserver 0.0.0.0:8000
