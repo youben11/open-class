@@ -5,7 +5,7 @@ services:
     build: .
     image: openclass:0.1
     volumes:
-      - ./OpenClass:/opt/Openclass
+      - ./OpenClass:/opt/OpenClass
     ports:
       - "8000:8000"
   db:
