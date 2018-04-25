@@ -27,8 +27,14 @@ class Tag(models.Model):
     name = models.TextField()
 
 class Profile(models.Model):
+    MALE = 'M'
+    FEMALE = 'F'
+    NAG = ' ' #NotAGender
+    GENDER_CHOICES = [(MALE, 'Male'),\
+                        (FEMALE, 'Female'),\
+                        (NAG, '')]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    gender = models.CharField() #choice here
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=NAG)
     score = models.PositiveIntegerField()
     phone_number = models.TextField()
     date_birth = models.DateField()
