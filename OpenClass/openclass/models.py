@@ -1,51 +1,51 @@
 from django.db import models
 
 class Workshop(models.Model):
-    title = #string
-    description = #string
-    material_required = #string
-    what_u_will_learn = #string
-    nb_places = #positiveinteger
-    date = #date
-    location = #string
-    cover_img = #image
-    accepted = #boolean
+    title = models.TextField()
+    description = models.TextField()
+    material_required = models.TextField()
+    what_u_will_learn = models.TextField()
+    nb_places = models.PositiveIntegerField()
+    date = models.DateTimeField()
+    location = models.TextField()
+    cover_img = models.ImageField()
+    accepted = models.BooleanField()
 
 
 class Registration(models.Model):
-    date = #date
-    confirmed = #boolean
+    date = models.DateField()
+    confirmed = models.BooleanField()
 
 class Question(models.Model):
-    question = #string
+    question = models.TextField()
 
 class Feedback(models.Model):
-    feedback = #string
+    feedback = models.TextField()
 
 class Tag(models.Model):
-    name = #string
+    name = models.TextField()
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    gender = #enum
-    score = #positiveinteger
-    phone_number = #string
-    date_birth = #date
-    confirmation_value = #string
-    confirmed = #boolean
-    photo = #image
-    enrollement_date = #date
+    gender = models.CharField() #choice here
+    score = models.PositiveIntegerField()
+    phone_number = models.TextField()
+    date_birth = models.DateField()
+    confirmation_value = models.TextField()
+    confirmed = models.BooleanField()
+    photo = models.ImageField()
+    enrollement_date = models.DateField()
 
 class Preference(models.Model):
-    confidentiality = #integer
+    confidentiality = models.IntegerField()
 
 class Badge(models.Model):
-    name = #string
-    description = #string
-    img = #image
+    name = models.TextField()
+    description = models.TextField()
+    img = models.ImageField()
 
     class Meta:
         abstract = True
 
 class Have_badge(models.Model):
-    priority = #positiveinteger
+    priority = models.PositiveIntegerField()
