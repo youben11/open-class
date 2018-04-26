@@ -1,5 +1,5 @@
 """
-WSGI config for OpenClass project.
+WSGI config for OpenClassProject project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "OpenClass.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "OpenClassProject.settings")
 
 application = get_wsgi_application()
