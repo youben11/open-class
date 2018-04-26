@@ -2,13 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Workshop(models.Model):
-    title = models.TextField()
+    MAX_TITLE = 20
+    MAX_LOCATION = 20
+    title = models.CharField(max_length=MAX_TITLE)
     description = models.TextField()
     material_required = models.TextField()
     what_u_will_learn = models.TextField()
     nb_places = models.PositiveIntegerField()
     date = models.DateTimeField()
-    location = models.TextField()
+    location = models.CharField(max_length=MAX_LOCATION)
     cover_img = models.ImageField()
     accepted = models.BooleanField()
 
@@ -27,6 +29,8 @@ class Tag(models.Model):
     name = models.TextField()
 
 class Profile(models.Model):
+    MAX_PHONE_NB = 20
+    MAX_CONF_VAL = 64
     MALE = 'M'
     FEMALE = 'F'
     NAG = ' ' #NotAGender
@@ -36,9 +40,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=NAG)
     score = models.PositiveIntegerField()
-    phone_number = models.TextField()
+    phone_number = models.CharField(max_length=MAX_PHONE_NB)
     date_birth = models.DateField()
-    confirmation_value = models.TextField()
+    confirmation_value = models.CharField(max_length=MAX_CONF_VAL)
     confirmed = models.BooleanField()
     photo = models.ImageField()
     enrollement_date = models.DateField()
@@ -47,7 +51,8 @@ class Preference(models.Model):
     confidentiality = models.IntegerField()
 
 class Badge(models.Model):
-    name = models.TextField()
+    MAX_BADGE_NAME = 20
+    name = models.CharField(max_length=MAX_BADGE_NAME)
     description = models.TextField()
     img = models.ImageField()
 
