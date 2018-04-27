@@ -35,8 +35,19 @@ class Question(models.Model):
     question = models.TextField()
 
 class Feedback(models.Model):
-    feedback = models.TextField()
+    comment = models.TextField()
 
+#Multiple Choice Question
+class MCQuestion(models.Model):
+    MAX_QST = 20
+
+    question = models.CharField(max_length=MAX_QST)
+
+class Choice(models.Model):
+    MAX_CHOICE = 20
+
+    choice = models.CharField(max_length=MAX_CHOICE)
+    
 class Tag(models.Model):
     name = models.TextField()
 
