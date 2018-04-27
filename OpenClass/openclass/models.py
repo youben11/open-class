@@ -1,11 +1,30 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from datetime import datetime
+
+
 class Workshop(models.Model):
     MAX_TITLE = 20
     MAX_LOCATION = 20
-    POLITIC_CHOICES = []
-    STATUS_CHOICES = []
+
+    FIFO = 'F'
+    MANUAL = 'M'
+    POLITIC_CHOICES = (
+        (FIFO, 'FIFO'),
+        (MANUAL, 'Manual'),
+    )
+
+    PENDING = 'P'
+    ACCEPTED = 'A'
+    REFUSED = 'R'
+    DONE = 'D'
+    STATUS_CHOICES = (
+        (PENDING, 'Pending'),
+        (ACCEPTED, 'Accepted'),
+        (REFUSED, 'Refused'),
+        (DONE, 'Done'),
+    )
 
     title = models.CharField(max_length=MAX_TITLE)
     description = models.TextField()
@@ -21,6 +40,28 @@ class Workshop(models.Model):
     location = models.CharField(max_length=MAX_LOCATION)
     cover_img = models.ImageField()
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+
+    def accept(self):
+        # accept only a PENDING workshop
+        if self.status == self.PENDING:
+            timezone = self.date_start.tzinfo
+            self.date_decision = datetime.now(timezone)
+            self.status = self.ACCEPTED
+            self.save()
+            return True
+        else:
+            return False
+
+    def is_accepted(self):
+        if self.status == self.ACCEPTED:
+            return True
+        else:
+            return False
+
+    def days_left(self):
+        timezone = self.date_start.tzinfo
+        time_left = self.date_start - datetime.now(timezone)
+        return time_left.days   # return only days left
 
 
 class Registration(models.Model):
