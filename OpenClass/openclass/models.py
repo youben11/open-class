@@ -24,7 +24,11 @@ class Workshop(models.Model):
 
 
 class Registration(models.Model):
-    date = models.DateField()
+    STATUS_CHOICES = []
+
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+    date_registration = models.DateTimeField()
+    date_cancel = models.DateTimeField()
     confirmed = models.BooleanField()
 
 class Question(models.Model):
