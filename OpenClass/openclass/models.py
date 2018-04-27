@@ -16,7 +16,7 @@ class Workshop(models.Model):
     date_submission = models.DateTimeField()
     date_decision = models.DateTimeField()
     date_start = models.DateTimeField()
-    date_end = models.DateTimeField()
+    duration = models.DurationField()
     registration_politic = models.CharField(max_length=1, choices=POLITIC_CHOICES)
     location = models.CharField(max_length=MAX_LOCATION)
     cover_img = models.ImageField()
