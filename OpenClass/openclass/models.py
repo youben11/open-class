@@ -4,15 +4,23 @@ from django.contrib.auth.models import User
 class Workshop(models.Model):
     MAX_TITLE = 20
     MAX_LOCATION = 20
+    POLITIC_CHOICES = []
+    STATUS_CHOICES = []
+
     title = models.CharField(max_length=MAX_TITLE)
     description = models.TextField()
     material_required = models.TextField()
     what_u_will_learn = models.TextField()
+    requirements = models.TextField()
     nb_places = models.PositiveIntegerField()
-    date = models.DateTimeField()
+    date_submission = models.DateTimeField()
+    date_decision = models.DateTimeField()
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
+    registration_politic = models.CharField(max_length=1, choices=POLITIC_CHOICES)
     location = models.CharField(max_length=MAX_LOCATION)
     cover_img = models.ImageField()
-    accepted = models.BooleanField()
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
 
 
 class Registration(models.Model):
