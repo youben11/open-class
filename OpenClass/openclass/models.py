@@ -35,6 +35,7 @@ class Question(models.Model):
     question = models.TextField()
 
 class Feedback(models.Model):
+    submission_date = models.DateTimeField()
     comment = models.TextField()
 
 #Multiple Choice Question
@@ -47,7 +48,7 @@ class Choice(models.Model):
     MAX_CHOICE = 20
 
     choice = models.CharField(max_length=MAX_CHOICE)
-    
+
 class Tag(models.Model):
     name = models.TextField()
 
