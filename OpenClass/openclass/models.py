@@ -183,6 +183,7 @@ class Profile(models.Model):
     GENDER_CHOICES = ((MALE, 'Male'),\
                         (FEMALE, 'Female'),\
                         (NAG, ''))
+    badges = models.ManyToManyField('Badge', through='Have_badge')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=NAG)
     score = models.PositiveIntegerField()
@@ -203,10 +204,12 @@ class Badge(models.Model):
     description = models.TextField()
     img = models.ImageField()
 
-    class Meta:
-        abstract = True
+    #class Meta:
+    #    abstract = True
 
 class Have_badge(models.Model):
+    badge = models.ForeignKey('Badge', on_delete=models.CASCADE)
+    profile = models.ForeignKey('Profile', on_delete=models.CASCADE)
     priority = models.PositiveIntegerField()
 
 class BadgeAttendance(Badge):
