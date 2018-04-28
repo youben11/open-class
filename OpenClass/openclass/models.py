@@ -41,6 +41,81 @@ class Workshop(models.Model):
     cover_img = models.ImageField()
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
 
+    def update_title(self, new_title):
+        if 0 < len(new_title) <= self.MAX_TITLE:
+            self.title = new_title
+            self.save()
+            return True
+        else:
+            return False
+
+    def update_description(self, new_description):
+        if len(new_description) > 0:
+            self.description = new_description
+            self.save()
+            return True
+        else:
+            return False
+
+    def update_material_required(self, new_material_required):
+        if len(new_material_required) > 0:
+            self.material_required = new_material_required
+            self.save()
+            return True
+        else:
+            return False
+
+    def update_what_u_will_learn(self, new_what_u_will_learn):
+        if len(new_what_u_will_learn) > 0:
+            self.what_u_will_learn = new_what_u_will_learn
+            self.save()
+            return True
+        else:
+            return False
+
+    def update_requirements(self, new_requirements):
+        if len(new_requirements) > 0:
+            self.requirements = new_what_u_will_learn
+            self.save()
+            return True
+        else:
+            return False
+
+    def update_nb_place(self, new_nb_places):
+        if new_nb_places > 0:
+            self.nb_places = new_nb_places
+            self.save()
+            return True
+        else:
+            return False
+
+    def update_date_start(self, new_date_start):
+        # all dates must have tzinfo
+        timezone = self.date_start.tzinfo
+        if new_date_start > datetime.now(timezone):
+            self.date_start = new_date_start
+            self.save()
+            return True
+        else:
+            return False
+
+    def update_location(self, new_location):
+        if 0 < len(new_location) <= self.MAX_LOCATION:
+            self.location = new_location
+            self.save()
+            return True
+        else:
+            return False
+
+    def update_cover_img(self):
+        pass
+
+    def update_topics(self):
+        pass
+
+    def get_topics(self):
+        pass
+
     def accept(self):
         # accept only a PENDING workshop
         if self.status == self.PENDING:
