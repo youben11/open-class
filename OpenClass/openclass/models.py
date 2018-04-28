@@ -28,6 +28,7 @@ class Workshop(models.Model):
 
     registred = models.ManyToManyField('Profile', through='Registration')
     animator = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
+    topics = models.ManyToManyField('Tag')
     title = models.CharField(max_length=MAX_TITLE)
     description = models.TextField()
     material_required = models.TextField()
@@ -188,6 +189,7 @@ class Profile(models.Model):
                         (NAG, ''))
     badges = models.ManyToManyField('Badge', through='Have_badge')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    interests = models.ManyToManyField('Tag')
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=NAG)
     score = models.PositiveIntegerField()
     phone_number = models.CharField(max_length=MAX_PHONE_NB)
