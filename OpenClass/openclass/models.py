@@ -190,6 +190,7 @@ class Profile(models.Model):
     enrollement_date = models.DateField()
 
 class Preference(models.Model):
+    profile = models.OneToOneField('Profile', on_delete=models.CASCADE)
     confidentiality = models.IntegerField()
 
 class Badge(models.Model):
