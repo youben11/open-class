@@ -26,7 +26,7 @@ class Workshop(models.Model):
         (DONE, 'Done'),
     )
 
-    animator = models.ForeignKey('Profile', on_delete=models.SET_NULL)
+    animator = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=MAX_TITLE)
     description = models.TextField()
     material_required = models.TextField()
@@ -149,12 +149,12 @@ class Registration(models.Model):
     confirmed = models.BooleanField()
 
 class Question(models.Model):
-    author = models.ForeignKey('Profile', on_delete=models.SET_NULL)
+    author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     question = models.TextField()
 
 class Feedback(models.Model):
-    author = models.ForeignKey('Profile', on_delete=models.SET_NULL)
+    author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     submission_date = models.DateTimeField()
     comment = models.TextField()
