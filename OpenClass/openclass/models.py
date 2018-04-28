@@ -201,3 +201,9 @@ class Badge(models.Model):
 
 class Have_badge(models.Model):
     priority = models.PositiveIntegerField()
+
+class BadgeAttendance(Badge):
+    nb_attendance = models.PositiveIntegerField()
+
+    def is_gained():
+        pass
