@@ -140,7 +140,7 @@ class Workshop(models.Model):
 
 
 class Registration(models.Model):
-    STATUS_CHOICES = []
+    STATUS_CHOICES = ()
 
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
     date_registration = models.DateTimeField()
@@ -174,9 +174,9 @@ class Profile(models.Model):
     MALE = 'M'
     FEMALE = 'F'
     NAG = ' ' #NotAGender
-    GENDER_CHOICES = [(MALE, 'Male'),\
+    GENDER_CHOICES = ((MALE, 'Male'),\
                         (FEMALE, 'Female'),\
-                        (NAG, '')]
+                        (NAG, ''))
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=NAG)
     score = models.PositiveIntegerField()
