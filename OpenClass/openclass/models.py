@@ -148,6 +148,8 @@ class Registration(models.Model):
     confirmed = models.BooleanField()
 
 class Question(models.Model):
+    author = models.ForeignKey('Profile', on_delete=models.SET_NULL)
+    workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     question = models.TextField()
 
 class Feedback(models.Model):
