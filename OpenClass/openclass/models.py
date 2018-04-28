@@ -26,6 +26,7 @@ class Workshop(models.Model):
         (DONE, 'Done'),
     )
 
+    registred = models.ManyToManyField('Profile', through='Registration')
     animator = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=MAX_TITLE)
     description = models.TextField()
@@ -143,6 +144,8 @@ class Workshop(models.Model):
 class Registration(models.Model):
     STATUS_CHOICES = ()
 
+    workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
+    profile = models.ForeignKey('Profile', on_delete=models.CASCADE)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
     date_registration = models.DateTimeField()
     date_cancel = models.DateTimeField()
@@ -204,8 +207,6 @@ class Badge(models.Model):
     description = models.TextField()
     img = models.ImageField()
 
-    #class Meta:
-    #    abstract = True
 
 class Have_badge(models.Model):
     badge = models.ForeignKey('Badge', on_delete=models.CASCADE)
