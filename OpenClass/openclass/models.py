@@ -27,6 +27,7 @@ class Workshop(models.Model):
     )
 
     registred = models.ManyToManyField('Profile', through='Registration')
+    mc_questions = models.ManyToManyField('MCQuestion')
     animator = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     topics = models.ManyToManyField('Tag')
     title = models.CharField(max_length=MAX_TITLE)
