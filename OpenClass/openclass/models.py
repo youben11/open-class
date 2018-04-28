@@ -26,6 +26,7 @@ class Workshop(models.Model):
         (DONE, 'Done'),
     )
 
+    animator = models.ForeignKey('Profile', on_delete=models.SET_NULL)
     title = models.CharField(max_length=MAX_TITLE)
     description = models.TextField()
     material_required = models.TextField()
