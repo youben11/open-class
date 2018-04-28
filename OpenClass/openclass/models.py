@@ -160,6 +160,7 @@ class Question(models.Model):
 class Feedback(models.Model):
     author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
+    choices = models.ManyToManyField('Choice')
     submission_date = models.DateTimeField()
     comment = models.TextField()
 
