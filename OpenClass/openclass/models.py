@@ -151,6 +151,8 @@ class Question(models.Model):
     question = models.TextField()
 
 class Feedback(models.Model):
+    author = models.ForeignKey('Profile', on_delete=models.SET_NULL)
+    workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     submission_date = models.DateTimeField()
     comment = models.TextField()
 
