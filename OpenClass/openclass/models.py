@@ -45,7 +45,7 @@ class Workshop(models.Model):
     registration_politic = models.CharField(max_length=1, choices=POLITIC_CHOICES)
     location = models.CharField(max_length=MAX_LOCATION)
     cover_img = models.ImageField()
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, db_index=True)
 
     def update_title(self, new_title):
         if 0 < len(new_title) <= self.MAX_TITLE:
