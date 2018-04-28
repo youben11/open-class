@@ -168,6 +168,7 @@ class MCQuestion(models.Model):
 class Choice(models.Model):
     MAX_CHOICE = 20
 
+    question = models.ForeignKey('MCQuestion', on_delete=models.CASCADE)
     choice = models.CharField(max_length=MAX_CHOICE)
 
 class Tag(models.Model):
