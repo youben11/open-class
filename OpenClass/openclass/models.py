@@ -193,6 +193,9 @@ class Feedback(models.Model):
     submission_date = models.DateTimeField()
     comment = models.TextField(blank=False)
 
+    class Meta:
+        unique_together = (('workshop', 'author'),)
+
 #Multiple Choice Question
 class MCQuestion(models.Model):
     MAX_LEN_QST = 20
