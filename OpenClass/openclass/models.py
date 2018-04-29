@@ -203,6 +203,10 @@ class Profile(models.Model):
     photo = models.ImageField()
     enrollement_date = models.DateField()
 
+    def workshop_animated(self):
+        workshops = self.animated.all()
+        return workshops
+
 class Preference(models.Model):
     profile = models.OneToOneField('Profile', on_delete=models.CASCADE)
     confidentiality = models.IntegerField()
