@@ -6,8 +6,8 @@ from datetime import datetime
 
 
 class Workshop(models.Model):
-    MAX_TITLE = 20
-    MAX_LOCATION = 20
+    MAX_LEN_TITLE = 20
+    MAX_LEN_LOCATION = 20
 
     FIFO = 'F'
     MANUAL = 'M'
@@ -35,21 +35,21 @@ class Workshop(models.Model):
     animator = models.ForeignKey('Profile', on_delete=models.SET_NULL,
                                 null=True, related_name='animated')
     topics = models.ManyToManyField('Tag')
-    title = models.CharField(max_length=MAX_TITLE, blank=False)
+    title = models.CharField(max_length=MAX_LEN_TITLE, blank=False)
     description = models.TextField(blank=False)
-    material_required = models.TextField()
-    what_u_will_learn = models.TextField()
+    required_materials = models.TextField()
+    objectives = models.TextField()
     requirements = models.TextField()
-    nb_places = models.PositiveIntegerField()
-    date_submission = models.DateTimeField()
-    date_decision = models.DateTimeField(null=True)
-    date_start = models.DateTimeField()
+    seats_number = models.PositiveIntegerField()
+    submission_date = models.DateTimeField()
+    decision_date = models.DateTimeField(null=True)
+    start_date = models.DateTimeField()
     duration = models.DurationField()
     registration_politic = models.CharField(
                                 max_length=1,
                                 choices=POLITIC_CHOICES,
                                 default=FIFO)
-    location = models.CharField(max_length=MAX_LOCATION)
+    location = models.CharField(max_length=MAX_LEN_LOCATION)
     cover_img = models.ImageField()
     status = models.CharField(
                     max_length=1,
@@ -58,7 +58,7 @@ class Workshop(models.Model):
                     db_index=True)
 
     def update_title(self, new_title):
-        if 0 < len(new_title) <= self.MAX_TITLE:
+        if 0 < len(new_title) <= self.MAX_LEN_TITLE:
             self.title = new_title
             self.save()
             return True
@@ -73,17 +73,17 @@ class Workshop(models.Model):
         else:
             return False
 
-    def update_material_required(self, new_material_required):
-        if len(new_material_required) > 0:
-            self.material_required = new_material_required
+    def update_required_materials(self, new_required_materials):
+        if len(new_required_materials) > 0:
+            self.required_materials = new_required_materials
             self.save()
             return True
         else:
             return False
 
-    def update_what_u_will_learn(self, new_what_u_will_learn):
-        if len(new_what_u_will_learn) > 0:
-            self.what_u_will_learn = new_what_u_will_learn
+    def update_objectives(self, new_objectives):
+        if len(new_objectives) > 0:
+            self.objectives = new_objectives
             self.save()
             return True
         else:
@@ -91,32 +91,32 @@ class Workshop(models.Model):
 
     def update_requirements(self, new_requirements):
         if len(new_requirements) > 0:
-            self.requirements = new_what_u_will_learn
+            self.requirements = new_objectives
             self.save()
             return True
         else:
             return False
 
-    def update_nb_place(self, new_nb_places):
-        if new_nb_places > 0:
-            self.nb_places = new_nb_places
+    def update_seats_number(self, new_seats_number):
+        if new_seats_number > 0:
+            self.seats_number = new_seats_number
             self.save()
             return True
         else:
             return False
 
-    def update_date_start(self, new_date_start):
+    def update_start_date(self, new_start_date):
         # all dates must have tzinfo
-        timezone = self.date_start.tzinfo
-        if new_date_start > datetime.now(timezone):
-            self.date_start = new_date_start
+        timezone = self.start_date.tzinfo
+        if new_start_date > datetime.now(timezone):
+            self.start_date = new_start_date
             self.save()
             return True
         else:
             return False
 
     def update_location(self, new_location):
-        if 0 < len(new_location) <= self.MAX_LOCATION:
+        if 0 < len(new_location) <= self.MAX_LEN_LOCATION:
             self.location = new_location
             self.save()
             return True
@@ -135,8 +135,8 @@ class Workshop(models.Model):
     def accept(self):
         # accept only a PENDING workshop
         if self.status == self.PENDING:
-            timezone = self.date_start.tzinfo
-            self.date_decision = datetime.now(timezone)
+            timezone = self.start_date.tzinfo
+            self.decision_date = datetime.now(timezone)
             self.status = self.ACCEPTED
             self.save()
             return True
@@ -150,8 +150,8 @@ class Workshop(models.Model):
             return False
 
     def days_left(self):
-        timezone = self.date_start.tzinfo
-        time_left = self.date_start - datetime.now(timezone)
+        timezone = self.start_date.tzinfo
+        time_left = self.start_date - datetime.now(timezone)
         return time_left.days   # return only days left
 
 
@@ -192,23 +192,23 @@ class Feedback(models.Model):
 
 #Multiple Choice Question
 class MCQuestion(models.Model):
-    MAX_QST = 20
+    MAX_LEN_QST = 20
 
-    question = models.CharField(max_length=MAX_QST, blank=False)
+    question = models.CharField(max_length=MAX_LEN_QST, blank=False)
 
 class Choice(models.Model):
-    MAX_CHOICE = 20
+    MAX_LEN_CHOICE = 20
 
     question = models.ForeignKey('MCQuestion', on_delete=models.CASCADE)
-    choice = models.CharField(max_length=MAX_CHOICE, blank=False)
+    choice = models.CharField(max_length=MAX_LEN_CHOICE, blank=False)
 
 class Tag(models.Model):
-    MAX_NAME = 20
-    name = models.CharField(max_length=MAX_NAME, blank=False)
+    MAX_LEN_NAME = 20
+    name = models.CharField(max_length=MAX_LEN_NAME, blank=False)
 
 class Profile(models.Model):
-    MAX_PHONE_NB = 20
-    MAX_CONF_VAL = 64
+    MAX_LEN_PHONE_NB = 20
+    MAX_LEN_CONF_VAL = 64
     MALE = 'M'
     FEMALE = 'F'
     NAG = ' ' #NotAGender
@@ -222,9 +222,9 @@ class Profile(models.Model):
     interests = models.ManyToManyField('Tag')
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=NAG)
     score = models.PositiveIntegerField()
-    phone_number = models.CharField(max_length=MAX_PHONE_NB)
-    date_birth = models.DateField(null=True)
-    verification_value = models.CharField(max_length=MAX_CONF_VAL)
+    phone_number = models.CharField(max_length=MAX_LEN_PHONE_NB)
+    birthday = models.DateField(null=True)
+    verification_token = models.CharField(max_length=MAX_LEN_CONF_VAL)
     verified = models.BooleanField(default=False)
     photo = models.ImageField()
     enrollement_date = models.DateField()
@@ -247,8 +247,8 @@ class Preference(models.Model):
     confidentiality = models.IntegerField()
 
 class Badge(models.Model):
-    MAX_BADGE_NAME = 20
-    name = models.CharField(max_length=MAX_BADGE_NAME, blank=False)
+    MAX_LEN_BADGE_NAME = 20
+    name = models.CharField(max_length=MAX_LEN_BADGE_NAME, blank=False)
     description = models.TextField(blank=False)
     img = models.ImageField()
 

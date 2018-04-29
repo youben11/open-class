@@ -12,8 +12,8 @@ class ModelsTest(TestCase):
                                           img=None)
         cls.profile = Profile(gender='M', score=100,
                                 phone_number='+21600000',
-                                date_birth=date.today(),
-                                verification_value='45abc3',
+                                birthday=date.today(),
+                                verification_token='45abc3',
                                 verified=False,
                                 photo=None,
                                 enrollement_date=date.today(),
@@ -25,10 +25,10 @@ class ModelsTest(TestCase):
         cls.profile.save()
         cls.workshop = Workshop.objects.create(title='Binary Analysis',
                                                 description="Learn how to RE B",
-                                                nb_places=100,
-                                                date_submission=datetime.now(),
-                                                date_decision=datetime.now(),
-                                                date_start=datetime.now(),
+                                                seats_number=100,
+                                                submission_date=datetime.now(),
+                                                decision_date=datetime.now(),
+                                                start_date=datetime.now(),
                                                 duration=datetime.now() - datetime.now(),
                                                 location='amphi c',
                                                 )
@@ -45,7 +45,7 @@ class ModelsTest(TestCase):
     def test_user(self):
         self.assertEqual(self.user.username, 'youben11')
         self.assertEqual(self.user.profile, self.profile)
-        self.assertEqual(self.user.profile.verification_value, '45abc3')
+        self.assertEqual(self.user.profile.verification_token, '45abc3')
 
 class ProfileTest(TestCase):
     """Tests the Profile model and its methods"""
@@ -60,8 +60,8 @@ class ProfileTest(TestCase):
         cls.profile = Profile.objects.create(
                         gender='M', score=100,
                         phone_number='+21600000',
-                        date_birth=date.today(),
-                        verification_value='45abc3',
+                        birthday=date.today(),
+                        verification_token='45abc3',
                         verified=False,
                         photo=None,
                         enrollement_date=date.today(),
@@ -70,10 +70,10 @@ class ProfileTest(TestCase):
         cls.workshop = Workshop.objects.create(
                         title='Binary Analysis',
                         description="Learn how to RE B",
-                        nb_places=100,
-                        date_submission=datetime.now(),
-                        date_decision=datetime.now(),
-                        date_start=datetime.now(),
+                        seats_number=100,
+                        submission_date=datetime.now(),
+                        decision_date=datetime.now(),
+                        start_date=datetime.now(),
                         duration=datetime.now() - datetime.now(),
                         location='amphi c',
                         )
