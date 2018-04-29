@@ -29,10 +29,10 @@ class Workshop(models.Model):
         (CANCELED, 'Canceled'),
     )
 
-    registred = models.ManyToManyField('Profile', through='Registration',\
+    registred = models.ManyToManyField('Profile', through='Registration',
                                         related_name='registred_to')
     mc_questions = models.ManyToManyField('MCQuestion')
-    animator = models.ForeignKey('Profile', on_delete=models.SET_NULL,\
+    animator = models.ForeignKey('Profile', on_delete=models.SET_NULL,
                                 null=True, related_name='animated')
     topics = models.ManyToManyField('Tag')
     title = models.CharField(max_length=MAX_TITLE, blank=False)
@@ -45,13 +45,17 @@ class Workshop(models.Model):
     date_decision = models.DateTimeField(null=True)
     date_start = models.DateTimeField()
     duration = models.DurationField()
-    registration_politic = models.CharField(max_length=1,\
-                                            choices=POLITIC_CHOICES,\
-                                            default=FIFO)
+    registration_politic = models.CharField(
+                                max_length=1,
+                                choices=POLITIC_CHOICES,
+                                default=FIFO)
     location = models.CharField(max_length=MAX_LOCATION)
     cover_img = models.ImageField()
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES,\
-                                default=PENDING, db_index=True)
+    status = models.CharField(
+                    max_length=1,
+                    choices=STATUS_CHOICES,
+                    default=PENDING,
+                    db_index=True)
 
     def update_title(self, new_title):
         if 0 < len(new_title) <= self.MAX_TITLE:
@@ -165,8 +169,11 @@ class Registration(models.Model):
 
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES,\
-                                default=PENDING, null=False)
+    status = models.CharField(
+                max_length=1,
+                choices=STATUS_CHOICES,
+                default=PENDING,
+                null=False)
     date_registration = models.DateTimeField()
     date_cancel = models.DateTimeField(null=True)
     present = models.BooleanField(null=False, default=False)
@@ -205,9 +212,11 @@ class Profile(models.Model):
     MALE = 'M'
     FEMALE = 'F'
     NAG = ' ' #NotAGender
-    GENDER_CHOICES = ((MALE, 'Male'),\
-                        (FEMALE, 'Female'),\
-                        (NAG, ''))
+    GENDER_CHOICES = (
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
+        (NAG, '')
+    )
     badges = models.ManyToManyField('Badge', through='Have_badge')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     interests = models.ManyToManyField('Tag')
