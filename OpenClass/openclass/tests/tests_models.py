@@ -86,6 +86,10 @@ class ProfileTest(TestCase):
                             present=True,
                             status=Registration.ACCEPTED,
                             )
+        cls.tag1 = Tag.objects.create(name="AI/ML")
+        cls.tag2 = Tag.objects.create(name="Security")
+        cls.profile.interests.add(cls.tag1, cls.tag2)
+
 
     def test_workshops_animated(self):
         workshop = self.profile.workshops_animated()[0]
@@ -94,3 +98,8 @@ class ProfileTest(TestCase):
     def test_workshops_attended(self):
         workshop = self.profile.workshops_attended()[0]
         self.assertEqual(workshop.title, 'Binary Analysis')
+
+    def test_get_interest(self):
+        interest = self.profile.get_interests()
+        self.assertEqual(interest.get(id=self.tag1.id).name, self.tag1.name)
+        self.assertEqual(interest.get(id=self.tag2.id).name, self.tag2.name)

@@ -181,6 +181,9 @@ class Registration(models.Model):
     date_cancel = models.DateTimeField(null=True)
     present = models.BooleanField(null=False, default=False)
 
+    class Meta:
+        unique_together = (('workshop', 'profile'),)
+
     def __str__(self):
         return "[%02d] %s -> %s <%s>" % (self.pk, self.profile, self.workshop,
                                         self.status)
@@ -199,6 +202,9 @@ class Feedback(models.Model):
     choices = models.ManyToManyField('Choice')
     submission_date = models.DateTimeField()
     comment = models.TextField(blank=False)
+
+    class Meta:
+        unique_together = (('workshop', 'author'),)
 
     def __str__(self):
         return "[%02d] %s -> %s" % (self.pk, self.author, self.workshop.title)
@@ -269,6 +275,12 @@ class Profile(models.Model):
         present = Q(registration__present=True)
         workshops = self.registred_to.filter(accepted, present)
         return workshops
+
+    def get_interests(self):#don't use interests():conflict with field interests
+        """Get the user's interests in form of Tags."""
+
+        interests = self.interests.all()
+        return interests
 
 class Preference(models.Model):
     profile = models.OneToOneField('Profile', on_delete=models.CASCADE)
