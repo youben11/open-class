@@ -216,11 +216,11 @@ class Profile(models.Model):
     photo = models.ImageField()
     enrollement_date = models.DateField()
 
-    def workshop_animated(self):
+    def workshops_animated(self):
         workshops = self.animated.all()
         return workshops
 
-    def workshop_attended(self):
+    def workshops_attended(self):
         """Get the workshops that the user attended, the registration
         must be ACCEPTED and CONFIRMED (the user was present)."""
 
