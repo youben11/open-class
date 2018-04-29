@@ -46,3 +46,50 @@ class ModelsTest(TestCase):
         self.assertEqual(self.user.username, 'youben11')
         self.assertEqual(self.user.profile, self.profile)
         self.assertEqual(self.user.profile.confirmation_value, '45abc3')
+
+class ProfileTest(TestCase):
+    """Tests the Profile model and its methods"""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create(
+                                username='youben11',
+                                email='youben@yopmail.com',
+                                )
+
+        cls.profile = Profile.objects.create(
+                        gender='M', score=100,
+                        phone_number='+21600000',
+                        date_birth=date.today(),
+                        confirmation_value='45abc3',
+                        confirmed=False,
+                        photo=None,
+                        enrollement_date=date.today(),
+                        user=cls.user,
+                        )
+        cls.workshop = Workshop.objects.create(
+                        title='Binary Analysis',
+                        description="Learn how to RE B",
+                        nb_places=100,
+                        date_submission=datetime.now(),
+                        date_decision=datetime.now(),
+                        date_start=datetime.now(),
+                        duration=datetime.now() - datetime.now(),
+                        location='amphi c',
+                        )
+        cls.profile.animated.add(cls.workshop)
+        cls.registration = Registration.objects.create(
+                            workshop=cls.workshop,
+                            profile=cls.profile,
+                            date_registration=datetime.now(),
+                            present=True,
+                            status=Registration.ACCEPTED,
+                            )
+
+    def test_workshops_animated(self):
+        workshop = self.profile.workshops_animated()[0]
+        self.assertEqual(workshop.title, 'Binary Analysis')
+
+    def test_workshops_attended(self):
+        workshop = self.profile.workshops_attended()[0]
+        self.assertEqual(workshop.title, 'Binary Analysis')
