@@ -76,6 +76,7 @@ class ProfileTest(TestCase):
                         start_date=datetime.now(),
                         duration=datetime.now() - datetime.now(),
                         location='amphi c',
+                        status=Workshop.DONE,
                         )
         cls.profile.animated.add(cls.workshop)
         cls.registration = Registration.objects.create(
