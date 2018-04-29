@@ -148,7 +148,16 @@ class Workshop(models.Model):
 
 
 class Registration(models.Model):
-    STATUS_CHOICES = ()
+    PENDING = 'P'
+    ACCEPTED = 'A'
+    REFUSED = 'R'
+    CANCELED = 'C'
+    STATUS_CHOICES = (
+        (PENDING, 'Pending'),
+        (ACCEPTED, 'Accepted'),
+        (REFUSED, 'Refused'),
+        (CANCELED, 'Canceled'),
+    )
 
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE)
