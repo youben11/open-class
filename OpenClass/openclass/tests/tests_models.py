@@ -13,7 +13,7 @@ class ModelsTest(TestCase):
         cls.profile = Profile(gender='M', score=100,
                                 phone_number='+21600000',
                                 date_birth=date.today(),
-                                confirmation_value='45abc3',
+                                verification_value='45abc3',
                                 confirmed=False,
                                 photo=None,
                                 enrollement_date=date.today(),
@@ -45,7 +45,7 @@ class ModelsTest(TestCase):
     def test_user(self):
         self.assertEqual(self.user.username, 'youben11')
         self.assertEqual(self.user.profile, self.profile)
-        self.assertEqual(self.user.profile.confirmation_value, '45abc3')
+        self.assertEqual(self.user.profile.verification_value, '45abc3')
 
 class ProfileTest(TestCase):
     """Tests the Profile model and its methods"""
@@ -61,7 +61,7 @@ class ProfileTest(TestCase):
                         gender='M', score=100,
                         phone_number='+21600000',
                         date_birth=date.today(),
-                        confirmation_value='45abc3',
+                        verification_value='45abc3',
                         confirmed=False,
                         photo=None,
                         enrollement_date=date.today(),
