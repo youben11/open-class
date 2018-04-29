@@ -168,35 +168,36 @@ class Registration(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES,\
                                 default=PENDING, null=False)
     date_registration = models.DateTimeField()
-    date_cancel = models.DateTimeField()
+    date_cancel = models.DateTimeField(null=True)
     confirmed = models.BooleanField(null=False, default=False)
 
 class Question(models.Model):
     author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
-    question = models.TextField()
+    question = models.TextField(blank=False)
 
 class Feedback(models.Model):
     author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     choices = models.ManyToManyField('Choice')
     submission_date = models.DateTimeField()
-    comment = models.TextField()
+    comment = models.TextField(blank=False)
 
 #Multiple Choice Question
 class MCQuestion(models.Model):
     MAX_QST = 20
 
-    question = models.CharField(max_length=MAX_QST)
+    question = models.CharField(max_length=MAX_QST, blank=False)
 
 class Choice(models.Model):
     MAX_CHOICE = 20
 
     question = models.ForeignKey('MCQuestion', on_delete=models.CASCADE)
-    choice = models.CharField(max_length=MAX_CHOICE)
+    choice = models.CharField(max_length=MAX_CHOICE, blank=False)
 
 class Tag(models.Model):
-    name = models.TextField()
+    MAX_NAME = 20
+    name = models.CharField(max_length=MAX_NAME, blank=False)
 
 class Profile(models.Model):
     MAX_PHONE_NB = 20
@@ -213,9 +214,9 @@ class Profile(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=NAG)
     score = models.PositiveIntegerField()
     phone_number = models.CharField(max_length=MAX_PHONE_NB)
-    date_birth = models.DateField()
+    date_birth = models.DateField(null=True)
     confirmation_value = models.CharField(max_length=MAX_CONF_VAL)
-    confirmed = models.BooleanField()
+    confirmed = models.BooleanField(default=False)
     photo = models.ImageField()
     enrollement_date = models.DateField()
 
@@ -238,8 +239,8 @@ class Preference(models.Model):
 
 class Badge(models.Model):
     MAX_BADGE_NAME = 20
-    name = models.CharField(max_length=MAX_BADGE_NAME)
-    description = models.TextField()
+    name = models.CharField(max_length=MAX_BADGE_NAME, blank=False)
+    description = models.TextField(blank=False)
     img = models.ImageField()
 
 
