@@ -35,20 +35,23 @@ class Workshop(models.Model):
     animator = models.ForeignKey('Profile', on_delete=models.SET_NULL,\
                                 null=True, related_name='animated')
     topics = models.ManyToManyField('Tag')
-    title = models.CharField(max_length=MAX_TITLE)
-    description = models.TextField()
+    title = models.CharField(max_length=MAX_TITLE, blank=False)
+    description = models.TextField(blank=False)
     material_required = models.TextField()
     what_u_will_learn = models.TextField()
     requirements = models.TextField()
     nb_places = models.PositiveIntegerField()
     date_submission = models.DateTimeField()
-    date_decision = models.DateTimeField()
+    date_decision = models.DateTimeField(null=True)
     date_start = models.DateTimeField()
     duration = models.DurationField()
-    registration_politic = models.CharField(max_length=1, choices=POLITIC_CHOICES)
+    registration_politic = models.CharField(max_length=1,\
+                                            choices=POLITIC_CHOICES,\
+                                            default=FIFO)
     location = models.CharField(max_length=MAX_LOCATION)
     cover_img = models.ImageField()
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, db_index=True)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES,\
+                                default=PENDING, db_index=True)
 
     def update_title(self, new_title):
         if 0 < len(new_title) <= self.MAX_TITLE:
