@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F,Q
 from django.contrib.auth.models import User
 
 from datetime import datetime
@@ -216,6 +217,15 @@ class Profile(models.Model):
 
     def workshop_animated(self):
         workshops = self.animated.all()
+        return workshops
+
+    def workshop_attended(self):
+        """Get the workshops that the user attended, the registration
+        must be ACCEPTED and CONFIRMED (the user was present)."""
+        
+        accepted = Q(registration__status=Registration.ACCEPTED)
+        confirmed = Q(registration__confirmed=True)
+        workshops = self.registred_to.filter(accepted, confirmed)
         return workshops
 
 class Preference(models.Model):
