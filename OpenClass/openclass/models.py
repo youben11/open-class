@@ -169,7 +169,7 @@ class Registration(models.Model):
                                 default=PENDING, null=False)
     date_registration = models.DateTimeField()
     date_cancel = models.DateTimeField(null=True)
-    confirmed = models.BooleanField(null=False, default=False)
+    present = models.BooleanField(null=False, default=False)
 
 class Question(models.Model):
     author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
@@ -226,11 +226,11 @@ class Profile(models.Model):
 
     def workshops_attended(self):
         """Get the workshops that the user attended, the registration
-        must be ACCEPTED and CONFIRMED (the user was present)."""
+        must be ACCEPTED and PRESENT (the user was present)."""
 
         accepted = Q(registration__status=Registration.ACCEPTED)
-        confirmed = Q(registration__confirmed=True)
-        workshops = self.registred_to.filter(accepted, confirmed)
+        present = Q(registration__present=True)
+        workshops = self.registred_to.filter(accepted, present)
         return workshops
 
 class Preference(models.Model):
