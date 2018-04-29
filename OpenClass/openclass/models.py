@@ -245,6 +245,12 @@ class Profile(models.Model):
         workshops = self.registred_to.filter(accepted, present)
         return workshops
 
+    def get_interests(self):#don't use interests():conflict with field interests
+        """Get the user's interests in form of Tags."""
+
+        interests = self.interests.all()
+        return interests
+
 class Preference(models.Model):
     profile = models.OneToOneField('Profile', on_delete=models.CASCADE)
     confidentiality = models.IntegerField()
