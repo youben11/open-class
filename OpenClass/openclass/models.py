@@ -178,6 +178,9 @@ class Registration(models.Model):
     date_cancel = models.DateTimeField(null=True)
     present = models.BooleanField(null=False, default=False)
 
+    class Meta:
+        unique_together = (('workshop', 'profile'),)
+
 class Question(models.Model):
     author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
