@@ -162,10 +162,11 @@ class Registration(models.Model):
 
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES,\
+                                default=PENDING, null=False)
     date_registration = models.DateTimeField()
     date_cancel = models.DateTimeField()
-    confirmed = models.BooleanField()
+    confirmed = models.BooleanField(null=False, default=False)
 
 class Question(models.Model):
     author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
@@ -222,7 +223,7 @@ class Profile(models.Model):
     def workshop_attended(self):
         """Get the workshops that the user attended, the registration
         must be ACCEPTED and CONFIRMED (the user was present)."""
-        
+
         accepted = Q(registration__status=Registration.ACCEPTED)
         confirmed = Q(registration__confirmed=True)
         workshops = self.registred_to.filter(accepted, confirmed)
