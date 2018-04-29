@@ -19,11 +19,13 @@ class Workshop(models.Model):
     ACCEPTED = 'A'
     REFUSED = 'R'
     DONE = 'D'
+    CANCELED = 'C'
     STATUS_CHOICES = (
         (PENDING, 'Pending'),
         (ACCEPTED, 'Accepted'),
         (REFUSED, 'Refused'),
         (DONE, 'Done'),
+        (CANCELED, 'Canceled'),
     )
 
     registred = models.ManyToManyField('Profile', through='Registration',\
