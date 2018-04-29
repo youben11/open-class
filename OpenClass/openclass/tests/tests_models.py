@@ -23,7 +23,15 @@ class ModelsTest(TestCase):
                                         profile=cls.profile)
         cls.profile.user = cls.user
         cls.profile.save()
-        cls.workshop = None
+        cls.workshop = Workshop.objects.create(title='Binary Analysis',
+                                                description="Learn how to RE B",
+                                                nb_places=100,
+                                                date_submission=datetime.now(),
+                                                date_decision=datetime.now(),
+                                                date_start=datetime.now(),
+                                                duration=datetime.now() - datetime.now(),
+                                                location='amphi c',
+                                                )
         cls.registration = None
         cls.question = None
         cls.feedback = None
