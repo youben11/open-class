@@ -230,7 +230,10 @@ class Profile(models.Model):
     enrollement_date = models.DateField()
 
     def workshops_animated(self):
-        workshops = self.animated.all()
+        """Get the workshops that the user animated.
+        The workshops must be DONE."""
+
+        workshops = self.animated.filter(status=Workshop.DONE)
         return workshops
 
     def workshops_attended(self):
