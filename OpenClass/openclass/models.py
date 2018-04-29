@@ -215,8 +215,8 @@ class Profile(models.Model):
     score = models.PositiveIntegerField()
     phone_number = models.CharField(max_length=MAX_PHONE_NB)
     date_birth = models.DateField(null=True)
-    confirmation_value = models.CharField(max_length=MAX_CONF_VAL)
-    confirmed = models.BooleanField(default=False)
+    verification_value = models.CharField(max_length=MAX_CONF_VAL)
+    verified = models.BooleanField(default=False)
     photo = models.ImageField()
     enrollement_date = models.DateField()
 
