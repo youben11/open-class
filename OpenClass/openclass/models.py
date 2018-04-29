@@ -57,6 +57,9 @@ class Workshop(models.Model):
                     default=PENDING,
                     db_index=True)
 
+    def __str__(self):
+        return "[%02d] %s" % (self.pk, self.title)
+
     def update_title(self, new_title):
         if 0 < len(new_title) <= self.MAX_LEN_TITLE:
             self.title = new_title
@@ -178,10 +181,17 @@ class Registration(models.Model):
     date_cancel = models.DateTimeField(null=True)
     present = models.BooleanField(null=False, default=False)
 
+    def __str__(self):
+        return "[%02d] %s -> %s <%s>" % (self.pk, self.profile, self.workshop,
+                                        self.status)
+
 class Question(models.Model):
     author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     question = models.TextField(blank=False)
+
+    def __str__(self):
+        return "[%02d] %s" % (self.pk, self.question)
 
 class Feedback(models.Model):
     author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
@@ -190,11 +200,17 @@ class Feedback(models.Model):
     submission_date = models.DateTimeField()
     comment = models.TextField(blank=False)
 
+    def __str__(self):
+        return "[%02d] %s -> %s" % (self.pk, self.author, self.workshop.title)
+
 #Multiple Choice Question
 class MCQuestion(models.Model):
     MAX_LEN_QST = 20
 
     question = models.CharField(max_length=MAX_LEN_QST, blank=False)
+
+    def __str__(self):
+        return "[%02d] %s" % (self.pk, self.question)
 
 class Choice(models.Model):
     MAX_LEN_CHOICE = 20
@@ -202,9 +218,15 @@ class Choice(models.Model):
     question = models.ForeignKey('MCQuestion', on_delete=models.CASCADE)
     choice = models.CharField(max_length=MAX_LEN_CHOICE, blank=False)
 
+    def __str__(self):
+        return "[%02d] %s" % (self.pk, self.choice)
+
 class Tag(models.Model):
     MAX_LEN_NAME = 20
     name = models.CharField(max_length=MAX_LEN_NAME, blank=False)
+
+    def __str__(self):
+        return "[%02d] %s" % (self.pk, self.name)
 
 class Profile(models.Model):
     MAX_LEN_PHONE_NB = 20
@@ -228,6 +250,9 @@ class Profile(models.Model):
     verified = models.BooleanField(default=False)
     photo = models.ImageField()
     enrollement_date = models.DateField()
+
+    def __str__(self):
+        return "[%02d] %s" % (self.pk, self.user)
 
     def workshops_animated(self):
         """Get the workshops that the user animated.
@@ -255,6 +280,8 @@ class Badge(models.Model):
     description = models.TextField(blank=False)
     img = models.ImageField()
 
+    def __str__(self):
+        return "[%02d] %s" % (self.pk, self.name)
 
 class Have_badge(models.Model):
     badge = models.ForeignKey('Badge', on_delete=models.CASCADE)
