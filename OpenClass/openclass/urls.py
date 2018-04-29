@@ -4,5 +4,10 @@ from . import views
 app_name = "openclass"
 
 urlpatterns = [
-    #path('index/<int:id>/', views.index, kwargs={'this_is_a_model':5555}, name='index'),
+    path('', views.index, name="index"),
+    path('workshops/', views.workshops_list, name='workshops_list'),
+    path('workshops/<int:pk>/', views.workshops_detail, name='workshops_detail'),
+    path('members/', views.members_list, name='members_list'),
+    path('members/<int:pk>/', views.members_detail, name='members_detail'),
+    path('badges/', views.badges_list, name='badges_list')
 ]
