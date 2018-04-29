@@ -14,7 +14,7 @@ class ModelsTest(TestCase):
                                 phone_number='+21600000',
                                 date_birth=date.today(),
                                 verification_value='45abc3',
-                                confirmed=False,
+                                verified=False,
                                 photo=None,
                                 enrollement_date=date.today(),
                                 )
@@ -62,7 +62,7 @@ class ProfileTest(TestCase):
                         phone_number='+21600000',
                         date_birth=date.today(),
                         verification_value='45abc3',
-                        confirmed=False,
+                        verified=False,
                         photo=None,
                         enrollement_date=date.today(),
                         user=cls.user,
