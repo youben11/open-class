@@ -190,7 +190,11 @@ class Registration(models.Model):
                                         self.status)
 
 class Question(models.Model):
-    author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(
+                    'Profile',
+                    on_delete=models.SET_NULL,
+                    related_name='asked',
+                    null=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     question = models.TextField(blank=False)
 
@@ -320,6 +324,28 @@ class Profile(models.Model):
         present = Q(registration__present=True)
         workshops = self.registred_to.filter(accepted, present)
         return workshops
+
+    def ask(self, workshop_pk, question):
+        #check user permission
+        #is he registred ? accepted ?
+        #is he present ? maybe not
+        try:
+            workshop = Workshop.objects.get(pk=workshop_pk)
+            registration = Registration.objects.get(
+                            workshop=workshop,
+                            profile=self)
+        except:
+            return False
+
+        if not registration.present:
+            return False
+
+        #now() is the current time
+        #current_duration = now() - workshop.start_date
+        #if current_duration < workshop.duration:
+
+        self.asked.create(workshop=workshop, question=question)
+        return True
 
     def get_interests(self):#don't use interests():conflict with field interests
         """Get the user's interests in form of Tags."""
