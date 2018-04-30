@@ -1,0 +1,108 @@
+{% load staticfiles %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Profile</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <style type="text/css">
+        
+    </style>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+</head>
+<header>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="#">
+                <img alt="OpenClass" src="...">
+              </a>
+            </div>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+    </nav>
+</header>
+<body>
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12 col-lg-3 col-md-3">
+
+            <div class="card hovercard">
+                <div class="cardheader">
+
+                </div>
+                <div class="avatar">
+                    <img alt="" src="{% static 'img/nadir.png' %}">
+                </div>
+                <div class="info">
+                    <div class="title">@droggy</div>
+                    <div class="desc">Ahmed Nadir</div>
+                    <div class="desc">Bounoua</div>
+                    <div class="desc">a.bounoua@esi-sba.dz</div>
+                    <div class="desc">21 years</div>
+                    <div class="desc">+213 542 158 381</div>
+                </div>
+                <div class="bottom">
+                    <a class="btn btn-default btn-twitter btn-sm" href="https://twitter.com/nadirgamer" target="_blank">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                    <a class="btn btn-default btn-sm" rel="publisher" href="https://github.com/nadirhackerman" target="_blank" target="_blank">
+                        <i class="fa fa-github"></i>
+                    </a>
+                    <a class="btn btn-default btn-sm" rel="publisher" href="https://fb.me/nadirbounoua" target="_blank">
+                        <i class="fa fa-facebook"></i>
+                    </a>
+                    <a class="btn btn-default btn-sm" rel="publisher" href="https://linkdin.com/" target="_blank">
+                        <i class="fa fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xs-12 col-lg-9 col-md-9">
+            <div class="card hovercard">
+                <div class="cardheader">
+
+                </div>
+                <div class="info">
+                    <div>
+                        <div class="title tabs">
+                            <a class="tab">Workshops Attented </a> 
+                            <a class="tab"> Workshops Animated</a>
+                        </div>                        
+                    </div>
+                    <ul class="list-group">
+                    {% for workshop in w %}
+                      <a href="#"><li class="list-group-item">{{workshop.title}}</li></a>
+                    {% endfor %}
+                    </ul>                
+                </div>
+                <div class="bottom">
+                    <a href="#"><span>View all</span></a>
+                </div>
+            </div>            
+        </div>
+
+	</div>
+</div>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>
+<!--                     <div class="desc">Username: @nadirhackerman</div>
+                    <div class="desc">First Name: Ahmed Nadir</div>
+                    <div class="desc">Last Name: Bounoua</div>
+                    <div class="desc">Email: a.bounoua@esi-sba.dz</div>
+                    <div class="desc">Age: 21</div>
+                    <div class="desc">Phone Number: +213 542 158 381</div>
+ -->
