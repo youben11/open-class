@@ -285,7 +285,27 @@ class Profile(models.Model):
             return True
         else:
             return False
-            
+
+    def update_first_name(self, fname):
+        """Update the user's first name."""
+
+        if len(fname):
+            self.user.first_name = fname
+            self.user.save()
+            return True
+        else:
+            return False
+
+    def update_last_name(self, lname):
+        """Update the user's last name."""
+
+        if len(lname):
+            self.user.last_name = lname
+            self.user.save()
+            return True
+        else:
+            return False
+
     def workshops_animated(self):
         """Get the workshops that the user animated.
         The workshops must be DONE."""

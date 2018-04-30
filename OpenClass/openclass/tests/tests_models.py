@@ -114,3 +114,17 @@ class ProfileTest(TestCase):
         self.assertEqual(self.profile.phone_number, "0557")
         self.profile.update_phone_number('055 a 7')
         self.assertEqual(self.profile.phone_number, "0557")
+
+    def test_update_first_name(self):
+        self.assertEqual(self.profile.user.first_name, '')
+        self.profile.update_first_name('ayoub')
+        self.assertEqual(self.profile.user.first_name, 'ayoub')
+        self.profile.update_first_name('')
+        self.assertEqual(self.profile.user.first_name, 'ayoub')
+
+    def test_update_last_name(self):
+        self.assertEqual(self.profile.user.last_name, '')
+        self.profile.update_last_name('benaissa')
+        self.assertEqual(self.profile.user.last_name, 'benaissa')
+        self.profile.update_last_name('')
+        self.assertEqual(self.profile.user.last_name, 'benaissa')
