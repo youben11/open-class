@@ -1,9 +1,10 @@
 body {
 }
-.card {
+.card-user {
+    height: 100%;
     padding-top: 20px;
-    margin: 10px 0 20px 0;
-    background-color: rgba(214, 224, 226, 0.2);
+    margin: 0px 0 20px 0;
+    background-color: rgba(255, 255, 255, 1);
     border-top-width: 0;
     border-bottom-width: 2px;
     -webkit-border-radius: 3px;
@@ -17,19 +18,19 @@ body {
     box-sizing: border-box;
 }
 
-.card .card-heading {
+.card-user .card-heading {
     padding: 0 20px;
     margin: 0;
 }
 
-.card .card-heading.simple {
+.card-user .card-heading.simple {
     font-size: 20px;
     font-weight: 300;
     color: #777;
     border-bottom: 1px solid #e5e5e5;
 }
 
-.card .card-heading.image img {
+.card-user .card-heading.image img {
     display: inline-block;
     width: 46px;
     height: 46px;
@@ -41,57 +42,57 @@ body {
     border-radius: 50%;
 }
 
-.card .card-heading.image .card-heading-header {
+.card-user .card-heading.image .card-heading-header {
     display: inline-block;
     vertical-align: top;
 }
 
-.card .card-heading.image .card-heading-header h3 {
+.card-user .card-heading.image .card-heading-header h3 {
     margin: 0;
     font-size: 14px;
     line-height: 16px;
     color: #262626;
 }
 
-.card .card-heading.image .card-heading-header span {
+.card-user .card-heading.image .card-heading-header span {
     font-size: 12px;
     color: #999999;
 }
 
-.card .card-body {
+.card-user .card-body {
     padding: 0 20px;
     margin-top: 20px;
 }
 
-.card .card-media {
+.card-user .card-media {
     padding: 0 20px;
     margin: 0 -14px;
 }
 
-.card .card-media img {
+.card-user .card-media img {
     max-width: 100%;
     max-height: 100%;
 }
 
-.card .card-actions {
+.card-user .card-actions {
     min-height: 30px;
     padding: 0 20px 20px 20px;
     margin: 20px 0 0 0;
 }
 
-.card .card-comments {
+.card-user .card-comments {
     padding: 20px;
     margin: 0;
     background-color: #f8f8f8;
 }
 
-.card .card-comments .comments-collapse-toggle {
+.card-user .card-comments .comments-collapse-toggle {
     padding: 0;
     margin: 0 20px 12px 20px;
 }
 
-.card .card-comments .comments-collapse-toggle a,
-.card .card-comments .comments-collapse-toggle span {
+.card-user .card-comments .comments-collapse-toggle a,
+.card-user .card-comments .comments-collapse-toggle span {
     padding-right: 5px;
     overflow: hidden;
     font-size: 12px;
@@ -105,7 +106,7 @@ body {
     font-weight: bold;
 }
 
-.card.people {
+.card-user.people {
     position: relative;
     display: inline-block;
     width: 170px;
@@ -116,11 +117,11 @@ body {
     vertical-align: top;
 }
 
-.card.people:first-child {
+.card-user.people:first-child {
     margin-left: 0;
 }
 
-.card.people .card-top {
+.card-user.people .card-top {
     position: absolute;
     top: 0;
     left: 0;
@@ -130,15 +131,15 @@ body {
     background-color: #ffffff;
 }
 
-.card.people .card-top.green {
+.card-user.people .card-top.green {
     background-color: #53a93f;
 }
 
-.card.people .card-top.blue {
+.card-user.people .card-top.blue {
     background-color: #427fed;
 }
 
-.card.people .card-info {
+.card-user.people .card-info {
     position: absolute;
     top: 150px;
     display: inline-block;
@@ -151,7 +152,7 @@ body {
     box-sizing: border-box;
 }
 
-.card.people .card-info .title {
+.card-user.people .card-info .title {
     display: block;
     margin: 8px 14px 0 14px;
     overflow: hidden;
@@ -161,7 +162,7 @@ body {
     color: #999;
 }
 
-.card.people .card-info .desc {
+.card-user.people .card-info .desc {
     display: block;
     margin: 8px 14px 0 14px;
     overflow: hidden;
@@ -171,7 +172,7 @@ body {
     text-overflow: ellipsis;
 }
 
-.card.people .card-bottom {
+.card-user.people .card-bottom {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -185,27 +186,27 @@ body {
     box-sizing: border-box;
 }
 
-.card.hovercard {
+.card-user.hovercard {
     position: relative;
     padding-top: 0;
     overflow: hidden;
     text-align: center;
-    background-color: rgba(214, 224, 226, 0.2);
+    background-color: rgba(255, 255, 255, 1);
 }
 
-.card.hovercard .cardheader {
+.card-user.hovercard .cardheader {
     background: url("../img/cover.jpg");
     background-size: cover;
     height: 135px;
 }
 
-.card.hovercard .avatar {
+.card-user.hovercard .avatar {
     position: relative;
     top: -50px;
     margin-bottom: -50px;
 }
 
-.card.hovercard .avatar img {
+.card-user.hovercard .avatar img {
     width: 100px;
     height: 100px;
     max-width: 100px;
@@ -216,11 +217,11 @@ body {
     border: 5px solid rgba(255,255,255,0.5);
 }
 
-.card.hovercard .info {
+.card-user.hovercard .info {
     padding: 4px 8px 10px;
 }
 
-.card.hovercard .info .title {
+.card-user.hovercard .info .title {
     margin-bottom: 4px;
     font-size: 24px;
     line-height: 1;
@@ -228,7 +229,7 @@ body {
     vertical-align: middle;
 }
 
-.card.hovercard .info .desc {
+.card-user.hovercard .info .desc {
     overflow: hidden;
     font-size: 12px;
     line-height: 20px;
@@ -236,12 +237,12 @@ body {
     text-overflow: ellipsis;
 }
 
-.card.hovercard .bottom {
+.card-user.hovercard .bottom {
     padding: 0 20px;
     margin-bottom: 17px;
 }
 
-.card .btn{ border-radius: 50%; width:32px; height:32px; line-height:18px;  }
+.card-user .btn{ border-radius: 50%; width:32px; height:32px; line-height:18px;  }
 
 .tab {
     border: 1px solid;
