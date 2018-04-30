@@ -256,7 +256,6 @@ class Profile(models.Model):
     verification_token = models.CharField(max_length=MAX_LEN_CONF_VAL)
     verified = models.BooleanField(default=False)
     photo = models.ImageField()
-    enrollement_date = models.DateField()
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.user)
