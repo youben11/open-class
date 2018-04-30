@@ -126,8 +126,3 @@ class ProfileTest(TestCase):
         self.assertEqual(self.profile.user.last_name, 'benaissa')
         self.profile.update_last_name('')
         self.assertEqual(self.profile.user.last_name, 'benaissa')
-
-    def test_ask(self):
-        self.profile.ask(self.workshop.id, "What does RE mean ?")
-        question = self.profile.asked.all()[0]
-        self.assertEqual(question.question, "What does RE mean ?")
