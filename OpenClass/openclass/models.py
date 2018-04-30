@@ -262,7 +262,7 @@ class Profile(models.Model):
         return "[%02d] %s" % (self.pk, self.user)
 
     def update_email(self, email):
-        """Update the email of the user only if the email is valid.
+        """Update the user's email only if it is valid.
         Verify the new email by sending the verification_token."""
 
         email_re = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
@@ -274,6 +274,18 @@ class Profile(models.Model):
         else:
             return False
 
+    def update_phone_number(self, phone_number):
+        """Update the user's phone number only if it is valid."""
+
+        phone_nb_re = r"^(\+[0-9]{3})?[0-9]+$"
+        phone_number = phone_number.replace(" ","")
+        if re.match(phone_nb_re, phone_number):
+            self.phone_number = phone_number
+            self.save()
+            return True
+        else:
+            return False
+            
     def workshops_animated(self):
         """Get the workshops that the user animated.
         The workshops must be DONE."""

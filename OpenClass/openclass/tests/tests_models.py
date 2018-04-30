@@ -58,7 +58,7 @@ class ProfileTest(TestCase):
 
         cls.profile = Profile.objects.create(
                         gender='M', score=100,
-                        phone_number='+21600000',
+                        phone_number='',
                         birthday=date.today(),
                         verification_token='45abc3',
                         verified=False,
@@ -67,6 +67,7 @@ class ProfileTest(TestCase):
                         user=cls.user,
                         )
         cls.profile.update_email('youben@yopmail.com')
+        cls.profile.update_phone_number('+213 557 388 000 ')
         cls.workshop = Workshop.objects.create(
                         title='Binary Analysis',
                         description="Learn how to RE B",
@@ -106,3 +107,10 @@ class ProfileTest(TestCase):
 
     def test_update_email(self):
         self.assertEqual(self.profile.user.email, 'youben@yopmail.com')
+
+    def test_update_phone_number(self):
+        self.assertEqual(self.profile.phone_number, "+213557388000")
+        self.profile.update_phone_number('055 7 ')
+        self.assertEqual(self.profile.phone_number, "0557")
+        self.profile.update_phone_number('055 a 7')
+        self.assertEqual(self.profile.phone_number, "0557")
