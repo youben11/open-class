@@ -1,3 +1,4 @@
+import re
 from django.db import models
 from django.db.models import F,Q
 from django.contrib.auth.models import User
@@ -259,6 +260,19 @@ class Profile(models.Model):
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.user)
+
+    def update_email(self, email):
+        """Update the email of the user only if the email is valid.
+        Verify the new email by sending the verification_token."""
+
+        email_re = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+        if re.match(email_re, email):
+            self.user.email = email
+            self.user.save()
+            #do the verification: send email...
+            return True
+        else:
+            return False
 
     def workshops_animated(self):
         """Get the workshops that the user animated.

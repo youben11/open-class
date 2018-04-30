@@ -54,7 +54,6 @@ class ProfileTest(TestCase):
     def setUpTestData(cls):
         cls.user = User.objects.create(
                                 username='youben11',
-                                email='youben@yopmail.com',
                                 )
 
         cls.profile = Profile.objects.create(
@@ -67,6 +66,7 @@ class ProfileTest(TestCase):
                         enrollement_date=date.today(),
                         user=cls.user,
                         )
+        cls.profile.update_email('youben@yopmail.com')
         cls.workshop = Workshop.objects.create(
                         title='Binary Analysis',
                         description="Learn how to RE B",
@@ -103,3 +103,6 @@ class ProfileTest(TestCase):
         interest = self.profile.get_interests()
         self.assertEqual(interest.get(id=self.tag1.id).name, self.tag1.name)
         self.assertEqual(interest.get(id=self.tag2.id).name, self.tag2.name)
+
+    def test_update_email(self):
+        self.assertEqual(self.profile.user.email, 'youben@yopmail.com')
