@@ -95,7 +95,7 @@ class Workshop(models.Model):
 
     def update_requirements(self, new_requirements):
         if len(new_requirements) > 0:
-            self.requirements = new_objectives
+            self.requirements = new_requirements
             self.save()
             return True
         else:
@@ -112,6 +112,8 @@ class Workshop(models.Model):
     def update_start_date(self, new_start_date):
         # all dates must have tzinfo
         timezone = self.start_date.tzinfo
+        if new_start_date.tzinfo == None:
+            return False
         if new_start_date > datetime.now(timezone):
             self.start_date = new_start_date
             self.save()
