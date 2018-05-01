@@ -1,0 +1,19 @@
+.openbadge{
+  line-height: 1;
+  height: 40px;
+  width: 40px;
+  border-radius: 50% 50% 50% 50%;
+}
+
+.themebadges{
+  border-radius: 40px;
+
+}
+
+.inscription-progress{
+  padding-top: 10px;
+}
+
+.inscription-progress-bar{
+  border-radius: 0px;
+}

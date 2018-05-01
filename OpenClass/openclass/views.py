@@ -6,7 +6,8 @@ def index(request):
     return HttpResponse('Hello, Welcome to OpenClass')
 
 def workshops_list(request):
-    return HttpResponse('workshops_list')
+    w = Workshop.objects.all()
+    return render(request, "listworkshop.html", {"list":w})
 
 def workshops_detail(request, pk):
     return HttpResponse('workshops_detail')
