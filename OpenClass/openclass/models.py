@@ -95,7 +95,7 @@ class Workshop(models.Model):
 
     def update_requirements(self, new_requirements):
         if len(new_requirements) > 0:
-            self.requirements = new_objectives
+            self.requirements = new_requirements
             self.save()
             return True
         else:
@@ -112,6 +112,8 @@ class Workshop(models.Model):
     def update_start_date(self, new_start_date):
         # all dates must have tzinfo
         timezone = self.start_date.tzinfo
+        if new_start_date.tzinfo == None:
+            return False
         if new_start_date > datetime.now(timezone):
             self.start_date = new_start_date
             self.save()
@@ -190,7 +192,11 @@ class Registration(models.Model):
                                         self.status)
 
 class Question(models.Model):
-    author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(
+                    'Profile',
+                    on_delete=models.SET_NULL,
+                    related_name='asked',
+                    null=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     question = models.TextField(blank=False)
 
@@ -256,7 +262,6 @@ class Profile(models.Model):
     verification_token = models.CharField(max_length=MAX_LEN_CONF_VAL)
     verified = models.BooleanField(default=False)
     photo = models.ImageField()
-    enrollement_date = models.DateField()
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.user)
@@ -321,6 +326,28 @@ class Profile(models.Model):
         present = Q(registration__present=True)
         workshops = self.registred_to.filter(accepted, present)
         return workshops
+
+    def ask(self, workshop_pk, question):
+        #check user permission
+        #is he registred ? accepted ?
+        #is he present ? maybe not
+        try:
+            workshop = Workshop.objects.get(pk=workshop_pk)
+            registration = Registration.objects.get(
+                            workshop=workshop,
+                            profile=self)
+        except:
+            return False
+
+        if not registration.present:
+            return False
+
+        #now() is the current time
+        #current_duration = now() - workshop.start_date
+        #if current_duration < workshop.duration:
+
+        self.asked.create(workshop=workshop, question=question)
+        return True
 
     def get_interests(self):#don't use interests():conflict with field interests
         """Get the user's interests in form of Tags."""

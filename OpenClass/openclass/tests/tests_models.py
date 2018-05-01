@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from openclass.models import *
 
 class ModelsTest(TestCase):
@@ -16,7 +16,6 @@ class ModelsTest(TestCase):
                                 verification_token='45abc3',
                                 verified=False,
                                 photo=None,
-                                enrollement_date=date.today(),
                                 )
         cls.user = User.objects.create(username='youben11',
                                         email='youben@yopmail.com',
@@ -63,7 +62,6 @@ class ProfileTest(TestCase):
                         verification_token='45abc3',
                         verified=False,
                         photo=None,
-                        enrollement_date=date.today(),
                         user=cls.user,
                         )
         cls.profile.update_email('youben@yopmail.com')
@@ -128,3 +126,193 @@ class ProfileTest(TestCase):
         self.assertEqual(self.profile.user.last_name, 'benaissa')
         self.profile.update_last_name('')
         self.assertEqual(self.profile.user.last_name, 'benaissa')
+
+    def test_ask(self):
+        self.profile.ask(self.workshop.id, "What does RE mean ?")
+        question = self.profile.asked.all()[0]
+        self.assertEqual(question.question, "What does RE mean ?")
+
+class WorkshopTest(TestCase):
+    """Workshop model test cases"""
+
+    @classmethod
+    def setUp(self):
+        Workshop.objects.create(
+                        title='PWNign in user_land',
+                        description="exploit dev",
+                        required_materials="laptop, linux OS",
+                        objectives="debuggin, exploit dev",
+                        requirements="C programming, Linux basics",
+                        seats_number=99,
+                        submission_date=datetime.now(),
+                        decision_date=datetime.now(),
+                        start_date=datetime.now(),
+                        duration=datetime.now() - datetime.now(),
+                        location='amphi c',
+                        status=Workshop.DONE)
+
+
+    def test_update_title(self):
+        w = Workshop.objects.all()[0]
+
+        # normal update
+        new_title = "kernel exploitation"
+        old_title = w.title
+        ret = w.update_title(new_title)
+        self.assertEqual(ret, True)
+        self.assertEqual(w.title, new_title)
+
+        # MAX_LEN_TITLE condition
+        new_title = "A"*(Workshop.MAX_LEN_TITLE+1)
+        old_title = w.title
+        ret = w.update_title(new_title)
+        self.assertEqual(ret, False)
+        self.assertEqual(w.title, old_title)
+
+        # blank title
+        new_title = ""
+        old_title = w.title
+        ret = w.update_title(new_title)
+        self.assertEqual(ret, False)
+        self.assertEqual(w.title, old_title)
+
+    def test_update_description(self):
+        w = Workshop.objects.all()[0]
+
+        # normal update
+        new_description = "learn how to find bugs and dev exploits"
+        old_description = w.description
+        ret = w.update_description(new_description)
+        self.assertEqual(ret, True)
+        self.assertEqual(w.description, new_description)
+
+        # blank description
+        new_description = ""
+        old_description = w.description
+        ret = w.update_description(new_description)
+        self.assertEqual(ret, False)
+        self.assertEqual(w.description, old_description)
+
+    def test_update_required_materials(self):
+        w = Workshop.objects.all()[0]
+
+        # normal update
+        new_required_materials = "linux os, gdb-peda, radare2"
+        old_required_materials = w.objectives
+        ret = w.update_required_materials(new_required_materials)
+        self.assertEqual(ret, True)
+        self.assertEqual(w.required_materials, new_required_materials)
+
+        # blank objectives
+        new_required_materials = ""
+        old_required_materials = w.required_materials
+        ret = w.update_required_materials(new_required_materials)
+        self.assertEqual(ret, False)
+        self.assertEqual(w.required_materials, old_required_materials)
+
+    def test_objectives(self):
+        w = Workshop.objects.all()[0]
+
+        # normal update
+        new_objectives = "secure coding, bug exploitation"
+        old_objectives = w.objectives
+        ret = w.update_objectives(new_objectives)
+        self.assertEqual(ret, True)
+        self.assertEqual(w.objectives, new_objectives)
+
+        # blank objectives
+        new_objectives = ""
+        old_objectives = w.objectives
+        ret = w.update_objectives(new_objectives)
+        self.assertEqual(ret, False)
+        self.assertEqual(w.objectives, old_objectives)
+
+    def test_update_requirements(self):
+        w = Workshop.objects.all()[0]
+
+        # normal update
+        new_requirements = "python, c, assembly"
+        old_requirements = w.requirements
+        ret = w.update_requirements(new_requirements)
+        self.assertEqual(ret, True)
+        self.assertEqual(w.requirements, new_requirements)
+
+        # blank requirements
+        new_requirements = ""
+        old_requirements = w.requirements
+        ret = w.update_requirements(new_requirements)
+        self.assertEqual(ret, False)
+        self.assertEqual(w.requirements, old_requirements)
+
+    def test_update_seats_number(self):
+        w = Workshop.objects.all()[0]
+
+        # normal update
+        new_seats_number = 64
+        old_seats_number = w.seats_number
+        ret = w.update_seats_number(new_seats_number)
+        self.assertEqual(ret, True)
+        self.assertEqual(w.seats_number, new_seats_number)
+
+        # zero seats_number
+        new_seats_number = 0
+        old_seats_number = w.seats_number
+        ret = w.update_seats_number(new_seats_number)
+        self.assertEqual(ret, False)
+        self.assertEqual(w.seats_number, old_seats_number)
+
+        # negative number
+        new_seats_number = -15
+        old_seats_number = w.seats_number
+        ret = w.update_seats_number(new_seats_number)
+        self.assertEqual(ret, False)
+        self.assertEqual(w.seats_number, old_seats_number)
+
+    def test_update_start_date(self):
+        w = Workshop.objects.all()[0]
+        timezone = w.start_date.tzinfo
+
+        # normal update
+        new_start_date = datetime.now(timezone) + timedelta(5)
+        old_start_date = w.start_date
+        ret = w.update_start_date(new_start_date)
+        self.assertEqual(ret, True)
+        self.assertEqual(w.start_date, new_start_date)
+
+        # date without timezone
+        new_start_date = datetime.now() + timedelta(5)
+        old_start_date = w.start_date
+        ret = w.update_start_date(new_start_date)
+        self.assertEqual(ret, False)
+        self.assertEqual(w.start_date, old_start_date)
+
+        # old date
+        new_start_date = datetime.now(timezone) - timedelta(16)
+        old_start_date = w.start_date
+        ret = w.update_start_date(new_start_date)
+        self.assertEqual(ret, False)
+        self.assertEqual(w.start_date, old_start_date)
+
+    def test_update_location(self):
+        w = Workshop.objects.all()[0]
+
+        # normal update
+        new_location = "class prepa amphi B"
+        old_location = w.location
+        ret = w.update_location(new_location)
+        self.assertEqual(ret, True)
+        self.assertEqual(w.location, new_location)
+
+        # MAX_LEN_location condition
+        new_location = "A"*(Workshop.MAX_LEN_LOCATION+1)
+        old_location = w.location
+        ret = w.update_location(new_location)
+        self.assertEqual(ret, False)
+        self.assertEqual(w.location, old_location)
+
+        # blank location
+        new_location = ""
+        old_location = w.location
+        ret = w.update_location(new_location)
+        self.assertEqual(ret, False)
+        self.assertEqual(w.location, old_location)
