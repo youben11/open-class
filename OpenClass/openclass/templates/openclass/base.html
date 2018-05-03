@@ -6,12 +6,12 @@
     <title>Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/vendor.css' %}">
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    <script src="{% static 'js/modernizr.js' %}"></script>
-    <script src="{% static 'js/pace.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'openclass/css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'openclass/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'openclass/css/vendor.css' %}">
+    <link rel="stylesheet" href="{% static 'openclass/css/main.css' %}">
+    <script src="{% static 'openclass/js/modernizr.js' %}"></script>
+    <script src="{% static 'openclass/js/pace.min.js' %}"></script>
     <!-- <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script> -->
     <!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -23,11 +23,11 @@
 
             <div class="header__logo">
                 <a class="logo" href="index.html">
-                    <img src="{% static 'img/logo.png' %}" alt="Homepage">
+                    <img src="{% static 'openclass/img/logo.png' %}" alt="Homepage">
                 </a>
             </div> <!-- end header__logo -->
 
-            
+
             <a class="header__search-trigger" href="#0"></a>
 
             <div class="header__search">
@@ -39,7 +39,7 @@
                     </label>
                     <input type="submit" class="search-submit" value="Search">
                 </form>
-    
+
                 <a href="#0" title="Close Search" class="header__overlay-close">Close</a>
 
             </div>  <!-- end header__search -->
@@ -84,7 +84,7 @@
 
         </div> <!-- header-content -->
     </header> <!-- header -->
-    
+
     {% block content %}
     {% endblock %}
 
@@ -92,9 +92,9 @@
 
         <div class="s-footer__main">
             <div class="row">
-                
+
                 <div class="col-two md-four mob-full s-footer__sitelinks">
-                        
+
                     <h4>Quick Links</h4>
 
                     <ul class="s-footer__linklist">
@@ -109,7 +109,7 @@
                 </div> <!-- end s-footer__sitelinks -->
 
                 <div class="col-two md-four mob-full s-footer__archives">
-                        
+
                     <h4>Archives</h4>
 
                     <ul class="s-footer__linklist">
@@ -124,7 +124,7 @@
                 </div> <!-- end s-footer__archives -->
 
                 <div class="col-two md-four mob-full s-footer__social">
-                        
+
                     <h4>Social</h4>
 
                     <ul class="s-footer__linklist">
@@ -139,7 +139,7 @@
                 </div> <!-- end s-footer__social -->
 
                 <div class="col-five md-full end s-footer__subscribe">
-                        
+
                     <h4>OpenClass</h4>
 
                     <p>Sit vel delectus amet officiis repudiandae est voluptatem. Tempora maxime provident nisi et fuga et enim exercitationem ipsam. Culpa consequatur occaecati.</p>
@@ -148,11 +148,11 @@
                         <form id="mc-form" class="group" novalidate="true">
 
                             <input type="email" value="" name="EMAIL" class="email" id="mc-email" placeholder="Find a workshop" required="">
-                
+
                             <input type="submit" name="subscribe" value="SEARCH">
-                
+
                             <label for="mc-email" class="subscribe-message"></label>
-                
+
                         </form>
                     </div>
 
@@ -165,7 +165,7 @@
             <div class="row">
                 <div class="col-full">
                     <div class="s-footer__copyright">
-                        <span>© Copyright OpenClass 2018</span> 
+                        <span>© Copyright OpenClass 2018</span>
                     </div>
 
                     <div class="go-top">
@@ -195,8 +195,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-<script src="{% static 'js/plugins.js' %}"></script>
-<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'openclass/js/plugins.js' %}"></script>
+<script src="{% static 'openclass/js/main.js' %}"></script>
 
 </body>
 </html>

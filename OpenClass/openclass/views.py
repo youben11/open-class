@@ -8,7 +8,7 @@ def index(request):
 
 def workshops_list(request):
     w = Workshop.objects.all()
-    return render(request, "listworkshop.html", {"list":w})
+    return render(request, "openclass/listworkshop.html", {"list":w})
 
 def workshops_detail(request, pk):
     return HttpResponse('workshops_detail')
@@ -24,7 +24,7 @@ def badges_list(request):
 
 def profile(request):
    w = Workshop.objects.all()
-   return render(request, "profile.html", {"w":w})
+   return render(request, "openclass/profile.html", {"w":w})
 
 def signup(request):
     if request.method == "POST":
