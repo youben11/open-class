@@ -2,6 +2,7 @@ import re
 from django.db import models
 from django.db.models import F,Q
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 
 from datetime import datetime
 
@@ -242,6 +243,7 @@ class Tag(models.Model):
         return "[%02d] %s" % (self.pk, self.name)
 
 class Profile(models.Model):
+    RE_PHONE_NB = r"^(\+[\d ]{3})?[\d ]+$"
     MAX_LEN_PHONE_NB = 20
     MAX_LEN_CONF_VAL = 64
     MALE = 'M'
@@ -257,7 +259,9 @@ class Profile(models.Model):
     interests = models.ManyToManyField('Tag')
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=NAG)
     score = models.PositiveIntegerField()
-    phone_number = models.CharField(max_length=MAX_LEN_PHONE_NB)
+    phone_number = models.CharField(
+                            max_length=MAX_LEN_PHONE_NB,
+                            validators=[RegexValidator(regex=RE_PHONE_NB),])
     birthday = models.DateField(null=True)
     verification_token = models.CharField(max_length=MAX_LEN_CONF_VAL)
     verified = models.BooleanField(default=False)
