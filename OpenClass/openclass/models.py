@@ -363,6 +363,11 @@ class Profile(models.Model):
         interests = self.interests.all()
         return interests
 
+    def get_age(self):
+        "calculate the age of a user from birthday"
+        age = datetime.now().date().year - self.birthday.year
+        return age
+
 class Preference(models.Model):
     profile = models.OneToOneField('Profile', on_delete=models.CASCADE)
     confidentiality = models.IntegerField()

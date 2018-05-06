@@ -40,3 +40,18 @@ def signup(request):
 
     context = {"user_form":user_form, "user_profile_form":user_profile_form}
     return render(request, 'openclass/signup.html', context)
+
+
+def submit_workshop(request):
+    if request.method == "POST":
+        workshop_form = WorkshopForm(request.POST)
+        if workshop_form.is_valid():
+            workshop_form.save()
+            return HttpResponse("Thanks, Your workshop has been submitted")
+
+    else:
+        workshop_form = WorkshopForm()
+
+    context = {"workshop_form": workshop_form}
+    return render(request, "openclass/submit_workshop.html", context)
+
