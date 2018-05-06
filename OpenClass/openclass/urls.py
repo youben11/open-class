@@ -13,7 +13,7 @@ urlpatterns = [
     path('badges/', views.badges_list, name='badges_list'),
     path('profile/', views.profile, name='profile'),
     path('signup/', views.signup, name='signup'),
-    # path('submit_workshop/', views.submit_workshop, name='submit_workshop'),
+    path('submit_workshop/', views.submit_workshop, name='submit_workshop'),
     path('login/', auth_views.login, name='login'),
     path('logout/', auth_views.logout, name='logout'),
 ]
