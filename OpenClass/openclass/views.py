@@ -11,7 +11,7 @@ def workshops_list(request):
     return render(request, "openclass/listworkshop.html", {"list":w})
 
 def workshops_detail(request, pk):
-    return HttpResponse('workshops_detail')
+    return render(request, "openclass/workshop.html")
 
 def members_list(request):
     return HttpResponse('members_list')
