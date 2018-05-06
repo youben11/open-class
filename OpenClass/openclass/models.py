@@ -192,6 +192,10 @@ class Registration(models.Model):
         return "[%02d] %s -> %s <%s>" % (self.pk, self.profile, self.workshop,
                                         self.status)
 
+    def confirm_presence(self):
+        #make sure the workshop has started
+        self.present = True
+
 class Question(models.Model):
     author = models.ForeignKey(
                     'Profile',
