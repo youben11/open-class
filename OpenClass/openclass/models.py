@@ -192,6 +192,10 @@ class Registration(models.Model):
         return "[%02d] %s -> %s <%s>" % (self.pk, self.profile, self.workshop,
                                         self.status)
 
+    def confirm_presence(self):
+        #make sure the workshop has started
+        self.present = True
+
 class Question(models.Model):
     author = models.ForeignKey(
                     'Profile',
@@ -248,11 +252,11 @@ class Profile(models.Model):
     MAX_LEN_CONF_VAL = 64
     MALE = 'M'
     FEMALE = 'F'
-    NAG = ' ' #NotAGender
+    NAG = 'X' #NotAGender
     GENDER_CHOICES = (
         (MALE, 'Male'),
         (FEMALE, 'Female'),
-        (NAG, '')
+        (NAG, 'Not mentioned')
     )
     badges = models.ManyToManyField('Badge', through='Have_badge')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
