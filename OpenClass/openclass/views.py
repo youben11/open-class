@@ -44,4 +44,3 @@ def signup(request):
 
     context = {"user_form":user_form, "user_profile_form":user_profile_form}
     return render(request, 'openclass/signup.html', context)
-    
