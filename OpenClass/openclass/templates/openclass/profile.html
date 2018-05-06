@@ -14,12 +14,12 @@
                     <img alt="" src="{% static 'openclass/img/nadir.png' %}">
                 </div>
                 <div class="info">
-                    <div class="title">@droggy</div>
-                    <div class="desc">Ahmed Nadir</div>
-                    <div class="desc">Bounoua</div>
-                    <div class="desc">a.bounoua@esi-sba.dz</div>
-                    <div class="desc">21 years</div>
-                    <div class="desc">+213 542 158 381</div>
+                    <div class="title">@{{user.username}}</div>
+                    <div class="desc">{{user.first_name}}</div>
+                    <div class="desc">{{user.last_name}}</div>
+                    <div class="desc">{{user.email}}</div>
+                    <div class="desc">{{user.birthday}} years</div>
+                    <div class="desc">{{user.phone_number}}</div>
                 </div>
             </div>
 

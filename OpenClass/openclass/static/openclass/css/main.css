@@ -660,7 +660,7 @@ select {
    padding: 1.5rem 0;
    border: 0;
    outline: none;
-   color: #151515;
+   color: #ffffff;
    font-family: "metropolis-regular", sans-serif;
    font-size: 1.6rem;
    line-height: 3rem;
@@ -1802,7 +1802,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
    margin: 0;
    padding: 0;
    position: absolute;
-   left: 20px;
+   right: 20px;
    top: 12px;
 }
 
@@ -1983,7 +1983,7 @@ body.search-is-visible {
    height: 21px;
    min-width: 21px;
    position: absolute;
-   right: 20px;
+   right: 60px;
    top: 15px;
    background-image: url(../images/icons/icon-search.svg);
    background-repeat: no-repeat;
@@ -2128,9 +2128,9 @@ body.search-is-visible {
  * ## main navigation
  * ------------------------------------------------------------------- */
 .header__nav-wrap {
-   margin-top: 15px;
-   border-top: 1px solid rgba(255, 255, 255, 0.04);
-   padding-top: 15px;
+   margin-top: 0px;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+   padding-top: 10px;
 }
 
 .header__nav-wrap a {
