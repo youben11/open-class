@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 app_name = "openclass"
 
@@ -12,4 +13,6 @@ urlpatterns = [
     path('badges/', views.badges_list, name='badges_list'),
     path('profile/', views.profile, name='profile'),
     path('signup/', views.signup, name='signup'),
+    path('login/', auth_views.login, name='login'),
+    path('logout/', auth_views.login, name='logout'),
 ]

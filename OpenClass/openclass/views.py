@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Workshop
+from .models import *
 from .forms import *
 
 def index(request):
@@ -23,10 +23,14 @@ def badges_list(request):
     return HttpResponse('badges_list')
 
 def profile(request):
-   w = Workshop.objects.all()
-   return render(request, "openclass/profile.html", {"w":w})
+    user = request.user
+    w = Workshop.objects.all()
+    return render(request, "openclass/profile.html", {"w":w})
 
 def signup(request):
+
+    tags = Tag.objects.all()
+
     if request.method == "POST":
         user_form = UserForm(request.POST)
         user_profile_form = UserProfileForm(request.POST)
@@ -40,3 +44,4 @@ def signup(request):
 
     context = {"user_form":user_form, "user_profile_form":user_profile_form}
     return render(request, 'openclass/signup.html', context)
+    
