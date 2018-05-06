@@ -248,11 +248,11 @@ class Profile(models.Model):
     MAX_LEN_CONF_VAL = 64
     MALE = 'M'
     FEMALE = 'F'
-    NAG = ' ' #NotAGender
+    NAG = 'X' #NotAGender
     GENDER_CHOICES = (
         (MALE, 'Male'),
         (FEMALE, 'Female'),
-        (NAG, '')
+        (NAG, 'Not mentioned')
     )
     badges = models.ManyToManyField('Badge', through='Have_badge')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
