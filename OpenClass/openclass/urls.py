@@ -15,9 +15,5 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('submit_workshop/', views.submit_workshop, name='submit_workshop'),
     path('login/', auth_views.login, name='login'),
-<<<<<<< HEAD
     path('logout/', auth_views.logout, name='logout'),
-=======
-    path('logout/', auth_views.login, name='logout'),
->>>>>>> a99409e880b11e5aaa9b6e7778bf2347a2e9af31
 ]
