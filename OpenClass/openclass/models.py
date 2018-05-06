@@ -366,7 +366,12 @@ class Profile(models.Model):
     def get_age(self):
         "calculate the age of a user from birthday"
         age = datetime.now().date().year - self.birthday.year
-        return age
+        if datetime.now().date().month < self.birthday.month and datetime.now().date().day < self.birthday.day:
+            return age-1
+        if datetime.now().date().month == self.birthday.month and datetime.now().date().day < self.birthday.day:
+            return age-1
+        else:
+            return age
 
 class Preference(models.Model):
     profile = models.OneToOneField('Profile', on_delete=models.CASCADE)

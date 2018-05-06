@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from .models import *
 from .forms import *
+from django.contrib.auth.decorators import login_required, permission_required
 
 def index(request):
     return HttpResponse('Hello, Welcome to OpenClass')
@@ -22,10 +23,13 @@ def members_detail(request, pk):
 def badges_list(request):
     return HttpResponse('badges_list')
 
+@login_required(login_url='/login')
 def profile(request):
     user = request.user
-    w = Workshop.objects.all()
-    return render(request, "openclass/profile.html", {"w":w})
+    w_at = user.profile.workshops_attended()
+    w_an = user.profile.workshops_animated()
+    age = user.profile.get_age
+    return render(request, "openclass/profile.html", {"w_at":w_at,"w_an":w_an,"age":age})
 
 def signup(request):
 
