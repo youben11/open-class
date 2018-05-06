@@ -1,8 +1,10 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
 
 def index(request):
     return HttpResponse('Hello, Welcome to OpenClass')
@@ -40,7 +42,12 @@ def signup(request):
         user_profile_form = UserProfileForm(request.POST)
 
         if user_form.is_valid() and user_profile_form.is_valid():
-            return HttpResponse("everything valid")
+            user_form.save()
+            username = user_form.cleaned_data.get('username')
+            raw_password = user_form.cleaned_data.get('password')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('/profile')
 
     else:
         user_form = UserForm()
