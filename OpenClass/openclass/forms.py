@@ -1,4 +1,5 @@
 from django.forms import ModelForm
+from django import forms
 from django.contrib.auth.models import User
 from .models import Profile, Workshop
 
@@ -6,12 +7,18 @@ class UserProfileForm(ModelForm):
     class Meta:
         model = Profile
         fields = ['gender', 'birthday', 'phone_number', 'interests', 'photo']
+        widgets = {
+                'birthday': forms.DateInput(attrs={'type':'date'})
+                }
 
 class UserForm(ModelForm):
 
     class Meta:
         model = User
         fields = ['username', 'password', 'email', 'first_name', 'last_name']
+        widgets = {
+                'password':forms.PasswordInput()
+        }
 
 class WorkshopForm(ModelForm):
 
