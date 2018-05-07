@@ -1,8 +1,11 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+
 from .models import *
 from .forms import *
-from django.contrib.auth.decorators import login_required, permission_required
+
 
 def index(request):
     return render(request, "openclass/home.html")
