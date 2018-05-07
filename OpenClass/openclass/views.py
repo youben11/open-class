@@ -77,3 +77,8 @@ def submit_workshop(request):
 
     context = {"workshop_form": workshop_form}
     return render(request, "openclass/submit_workshop.html", context)
+
+
+def moderation(request):
+    return render(request, "openclass/moderation.html")
+

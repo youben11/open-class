@@ -17,4 +17,5 @@ urlpatterns = [
     path('submit_workshop/', views.submit_workshop, name='submit_workshop'),
     path('login/', auth_views.login, name='login'),
     path('logout/', auth_views.logout, name='logout'),
+    path('moderation/', views.moderation, name='moderation'),
 ]
