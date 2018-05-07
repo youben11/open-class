@@ -46,7 +46,16 @@ def signup(request):
         user_profile_form = UserProfileForm(request.POST)
 
         if user_form.is_valid() and user_profile_form.is_valid():
-            return HttpResponse("everything valid")
+            user = user_form.save(commit=False)
+            user.set_password(user.password)
+            user.save()
+            profile = user_profile_form.save(commit=False)
+            profile.user = user
+            profile.score = 0
+            profile.save()
+            #should verify the user via email
+            login(request, user)
+            return redirect('/profile')
 
     else:
         user_form = UserForm()
