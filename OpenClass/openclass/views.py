@@ -28,10 +28,6 @@ def profile(request):
     user = request.user
     return render(request, "openclass/profile.html")
 
-def profile(request):
-    user = request.user
-    return render(request, "openclass/profile.html")    
-
 def prefs(request):
     user = request.user
     age = user.profile.get_age
