@@ -85,8 +85,8 @@ html, body {
 }
 
 body {
-   background: #19191b;
-   font-family: "metropolis-regular", sans-serif;
+   background: #181820;
+   /*font-family: "metropolis-regular", sans-serif;*/
    font-size: 1.6rem;
    font-style: normal;
    font-weight: normal;
@@ -121,7 +121,7 @@ a:hover, a:active {
  * 
  * ------------------------------------------------------------------- */
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-   font-family: "librebaskerville-bold", serif;
+   /*font-family: "librebaskerville-bold", serif;*/
    color: #000000;
    font-style: normal;
    font-weight: normal;
@@ -206,7 +206,7 @@ p img {
 }
 
 p.lead {
-   font-family: "metropolis-medium", sans-serif;
+   /*font-family: "metropolis-medium", sans-serif;*/
    font-size: 2rem;
    line-height: 1.8;
    margin-bottom: 3.6rem;
@@ -661,7 +661,7 @@ select {
    border: 0;
    outline: none;
    color: #ffffff;
-   font-family: "metropolis-regular", sans-serif;
+   /*font-family: "metropolis-regular", sans-serif;*/
    font-size: 1.6rem;
    line-height: 3rem;
    max-width: 100%;
@@ -743,7 +743,7 @@ select:focus {
 }
 
 label, legend {
-   font-family: "metropolis-regular", sans-serif;
+   /*font-family: "metropolis-regular", sans-serif;*/
    font-size: 1.4rem;
    font-weight: bold;
    margin-bottom: .9rem;
@@ -817,7 +817,7 @@ input[type="submit"],
 input[type="reset"],
 input[type="button"] {
    display: inline-block;
-   font-family: "metropolis-bold", sans-serif;
+   /*font-family: "metropolis-bold", sans-serif;*/
    font-size: 1.2rem;
    text-transform: uppercase;
    letter-spacing: .3rem;
@@ -833,8 +833,8 @@ input[type="button"] {
    cursor: pointer;
    -webkit-transition: all 0.3s ease-in-out;
    transition: all 0.3s ease-in-out;
-   background-color: #c5c5c5;
-   border: .2rem solid #c5c5c5;
+   background-color: #ffe;
+   border: .2rem solid #19191b;
 }
 
 .btn:hover,
@@ -847,9 +847,9 @@ button:focus,
 input[type="submit"]:focus,
 input[type="reset"]:focus,
 input[type="button"]:focus {
-   background-color: #b8b8b8;
-   border-color: #b8b8b8;
-   color: #000000;
+   background-color: #19191b;
+   border-color: #19191b;
+   color: #fff;
    outline: 0;
 }
 
@@ -933,7 +933,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
    position: relative;
    margin-bottom: 3rem;
    border-radius: 3px;
-   font-family: "metropolis-semibold", sans-serif;
+   /*font-family: "metropolis-semibold", sans-serif;*/
    font-size: 1.5rem;
    line-height: 1.6;
 }
@@ -981,7 +981,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
    margin: 0;
    padding: 1.5rem .6rem 0 0;
    font-size: 8.4rem;
-   font-family: "metropolis-extrabold", sans-serif;
+   /*font-family: "metropolis-extrabold", sans-serif;*/
    font-weight: bold;
    line-height: 6rem;
    text-indent: 0;
@@ -1113,7 +1113,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 .stats-tabs li a {
    display: inline-block;
    font-size: 2.5rem;
-   font-family: "metropolis-bold", sans-serif;
+   /*font-family: "metropolis-bold", sans-serif;*/
    font-weight: bold;
    border: none;
    color: #000000;
@@ -1127,7 +1127,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
    display: block;
    margin: .6rem 0 0 0;
    font-size: 1.5rem;
-   font-family: "metropolis-regular", sans-serif;
+   /*font-family: "metropolis-regular", sans-serif;*/
    color: #727272;
 }
 
@@ -1155,7 +1155,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 }
 
 .pgn__num {
-   font-family: "metropolis-bold", sans-serif;
+   /*font-family: "metropolis-bold", sans-serif;*/
    font-size: 1.5rem;
    line-height: 2.4rem;
    display: inline-block;
@@ -1914,7 +1914,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 
 .header__search-form input[type="search"] {
    background-color: transparent;
-   color: #000000;
+   color: #fff;
    height: auto;
    width: 100%;
    font-family: "metropolis-semibold", sans-serif;
