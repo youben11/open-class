@@ -26,7 +26,7 @@ def members_detail(request, pk):
 def badges_list(request):
     return HttpResponse('badges_list')
 
-@login_required(login_url='/login')
+@login_required()
 def profile(request):
     user = request.user
     return render(request, "openclass/profile.html")
