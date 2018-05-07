@@ -28,7 +28,6 @@ def badges_list(request):
 
 @login_required()
 def profile(request):
-    user = request.user
     return render(request, "openclass/profile.html")
 
 def prefs(request):
