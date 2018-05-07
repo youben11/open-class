@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'openclass/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'openclass/css/vendor.css' %}">
     <link rel="stylesheet" href="{% static 'openclass/css/main.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
     <script src="{% static 'openclass/js/modernizr.js' %}"></script>
     <script src="{% static 'openclass/js/pace.min.js' %}"></script>
     <!-- <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script> -->
@@ -20,7 +21,7 @@
         <div class="header__content row">
 
             <div class="header__logo">
-                <a class="logo" href="index.html">
+                <a class="logo" href="{% url 'openclass:index' %}">
                     <img src="{% static 'openclass/img/logo.png' %}" alt="Homepage">
                 </a>
             </div> <!-- end header__logo -->
@@ -50,30 +51,36 @@
                 <h2 class="header__nav-heading h6">Site Navigation</h2>
 
                 <ul class="header__nav">
-                    <li class="current"><a href="index.html" title="">Home</a></li>
+                    <li class="current"><a href="{% url 'openclass:index' %}" title="">Home</a></li>
                     <li class="has-children">
-                        <a href="#0" title="">Categories</a>
+                        <a href="#0" title="">Workshops</a>
                         <ul class="sub-menu">
-                        <li><a href="category.html">Lifestyle</a></li>
-                        <li><a href="category.html">Health</a></li>
-                        <li><a href="category.html">Family</a></li>
-                        <li><a href="category.html">Management</a></li>
-                        <li><a href="category.html">Travel</a></li>
-                        <li><a href="category.html">Work</a></li>
+                        <li><a href="{% url 'openclass:workshops_list' %}">Workshops List</a></li>
+                        <li><a href="#">Upcoming Workshops</a></li>
                         </ul>
                     </li>
+                    <li><a href="#" title="">FAQ</a></li>
+                    <li><a href="#" title="">About</a></li>
+                    <li><a href="#" title="">Contact</a></li>
+                    {% if request.user.is_authenticated %}
                     <li class="has-children">
-                        <a href="#0" title="">Blog</a>
+                        <a href="{% url 'openclass:profile' %}">
+                        @{{ request.user.username }}
+                        </a>
                         <ul class="sub-menu">
-                        <li><a href="single-video.html">Video Post</a></li>
-                        <li><a href="single-audio.html">Audio Post</a></li>
-                        <li><a href="single-gallery.html">Gallery Post</a></li>
-                        <li><a href="single-standard.html">Standard Post</a></li>
+                        <li><a href="{% url 'openclass:profile' %}">Profile</a></li>
+                        <li><a href="{% url 'openclass:prefs' %}">Preferences</a></li>
+                        <li><a href="#">My Registrations</a></li>
+                        <li><a href="{% url 'openclass:logout' %}">Logout</a></li>
                         </ul>
                     </li>
-                    <li><a href="style-guide.html" title="">Styles</a></li>
-                    <li><a href="about.html" title="">About</a></li>
-                    <li><a href="contact.html" title="">Contact</a></li>
+                    {% else %}
+                    <li>
+                        <a href="{% url 'openclass:login' %}" title="">
+                        Login
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul> <!-- end header__nav -->
 
                 <a href="#0" title="Close Menu" class="header__overlay-close close-mobile-menu">Close</a>
@@ -96,27 +103,27 @@
                     <h4>Quick Links</h4>
 
                     <ul class="s-footer__linklist">
-                        <li><a href="#0">Home</a></li>
-                        <li><a href="#0">Blog</a></li>
-                        <li><a href="#0">Styles</a></li>
+                        <li><a href="{% url 'openclass:index' %}">Home</a></li>
+                        <li><a href="{% url 'openclass:workshops_list' %}">Workshops</a></li>
+                        <li><a href="#0">FAQ</a></li>
                         <li><a href="#0">About</a></li>
                         <li><a href="#0">Contact</a></li>
-                        <li><a href="#0">Privacy Policy</a></li>
+                        <li><a href="#0">Terms of use</a></li>
                     </ul>
 
                 </div> <!-- end s-footer__sitelinks -->
 
                 <div class="col-two md-four mob-full s-footer__archives">
 
-                    <h4>Archives</h4>
+                    <h4>TRENDING</h4>
 
                     <ul class="s-footer__linklist">
-                        <li><a href="#0">January 2018</a></li>
-                        <li><a href="#0">December 2017</a></li>
-                        <li><a href="#0">November 2017</a></li>
-                        <li><a href="#0">October 2017</a></li>
-                        <li><a href="#0">September 2017</a></li>
-                        <li><a href="#0">August 2017</a></li>
+                        <li><a href="#0">Security</a></li>
+                        <li><a href="#0">Design</a></li>
+                        <li><a href="#0">Web Development<a></li>
+                        <li><a href="#0">Mobile Development</a></li>
+                        <li><a href="#0">Sound Editing</a></li>
+                        <li><a href="#0">Soft Skills</a></li>
                     </ul>
 
                 </div> <!-- end s-footer__archives -->

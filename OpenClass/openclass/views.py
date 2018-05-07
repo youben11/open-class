@@ -1,13 +1,14 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+
 from .models import *
 from .forms import *
-from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
+
 
 def index(request):
-    return HttpResponse('Hello, Welcome to OpenClass')
+    return render(request, "openclass/home.html")
 
 def workshops_list(request):
     w = Workshop.objects.all()
@@ -25,13 +26,14 @@ def members_detail(request, pk):
 def badges_list(request):
     return HttpResponse('badges_list')
 
-@login_required(login_url='/login')
+@login_required()
 def profile(request):
+    return render(request, "openclass/profile.html")
+
+def prefs(request):
     user = request.user
-    w_at = user.profile.workshops_attended()
-    w_an = user.profile.workshops_animated()
     age = user.profile.get_age
-    return render(request, "openclass/profile.html", {"w_at":w_at,"w_an":w_an,"age":age})
+    return render(request, "openclass/user-preferences.html", {"age":age})
 
 def signup(request):
 
@@ -60,6 +62,7 @@ def signup(request):
     context = {"user_form":user_form, "user_profile_form":user_profile_form}
     return render(request, 'openclass/signup.html', context)
 
+
 def submit_workshop(request):
     if request.method == "POST":
         workshop_form = WorkshopForm(request.POST)
@@ -72,3 +75,8 @@ def submit_workshop(request):
 
     context = {"workshop_form": workshop_form}
     return render(request, "openclass/submit_workshop.html", context)
+
+
+def moderation(request):
+    return render(request, "openclass/moderation.html")
+

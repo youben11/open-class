@@ -18,7 +18,7 @@
                     <div class="desc">{{user.first_name}}</div>
                     <div class="desc">{{user.last_name}}</div>
                     <div class="desc">{{user.email}}</div>
-                    <div class="desc">{{age}} years</div>
+                    <div class="desc">{{user.profile.get_age}} years</div>
                     <div class="desc">{{user.phone_number}}</div>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                       <div class="card">
                         <div class="card-header" id="headingOne">
                           <h5 class="mb-0 text-center">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <button class="btn" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                               Workshop Attended
                             </button>
                           </h5>
@@ -43,7 +43,7 @@
                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                           <div class="card-body">
                             <div class="list-group  text-center">
-                            {% for workshop in w_at %}
+                            {% for workshop in user.profile.workshops_attended %}
                               <a href="#" class="list-group-item list-group-item-action">{{workshop.title}}</a>
                             {% endfor %}
                               <a href="#" class="list-group-item list-group-item-action">Example Workshop 1</a>
@@ -57,7 +57,7 @@
                       <div class="card">
                         <div class="card-header" id="headingTwo">
                           <h5 class="mb-0 text-center">
-                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <button class="btn collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                               Workshops Animated
                             </button>
                           </h5>
@@ -65,7 +65,7 @@
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                           <div class="card-body">
                             <div class="list-group  text-center">
-                            {% for workshop in w_an %}
+                            {% for workshop in user.profile.workshops_animated %}
                               <a href="#" class="list-group-item list-group-item-action">{{workshop.title}}</a>
                             {% endfor %}
                               <a href="#" class="list-group-item list-group-item-action">Example Workshop 1</a>
