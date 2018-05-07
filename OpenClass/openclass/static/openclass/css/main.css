@@ -817,15 +817,15 @@ input[type="submit"],
 input[type="reset"],
 input[type="button"] {
    display: inline-block;
-   /*font-family: "metropolis-bold", sans-serif;*/
-   font-size: 1.2rem;
-   text-transform: uppercase;
-   letter-spacing: .3rem;
-   height: 5.4rem;
-   line-height: 5rem;
+   font-family: 'Abel';
+   font-size: 1.8rem;
+   /*text-transform: uppercase;*/
+   letter-spacing: .1rem;
+   height: 3.4rem;
+   line-height: 3rem;
    padding: 0 3rem;
    margin: 0 .3rem 1.2rem 0;
-   color: #000000;
+   color: #FFFFFF;
    text-decoration: none;
    text-align: center;
    white-space: nowrap;
@@ -833,8 +833,12 @@ input[type="button"] {
    cursor: pointer;
    -webkit-transition: all 0.3s ease-in-out;
    transition: all 0.3s ease-in-out;
-   background-color: #ffe;
-   border: .2rem solid #19191b;
+   background-color: #0054a5;;
+   border: .2rem solid #0054a5;
+}
+
+input[type="submit"] {
+   height: 5.4rem;
 }
 
 .btn:hover,
