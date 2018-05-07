@@ -5,7 +5,7 @@ from .forms import *
 from django.contrib.auth.decorators import login_required, permission_required
 
 def index(request):
-    return HttpResponse('Hello, Welcome to OpenClass')
+    return render(request, "openclass/home.html")
 
 def workshops_list(request):
     w = Workshop.objects.all()
