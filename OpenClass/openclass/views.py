@@ -42,10 +42,14 @@ def signup(request):
         user_profile_form = UserProfileForm(request.POST)
 
         if user_form.is_valid() and user_profile_form.is_valid():
-            user_form.save()
-            username = user_form.cleaned_data.get('username')
-            raw_password = user_form.cleaned_data.get('password')
-            user = authenticate(username=username, password=raw_password)
+            user = user_form.save(commit=False)
+            user.set_password(user.password)
+            user.save()
+            profile = user_profile_form.save(commit=False)
+            profile.user = user
+            profile.score = 0
+            profile.save()
+            #should verify the user via email
             login(request, user)
             return redirect('/profile')
 
