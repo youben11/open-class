@@ -46,10 +46,16 @@
                             {% for workshop in user.profile.workshops_attended %}
                               <a href="#" class="list-group-item list-group-item-action">{{workshop.title}}</a>
                             {% endfor %}
+                            {% if user.profile.workshops_attended.count == 0 %}
+                              <p>You didn't attend to any workshop yet. Visit the <a href="{% url 'openclass:workshops_list' %}">Workshops List</a> now!</p>
+                            <!-- 
                               <a href="#" class="list-group-item list-group-item-action">Example Workshop 1</a>
                               <a href="#" class="list-group-item list-group-item-action">Example Workshop 2</a>
                               <a href="#" class="list-group-item list-group-item-action">Example Workshop 3</a>
+                            -->
+                            {% else %}
                               <a href="#"><span>View more</span></a>
+                            {% endif %}  
                             </div>
                           </div>
                         </div>
