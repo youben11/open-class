@@ -1,0 +1,30 @@
+.container_workshop{
+  background-image: url('https://www.newstatesman.com/sites/all/themes/creative-responsive-theme/images/new_statesman_events.jpg');
+  background-size:cover;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.container_infos{
+  background: rgba(255, 255, 255,0.9);
+
+}
+
+.text-description{
+  text-align: center;
+}
+
+
+
+.column-title{
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.row-register{
+  border-color: #000;
+border-width: 1px 0;
+}
+
+.container-shape{
+  border-radius: 50% 50% 50% 50%;
+
+}
