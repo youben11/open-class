@@ -44,7 +44,7 @@
                           <div class="card-body">
                             <div class="list-group  text-center">
                             {% for workshop in user.profile.workshops_attended %}
-                              <a href="#" class="list-group-item list-group-item-action">{{workshop.title}}</a>
+                              <a href="{% url 'openclass:workshops_detail' workshop.pk %}" class="list-group-item list-group-item-action">{{workshop.title}}</a>
                             {% endfor %}
                             {% if user.profile.workshops_attended.count == 0 %}
                               <p>You didn't attend to any workshop yet. Visit the <a href="{% url 'openclass:workshops_list' %}">Workshops List</a> now!</p>
@@ -72,7 +72,7 @@
                           <div class="card-body">
                             <div class="list-group  text-center">
                             {% for workshop in user.profile.workshops_animated %}
-                              <a href="#" class="list-group-item list-group-item-action">{{workshop.title}}</a>
+                              <a href="{% url 'openclass:workshops_detail' workshop.pk %}" class="list-group-item list-group-item-action">{{workshop.title}}</a>
                             {% endfor %}
                             <!--   <a href="#" class="list-group-item list-group-item-action">Example Workshop 1</a>
                               <a href="#" class="list-group-item list-group-item-action">Example Workshop 2</a>
