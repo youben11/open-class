@@ -37,10 +37,10 @@
             // $('html, body').animate({ scrollTop: 0 }, 'normal');
 
             // will first fade out the loading animation 
-            $("#loader").fadeOut("slow", function() {
-                // will fade out the whole DIV that covers the website.
-                $("#preloader").delay(300).fadeOut("slow");
-            }); 
+            // $("#loader").fadeOut("slow", function() {
+            //     // will fade out the whole DIV that covers the website.
+            //     $("#preloader").delay(300).fadeOut("slow");
+            // }); 
             
             // for hero content animations 
             $("html").removeClass('cl-preload');
@@ -628,30 +628,3 @@
         
 })(jQuery);
 
-
-    $("#update_user").submit(function(event) {
-      /* stop form from submitting normally */
-      event.preventDefault();
-
-      /* get some values from elements on the page: */
-      var $form = $( this ),
-          $submit = $form.find( 'button[type="submit"]' ),
-          inputs = $('input'),
-          check = true;
-          url = $form.attr('action');
-          for (field in inputs) {
-            if (field == '') {
-                check = false;
-                return false;
-            }
-          }
-      if (!event.target.checkValidity() && !check) {
-        // the form is not valid
-        // show some nice errors, I'm just changing the button text here
-        $submit.text('wrong');
-        return false;
-      $submit.text('Les champs ne doivent pas être vides');
-      }
-
-      // send your data here, the form should be valid
-    });

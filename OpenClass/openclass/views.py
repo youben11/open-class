@@ -87,6 +87,7 @@ def user_settings(request):
         if settings_form.is_valid():
             user = settings_form.save(commit=False)
             user.save()
-            return HttpResponse("Thanks, Your workshop has been submitted")
+            return render(request, "openclass/profile.html")
+            
     context = {"user_settings":settings_form}
     return render(request, "openclass/user-settings.html", context)
