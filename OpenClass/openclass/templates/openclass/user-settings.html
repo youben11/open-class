@@ -1,0 +1,57 @@
+{% extends 'openclass/base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'openclass/css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'openclass/css/signup.css' %}">
+<link rel="stylesheet" href="{% static 'openclass/css/preferences.css' %}">
+<title>Settings</title>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-lg-3 col-md-3">
+            <div class="card-user hovercard">
+                <div class="cardheader"></div>
+                <div class="avatar">
+                    <img alt="" src="{% static 'openclass/img/nadir.png' %}">
+                </div>
+                <div class="info">
+                    <div class="title">@{{user.username}}</div>
+                    <div class="desc">{{user.first_name}}</div>
+                    <div class="desc">{{user.last_name}}</div>
+                    <div class="desc">{{user.email}}</div>
+                    <div class="desc">{{user.profile.get_age}} years</div>
+                    <div class="desc">{{user.phone_number}}</div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xs-12 col-lg-9 col-md-9">
+            <div class="card hovercard pl-5">
+                <div class="cardheader">
+                  <h3>Manage settings</h3>
+                  <h6>Choose the informations you want to change:</h6>
+                <div class="row">
+                    <div class="col-xs-12 col-lg-6 col-md-6">
+                        <div class="info">
+                            <div id="errorAlert" class="alert alert-danger" role="alert" style="display: none;">
+                              This field can't be empty!
+                            </div>
+                            <form name="update_user" method="post" onsubmit="return validateForm()">
+                                {% csrf_token %}
+                                {{user_settings.as_p}}
+                                <button id="signup-btn" type="submit">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+</script>
+{% endblock %}
