@@ -40,6 +40,9 @@ def signup(request):
 
     tags = Tag.objects.all()
 
+    if request.user.is_authenticated:
+        return redirect('/profile')
+
     if request.method == "POST":
         user_form = UserForm(request.POST)
         user_profile_form = UserProfileForm(request.POST)
