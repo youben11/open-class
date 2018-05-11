@@ -29,3 +29,7 @@
   border-color: #DDDDDD;
   background: : #DDDDDD;
 }
+
+.container-custom{
+  background: rgba(255, 255, 255,0.85);
+}
