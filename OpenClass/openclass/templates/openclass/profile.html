@@ -4,7 +4,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'openclass/css/profile.css' %}">
-<title>Profile</title>
+<title>{{user.first_name}} {{user.last_name}} (@{{user.username}})</title>
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-lg-3 col-md-3">
@@ -74,10 +74,20 @@
                             {% for workshop in user.profile.workshops_animated %}
                               <a href="#" class="list-group-item list-group-item-action">{{workshop.title}}</a>
                             {% endfor %}
+                            <!--   <a href="#" class="list-group-item list-group-item-action">Example Workshop 1</a>
+                              <a href="#" class="list-group-item list-group-item-action">Example Workshop 2</a>
+                              <a href="#" class="list-group-item list-group-item-action">Example Workshop 3</a>
+                             -->
+                            {% if user.profile.workshops_animated.count == 0 %}
+                              <p>You didn't animate any workshop yet. <a href="{% url 'openclass:workshops_list' %}">Submit a Workshop now!</a></p>
+                            <!-- 
                               <a href="#" class="list-group-item list-group-item-action">Example Workshop 1</a>
                               <a href="#" class="list-group-item list-group-item-action">Example Workshop 2</a>
                               <a href="#" class="list-group-item list-group-item-action">Example Workshop 3</a>
+                            -->
+                            {% else %}
                               <a href="#"><span>View more</span></a>
+                            {% endif %}  
                             </div>
                           </div>
                         </div>

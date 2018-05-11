@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-
+from django.urls import reverse
 from .models import *
 from .forms import *
 
@@ -80,3 +80,12 @@ def submit_workshop(request):
 def moderation(request):
     return render(request, "openclass/moderation.html")
 
+def user_settings(request):
+    settings_form = UserSettings(request.POST, instance=request.user)
+    if request.method == "POST":
+        if settings_form.is_valid():
+            user = settings_form.save(commit=False)
+            user.save()
+            return HttpResponse("Thanks, Your workshop has been submitted")
+    context = {"user_settings":settings_form}
+    return render(request, "openclass/user-settings.html", context)

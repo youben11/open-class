@@ -13,9 +13,9 @@ urlpatterns = [
     path('badges/', views.badges_list, name='badges_list'),
     path('profile/', views.profile, name='profile'),
     path('profile/preferences', views.prefs, name='prefs'),
+    path('profile/settings', views.user_settings, name='user_settings'),
     path('signup/', views.signup, name='signup'),
     path('submit_workshop/', views.submit_workshop, name='submit_workshop'),
     path('moderation/', views.moderation, name='moderation'),
-
     path('accounts/', include('django.contrib.auth.urls')),
 ]
