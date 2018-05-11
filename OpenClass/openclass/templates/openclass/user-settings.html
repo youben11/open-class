@@ -37,7 +37,7 @@
                             <div id="errorAlert" class="alert alert-danger" role="alert" style="display: none;">
                               This field can't be empty!
                             </div>
-                            <form name="update_user" method="post" onsubmit="return validateForm()">
+                            <form name="update_user" method="post" onsubmit="return validateSettingsForm()">
                                 {% csrf_token %}
                                 {{user_settings.as_p}}
                                 <button id="signup-btn" type="submit">Submit</button>

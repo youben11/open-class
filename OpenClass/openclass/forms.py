@@ -9,11 +9,13 @@ class UserSettings(ModelForm):
         fields = ['first_name', 'last_name', 'email']
 
 class UserProfileForm(ModelForm):
+    interests = forms.MultipleChoiceField(required=False)
+    photo = forms.ImageField(required=False)
     class Meta:
         model = Profile
         fields = ['gender', 'birthday', 'phone_number', 'interests', 'photo']
         widgets = {
-                'birthday': forms.DateInput(attrs={'type':'date'})
+                'birthday': forms.DateInput(attrs={'type':'date'}),
                 }
 
 class UserForm(ModelForm):
