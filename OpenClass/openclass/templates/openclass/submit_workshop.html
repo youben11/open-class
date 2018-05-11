@@ -1,5 +1,59 @@
-<form method="post">
-  {% csrf_token %}
-  {{ workshop_form.as_p }}
-  <input type="submit"/>
-</form>
+{% extends 'openclass/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<title>Submit a workshop</title>
+<link rel="stylesheet" href="{% static 'openclass/css/submit_workshop.css' %}">
+
+<div class="container container-custom">
+
+  <div class="row my-4">
+    <div class="col-xs-12 col-lg-12 col-xl-12">
+
+      <h1 class="content-center  my-4">Welcome to the workshop submitting form !</h1>
+
+  </div>
+</div>
+  <div class="row my-4">
+    <div class="col-xs-12 col-lg-12 col-xl-12">
+
+      <p class="content-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+  </div>
+</div>
+  <div class="row my-2">
+    <div class="col-xs-12 col-lg-12 col-xl-12">
+
+      <h2 class="content-center  my-2">Workshop page example:</h2>
+
+    </div>
+
+  </div>
+  <div class="row my-2">
+    <div class="col-xs-12 col-lg-12 col-xl-6">
+      <div class="card">
+        <div class="card-body">
+          <img class="card-img-top" src="{% static 'openclass/img/workshop_screenshot.png' %}" alt="Card image cap">
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-lg-12 col-xl-6">
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12 col-lg-12 col-xl-12">
+    <form class="my-4"method="post">
+      {% csrf_token %}
+      {{ workshop_form.as_p }}
+      <input type="submit"/>
+    </form>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+{% endblock %}

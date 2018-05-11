@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.urls import reverse
@@ -14,13 +14,14 @@ def workshops_list(request):
     w = Workshop.objects.all()
     return render(request, "openclass/listworkshop.html", {"list":w})
 
-def workshops_detail(request, pk):
-    return render(request, "openclass/workshop.html")
+def workshops_detail(request, workshop_id):
+    workshop = get_object_or_404(Workshop,pk=workshop_id)
+    return render(request, "openclass/workshop.html",{"workshop":workshop})
 
 def members_list(request):
     return HttpResponse('members_list')
 
-def members_detail(request, pk):
+def members_detail(request, member_id):
     return HttpResponse('members_detail')
 
 def badges_list(request):
