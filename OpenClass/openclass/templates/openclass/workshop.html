@@ -5,6 +5,31 @@
 {% block content %}
 <title>{{workshop.title}} workshop</title>
 <link rel="stylesheet" href="{% static 'openclass/css/workshop.css' %}">
+<script type="text/javascript">
+  $.ajaxSetup({ 
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+     } 
+  });
+</script>
 <div  class="container container-shape">
     <div class="container container_infos px-0">
     <div class="row row-head">
@@ -29,7 +54,10 @@
         </div>
           <div class="col-xs-12 col-lg-12 col-xl-4 col-progress-btn">
             <div>
-            <button id="register-btn" type="button" class="btn btn-success my-4" style="display:flex;justify-content:center;align-items:center;">Register !</button>
+              <form method="post">
+                {% csrf_token %}
+                <button id="register-btn" type="button" class="btn btn-success my-4" style="display:flex;justify-content:center;align-items:center;">Register !</button>
+              </form>
           </div>
           </div>
 
