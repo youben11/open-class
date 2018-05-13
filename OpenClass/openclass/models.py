@@ -196,6 +196,13 @@ class Registration(models.Model):
         #make sure the workshop has started
         self.present = True
 
+    def find_registration(qprofile,qworkshop):
+        try:
+            registration = Registration.objects.get(workshop = qworkshop, profile = qprofile)
+        except Registration.DoesNotExist:
+            return False
+        return True
+
 class Question(models.Model):
     author = models.ForeignKey(
                     'Profile',
