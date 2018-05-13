@@ -379,6 +379,11 @@ class Profile(models.Model):
         else:
             return age
 
+    def get_registrations(self):
+        registrations = Registration.objects.all().filter(profile = self)
+        return registrations
+
+
 class Preference(models.Model):
     profile = models.OneToOneField('Profile', on_delete=models.CASCADE)
     confidentiality = models.IntegerField()

@@ -19,4 +19,5 @@ urlpatterns = [
     path('moderation/', views.moderation, name='moderation'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('workshops/register/', views.register_to_workshop, name='register_to_workshop'),
+    path('profile/registrations', views.user_registrations, name='user_registrations'),
 ]

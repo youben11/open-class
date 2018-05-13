@@ -113,3 +113,7 @@ def register_to_workshop(request):
     registration.save()
 
     return HttpResponse("Registrations Done")
+
+def user_registrations(request):
+    registrations = request.user.profile.get_registrations
+    return render(request, "openclass/user-registrations.html", {"registrations":registrations})
