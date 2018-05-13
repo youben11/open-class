@@ -107,10 +107,9 @@
       <script type="text/javascript">
         btnRegister = document.getElementById("register-btn");
         btnRegister.onclick = function register() { 
-          alert("You successfully registered to "+'{{workshop.title}}');
           $.ajax({
             type: "POST",
-            url: "./register",
+            url: "/workshops/register/",
             dataType: "json",
             traditional: true,
             data: {'workshop_pk': {{workshop.pk}}},

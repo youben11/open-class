@@ -94,3 +94,21 @@ def user_settings(request):
             
     context = {"user_settings":settings_form}
     return render(request, "openclass/user-settings.html", context)
+
+@login_required()
+def register_to_workshop(request):
+    workshop_pk = request.POST['workshop_pk']
+    # add checks
+    try:
+        workshop = Workshop.objects.filter(pk=workshop_pk)
+    except Workshop.DoesNotExist:
+        return HttpResponse("Invalid Workshop pk")
+
+    registration = Registration()
+    registration.workshop = workshop
+    registration.profile = request.user.profile
+    registration.status = Registration.PENDING
+    registration.date_registration = datetime.now()
+    registration.save()
+
+    return HttpResponse("Registrations Done")
