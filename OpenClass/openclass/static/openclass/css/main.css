@@ -355,7 +355,7 @@ ol {
 }
 
 ul {
-   list-style: disc;
+   list-style: none;
 }
 
 li {
@@ -403,6 +403,11 @@ dd {
    margin: 0 0 0 2rem;
 }
 
+.errorlist {
+   font-size: 14px;
+   margin-left: 0;
+   margin-top: 0;
+}
 
 /* ------------------------------------------------------------------- 
  * ## responsive video container
@@ -496,7 +501,6 @@ blockquote,
 figure,
 table,
 p,
-ul,
 ol,
 dl,
 form,
@@ -746,7 +750,8 @@ label, legend {
    /*font-family: "metropolis-regular", sans-serif;*/
    font-size: 1.4rem;
    font-weight: bold;
-   margin-bottom: .9rem;
+   margin-bottom: 0;
+   margin-top: 1vh;
    line-height: 1.714;
    color: #000000;
    display: block;
@@ -839,6 +844,10 @@ input[type="button"] {
 
 input[type="submit"] {
    height: 5.4rem;
+}
+
+#signup-btn {
+   margin-top: 2.5vh;
 }
 
 .btn:hover,
