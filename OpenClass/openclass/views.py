@@ -16,7 +16,8 @@ def workshops_list(request):
 
 def workshops_detail(request, workshop_id):
     workshop = get_object_or_404(Workshop,pk=workshop_id)
-    return render(request, "openclass/workshop.html",{"workshop":workshop})
+    is_registered = workshop.check_registration(request.user.profile)
+    return render(request, "openclass/workshop.html",{"workshop":workshop, "is_registered":is_registered})
 
 def members_list(request):
     return HttpResponse('members_list')
