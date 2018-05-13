@@ -69,7 +69,11 @@
           <div class="intro-text">
             <div class="intro-lead-in">Welcome to OpenClass!</div>
             <div class="intro-heading text-uppercase">Where you'll learn</div>
+            {% if request.user.is_authenticated %}
+            <a class="btn btn-xl text-uppercase text-white js-scroll-trigger" href="{% url 'openclass:profile' %}">Welcome @{{request.user.username}}</a>
+            {% else %}
             <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="{% url 'openclass:signup' %}">Join OpenClass</a>
+            {% endif %}
           </div>
         </div>
       </div>
