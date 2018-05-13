@@ -161,6 +161,12 @@ class Workshop(models.Model):
         time_left = self.start_date - datetime.now(timezone)
         return time_left.days   # return only days left
 
+    def check_registration(self,qprofile):
+        try:
+            registration = Registration.objects.get(workshop = self, profile = qprofile)
+        except Registration.DoesNotExist:
+            return False
+        return True
 
 class Registration(models.Model):
     PENDING = 'P'
@@ -195,13 +201,6 @@ class Registration(models.Model):
     def confirm_presence(self):
         #make sure the workshop has started
         self.present = True
-
-    def find_registration(qprofile,qworkshop):
-        try:
-            registration = Registration.objects.get(workshop = qworkshop, profile = qprofile)
-        except Registration.DoesNotExist:
-            return False
-        return True
 
 class Question(models.Model):
     author = models.ForeignKey(
