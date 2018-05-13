@@ -100,7 +100,7 @@ def register_to_workshop(request):
     workshop_pk = request.POST['workshop_pk']
     # add checks
     try:
-        workshop = Workshop.objects.filter(pk=workshop_pk)
+        workshop = Workshop.objects.filter(pk=workshop_pk)[0]
     except Workshop.DoesNotExist:
         return HttpResponse("Invalid Workshop pk")
 
