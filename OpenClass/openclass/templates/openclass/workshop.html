@@ -54,10 +54,19 @@
         </div>
           <div class="col-xs-12 col-lg-12 col-xl-4 col-progress-btn">
             <div>
+              {% if not is_registered %}
               <form method="post">
                 {% csrf_token %}
                 <button id="register-btn" type="button" class="btn btn-success my-4" style="display:flex;justify-content:center;align-items:center;">Register !</button>
               </form>
+              <div id="registeredMessage1" class="alert alert-primary" role="alert" style="display: none;">
+                  You are <b>registered</b> to this workshop.
+              </div>
+              {% else %}
+                <div id="registeredMessage2" class="alert alert-primary mt-3" role="alert">
+                  You are registered to this workshop.
+                </div>
+              {% endif %}
           </div>
           </div>
 
@@ -145,6 +154,8 @@
                      console.log(data["HTTPRESPONSE"]);
              }
           });
+          $("#register-btn").hide();
+          $("#registeredMessage1").slideToggle("slow");
         }
       </script>
 
