@@ -107,10 +107,8 @@
                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                           <div class="card-body">
                             <div class="list-group  text-center">
-                            {% for workshop in w %}
                               <a href="#" class="list-group-item list-group-item-action" >{{workshop.title}}</a>
                                   <a href="#" class="list-group-item list-group-item-action" >Date: {{workshop.start_date}}</a>
-                            {% endfor %}
                               {% for registration in r %}
                                 <form name="attendace.html" method="POST"> {% csrf_token %} <a href="#" class="list-group-item list-group-item-action">{{registration.profile.user}}  <button type="submit" name="yes" value="YAYA" > Attended</button> <button name="yes" value="{{ registration.profile.pk }}" >Nope</button></a> </form>
                             {% endfor %}
