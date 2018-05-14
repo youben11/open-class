@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.models import User
 from .models import Profile, Workshop
+from .models import Registration
 
 class UserSettings(ModelForm):
     first_name = forms.CharField(required=True)
@@ -10,6 +11,12 @@ class UserSettings(ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
+
+class AttendanceList(ModelForm):
+    class meta:
+        model = Registration
+        presence = forms.BooleanField()
+        fields  = ['presence'] 
 
 class UserProfileForm(ModelForm):
     interests = forms.MultipleChoiceField(required=False)
