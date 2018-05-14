@@ -94,3 +94,21 @@ def user_settings(request):
             
     context = {"user_settings":settings_form}
     return render(request, "openclass/user-settings.html", context)
+
+
+
+def attendance(request,workshop):
+    attendance_form = AttendanceList(request.POST, instance = request.Registration)
+    if request.method=="GET":
+        r=Registration.objects.all().filter(workshop=workshop)
+        w=workshop
+        return render(request, "openclass/attendance.html", {"r": r,"w":w})
+    
+    elif request.method=="POST":
+        if attendance_form.is_valid():
+            Registration = attendance_form.save(commit=False)
+            Registration.save()
+            return render(request, "openclass/profile.html")
+
+
+
