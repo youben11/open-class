@@ -161,6 +161,12 @@ class Workshop(models.Model):
         time_left = self.start_date - datetime.now(timezone)
         return time_left.days   # return only days left
 
+    def check_registration(self,qprofile):
+        try:
+            registration = Registration.objects.get(workshop = self, profile = qprofile)
+        except Registration.DoesNotExist:
+            return False
+        return True
 
 class Registration(models.Model):
     PENDING = 'P'
@@ -372,6 +378,11 @@ class Profile(models.Model):
             return age-1
         else:
             return age
+
+    def get_registrations(self):
+        registrations = Registration.objects.all().filter(profile = self)
+        return registrations
+
 
 class Preference(models.Model):
     profile = models.OneToOneField('Profile', on_delete=models.CASCADE)

@@ -5,6 +5,9 @@ from .models import Profile, Workshop
 from .models import Registration
 
 class UserSettings(ModelForm):
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    email = forms.EmailField(required=True)
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']

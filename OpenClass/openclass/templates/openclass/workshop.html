@@ -5,6 +5,31 @@
 {% block content %}
 <title>{{workshop.title}} workshop</title>
 <link rel="stylesheet" href="{% static 'openclass/css/workshop.css' %}">
+<script type="text/javascript">
+  $.ajaxSetup({ 
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+     } 
+  });
+</script>
 <div  class="container container-shape">
     <div class="container container_infos px-0">
     <div class="row row-head">
@@ -29,7 +54,19 @@
         </div>
           <div class="col-xs-12 col-lg-12 col-xl-4 col-progress-btn">
             <div>
-            <button type="button" class="btn btn-success my-4" style="display:flex;justify-content:center;align-items:center;">Register !</button>
+              {% if not is_registered %}
+              <form method="post">
+                {% csrf_token %}
+                <button id="register-btn" type="button" class="btn btn-success my-4" style="display:flex;justify-content:center;align-items:center;">Register !</button>
+              </form>
+              <div id="registeredMessage1" class="alert alert-primary" role="alert" style="display: none;">
+                  You are <b>registered</b> to this workshop.
+              </div>
+              {% else %}
+                <div id="registeredMessage2" class="alert alert-primary mt-3" role="alert">
+                  You are registered to this workshop.
+                </div>
+              {% endif %}
           </div>
           </div>
 
@@ -104,7 +141,23 @@
       </div>
 
 
-
+      <script type="text/javascript">
+        btnRegister = document.getElementById("register-btn");
+        btnRegister.onclick = function register() { 
+          $.ajax({
+            type: "POST",
+            url: "/workshops/register/",
+            dataType: "json",
+            traditional: true,
+            data: {'workshop_pk': {{workshop.pk}}},
+            success: function(data) {
+                     console.log(data["HTTPRESPONSE"]);
+             }
+          });
+          $("#register-btn").hide();
+          $("#registeredMessage1").slideToggle("slow");
+        }
+      </script>
 
 
 
