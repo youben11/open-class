@@ -43,7 +43,7 @@ class Workshop(models.Model):
     objectives = models.TextField()
     requirements = models.TextField()
     seats_number = models.PositiveIntegerField()
-    submission_date = models.DateTimeField()
+    submission_date = models.DateTimeField(auto_now_add=True)
     decision_date = models.DateTimeField(null=True)
     start_date = models.DateTimeField()
     duration = models.DurationField()
@@ -218,7 +218,7 @@ class Feedback(models.Model):
     author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     choices = models.ManyToManyField('Choice')
-    submission_date = models.DateTimeField()
+    submission_date = models.DateTimeField(auto_now_add=True)
     comment = models.TextField(blank=False)
 
     class Meta:
