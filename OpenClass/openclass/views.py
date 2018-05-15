@@ -12,13 +12,13 @@ def index(request):
     return render(request, "openclass/home.html")
 
 #moderator
-def moderation_submitted_workshop(request):
+def moderation_submitted_workshops(request):
     pending_workshops = Workshop.objects.filter(status=Workshop.PENDING)
     context = {'submissions': pending_workshops}
     return render(request, 'openclass/submitted-workshops.html', context)
 
 #moderator
-def moderation_submitted_workshop_decision(request):
+def moderation_submitted_workshops_decision(request):
     ACCEPT = "accept"
     REFUSE = "refuse"
     workshop_pk = request.POST['workshop_pk']
