@@ -63,11 +63,12 @@ def workshops_detail(request, workshop_id):
     is_registered = workshop.check_registration(request.user.profile)
     return render(request, "openclass/workshop.html",{"workshop":workshop, "is_registered":is_registered})
 
+@login_required()
 def members_list(request):
-	profiles = Profile.objects.all()
+	profiles = Profile.objects.filter(user__is_active=True)
 	return render(request, "openclass/member_list.html", {"profiles":profiles})
 
-
+@login_required()
 def members_detail(request, username):
     user = User.objects.get(username = username)
     return render(request, "openclass/profile.html", {"user":user})
@@ -77,13 +78,11 @@ def badges_list(request):
 
 @login_required()
 def profile(request):
-    user = request.user
     return render(request, "openclass/profile.html")
 
+@login_required()
 def prefs(request):
-    user = request.user
-    age = user.profile.get_age
-    return render(request, "openclass/user-preferences.html", {"age":age})
+    return render(request, "openclass/user-preferences.html")
 
 def signup(request):
 
