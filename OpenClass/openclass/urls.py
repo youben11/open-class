@@ -25,4 +25,6 @@ urlpatterns = [
     path('workshops/register/',views.register_to_workshop, name='register_to_workshop'),
     path('workshops/upcoming/', views.upcoming_workshops_list, name='upcoming_workshops_list'),
     path('profile/registrations', views.user_registrations, name='user_registrations'),
+    
+               
 ]

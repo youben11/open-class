@@ -44,7 +44,7 @@ class Workshop(models.Model):
     objectives = models.TextField()
     requirements = models.TextField()
     seats_number = models.PositiveIntegerField()
-    submission_date = models.DateTimeField(auto_now_add=True)
+    submission_date = models.DateTimeField()
     decision_date = models.DateTimeField(null=True)
     start_date = models.DateTimeField()
     duration = models.DurationField()
@@ -142,16 +142,26 @@ class Workshop(models.Model):
 
     def accept(self):
         # accept only a PENDING workshop
-        if self.status == self.PENDING and self.start_date < timezone.now():
+        if self.status == Workshop.PENDING and self.start_date < timezone.now():
             self.decision_date = timezone.now()
-            self.status = self.ACCEPTED
+            self.status = Workshop.ACCEPTED
+            self.save()
+            return True
+        else:
+            return False
+
+    def refuse(self):
+        # refuse only a PENDING workshop
+        if self.status == Workshop.PENDING and self.start_date < timezone.now():
+            self.decision_date = timezone.now()
+            self.status = Workshop.REFUSED
             self.save()
             return True
         else:
             return False
 
     def is_accepted(self):
-        if self.status == self.ACCEPTED:
+        if self.status == Workshop.ACCEPTED:
             return True
         else:
             return False
@@ -186,7 +196,7 @@ class Registration(models.Model):
                 choices=STATUS_CHOICES,
                 default=PENDING,
                 null=False)
-    date_registration = models.DateTimeField()
+    date_registration = models.DateTimeField(auto_now_add=True)
     date_cancel = models.DateTimeField(null=True)
     present = models.BooleanField(null=False, default=False)
 
@@ -217,7 +227,7 @@ class Feedback(models.Model):
     author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     choices = models.ManyToManyField('Choice')
-    submission_date = models.DateTimeField(auto_now_add=True)
+    submission_date = models.DateTimeField()
     comment = models.TextField(blank=False)
 
     class Meta:
