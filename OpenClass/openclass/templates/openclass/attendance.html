@@ -13,7 +13,7 @@
 							<div class="card-header text-center" id="headingOne">
 								<a href="#"><h3>{{workshop.title}}</h3></a>
 										<label>Date: </label><p>{{workshop.start_date}}</p>
-								<p>Attendence Management</p>
+								<span>Attendence Management</span>
 							</div>
 							<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
 								<div class="card-body">
@@ -54,29 +54,9 @@
 												{% endfor %}
 											</tbody>
 										</table>
-										<a href="#"><span>View more</span></a>
+										<a href="{% url 'openclass:moderation' %}"><span>Moderation Dashboard</span></a>
 									</div>
 								</div>
-							</div>
-						</div>
-				<div class="card">
-					<div class="card-header" id="headingTwo">
-						<h5 class="mb-0 text-center">
-						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-						Workshops Animated
-						</button>
-						</h5>
-					</div>
-					<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-						<div class="card-body">
-							<div class="list-group  text-center">
-								{% for workshop in w %}
-								<a href="#" class="list-group-item list-group-item-action">{{workshop}}</a>
-								{% endfor %}
-								<a href="#" class="list-group-item list-group-item-action">Example Workshop 1</a>
-								<a href="#" class="list-group-item list-group-item-action">Example Workshop 2</a>
-								<a href="#" class="list-group-item list-group-item-action">Example Workshop 3</a>
-								<a href="#"><span>View more</span></a>
 							</div>
 						</div>
 					</div>
@@ -84,8 +64,5 @@
 			</div>
 		</div>
 	</div>
-</div>
-
-</div>
 </div>
 {% endblock %}

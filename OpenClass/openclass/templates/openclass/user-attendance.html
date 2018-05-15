@@ -1,0 +1,51 @@
+{% extends 'openclass/base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12 col-lg-9 col-md-9">
+			<div class="card hovercard">
+				<div class="info">
+					<div id="accordion">
+						<div class="card">
+							<div class="card-header text-center" id="headingOne">
+								<h3>Registration number {{registration.pk}}</h3>
+								<a href="#"><h3>{{workshop.title}}</h3></a>
+								<label>Date: </label><p>{{workshop.start_date}}</p>
+								<span>Attendence Management</span>
+							</div>
+							<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+								<div class="card-body">
+									<div class="list-group  text-center">
+										<label>Username</label>
+										<a href="#">@{{profile.user.username}}</a>
+										<label>Status:</label>
+										<span>
+										{% if registration.present %}
+										Present
+										{% else %}
+										Absent
+										{% endif %}
+										</span>
+										<form method="post">
+											{% csrf_token %}
+											{% if registration.present %}
+											<button class="btn-danger" type="submit">Mark as Absent</button>
+											{% else %}
+											<button class="btn-success" type="submit">Mark as Present</button>
+											{% endif %}
+										</form>
+										<a href=".."><span>Cancel</span></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
