@@ -63,7 +63,7 @@ def workshops_detail(request, workshop_id):
     return render(request, "openclass/workshop.html",{"workshop":workshop, "is_registered":is_registered})
 
 def members_list(request):
-	profiles = Profile.objects.all() 
+	profiles = Profile.objects.all()
 	return render(request, "openclass/member_list.html", {"profiles":profiles})
 
 
@@ -114,7 +114,7 @@ def signup(request):
     context = {"user_form":user_form, "user_profile_form":user_profile_form}
     return render(request, 'openclass/signup.html', context)
 
-
+@login_required()
 def submit_workshop(request):
     if request.method == "POST":
         workshop_form = WorkshopForm(request.POST)
@@ -122,6 +122,7 @@ def submit_workshop(request):
             workshop = workshop_form.save(commit=False)
             workshop.submission_date = datetime.now()
             workshop.status = Workshop.PENDING
+            workshop.animator = request.user.profile
             workshop.save()
             return HttpResponse("Thanks, Your workshop has been submitted")
 
