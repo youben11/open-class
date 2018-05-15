@@ -4,15 +4,35 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'openclass/css/moderation.css' %}">
-<title>Profile</title>
+<title>Moderation</title>
 <div class="container container-custom py-4">
     <div class="row">
         <div class="col-xs-12 col-lg-3 col-md-3">
         </div>
         <div class="col-xs-12 col-lg-6 col-md-6">
-          <a class="btn text-white">Manage Attendance</a>
+          <h3>Manage Attendance</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for w in workshops %}
+              <tr>
+                <th scope="row">{{w.pk}}</th>
+                <td>{{w.title}}</td>
+                <td>{{w.start_date}}</td>
+                <td><a href="{% url 'openclass:attendance' w.pk %}">Manage</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
           <a class="btn text-white">Manage Submitted Workshops</a>
-          <a class="btn text-white mb-0">Manage Questions</a>
+          <a class="btn text-white">Manage Questions</a>
         </div>
         <div class="col-xs-12 col-lg-3 col-md-3">
         </div>

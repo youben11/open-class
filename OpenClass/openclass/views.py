@@ -84,7 +84,8 @@ def submit_workshop(request):
 
 
 def moderation(request):
-    return render(request, "openclass/moderation.html")
+    workshops = Workshop.objects.all()
+    return render(request, "openclass/moderation.html", {"workshops":workshops})
 
 @login_required()
 def user_settings(request):
