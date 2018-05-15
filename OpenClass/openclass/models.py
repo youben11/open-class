@@ -142,7 +142,7 @@ class Workshop(models.Model):
 
     def accept(self):
         # accept only a PENDING workshop
-        if self.status == Workshop.PENDING and self.start_date < timezone.now():
+        if self.status == Workshop.PENDING and self.start_date > timezone.now():
             self.decision_date = timezone.now()
             self.status = Workshop.ACCEPTED
             self.save()
@@ -152,7 +152,7 @@ class Workshop(models.Model):
 
     def refuse(self):
         # refuse only a PENDING workshop
-        if self.status == Workshop.PENDING and self.start_date < timezone.now():
+        if self.status == Workshop.PENDING and self.start_date > timezone.now():
             self.decision_date = timezone.now()
             self.status = Workshop.REFUSED
             self.save()
