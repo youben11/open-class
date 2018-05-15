@@ -44,5 +44,8 @@ class WorkshopForm(ModelForm):
                 'required_materials',
                 'start_date',
                 'duration',
-                'cover_img',
+                #'cover_img',
                 ]
+        widgets = {
+                'start_date': forms.DateInput(attrs={'type':'date'}),
+                }
