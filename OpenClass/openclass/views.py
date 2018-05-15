@@ -73,7 +73,10 @@ def submit_workshop(request):
     if request.method == "POST":
         workshop_form = WorkshopForm(request.POST)
         if workshop_form.is_valid():
-            workshop_form.save()
+            workshop = workshop_form.save(commit=False)
+            workshop.submission_date = datetime.now()
+            workshop.status = Workshop.PENDING
+            workshop.save()
             return HttpResponse("Thanks, Your workshop has been submitted")
 
     else:
@@ -138,4 +141,3 @@ def register_to_workshop(request):
 def user_registrations(request):
     registrations = request.user.profile.get_registrations
     return render(request, "openclass/user-registrations.html", {"registrations":registrations})
-
