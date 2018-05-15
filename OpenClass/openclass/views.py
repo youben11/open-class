@@ -63,7 +63,9 @@ def workshops_detail(request, workshop_id):
     return render(request, "openclass/workshop.html",{"workshop":workshop, "is_registered":is_registered})
 
 def members_list(request):
-    return HttpResponse('members_list')
+	profiles = Profile.objects.all() 
+	return render(request, "openclass/member_list.html", {"profiles":profiles})
+
 
 def members_detail(request, username):
     user = User.objects.get(username = username)

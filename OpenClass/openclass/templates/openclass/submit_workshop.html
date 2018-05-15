@@ -3,7 +3,6 @@
 
 {% block content %}
 <title>Submit a workshop</title>
-<link rel="stylesheet" href="{% static 'openclass/css/signup.css' %}">
 <link rel="stylesheet" href="{% static 'openclass/css/submit_workshop.css' %}">
 
 <div class="container container-custom">
@@ -11,7 +10,7 @@
   <div class="row my-4">
     <div class="col-xs-12 col-lg-12 col-xl-12">
 
-      <h1 class="content-center  my-4">Welcome to the Workshop Submitting Form !</h1>
+      <h1 class="content-center  my-4">Welcome to the workshop submitting form !</h1>
 
   </div>
 </div>
@@ -44,20 +43,14 @@
   </div>
 
   <div class="row">
-    <div class="col-xs-12 col-lg-6 col-xl-3">
+    <div class="col-xs-12 col-lg-12 col-xl-12">
+    <form class="my-4"method="post">
+      {% csrf_token %}
+      {{ workshop_form.as_p }}
+      <input type="submit"/>
+    </form>
+
     </div>
-    <div class="col-xs-12 col-lg-6 col-xl-6">
-      <div class="text-left">
-        <h3>Submit a Workshop</h3>
-        <form method="post">
-          {% csrf_token %}
-          {{ workshop_form.as_p }}
-          <input type="submit"/>
-        </form>
-      </div>
-    </div>
-    <div class="col-xs-12 col-lg-6 col-xl-3">
-    </div>    
   </div>
 
 </div>
