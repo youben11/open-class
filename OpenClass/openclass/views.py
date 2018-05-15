@@ -12,8 +12,8 @@ def index(request):
     return render(request, "openclass/home.html")
 
 def workshops_list(request):
-    w = Workshop.objects.all()
-    return render(request, "openclass/listworkshop.html", {"list":w})
+    workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    return render(request, "openclass/listworkshop.html", {"workshops":workshops})
 
 def workshops_detail(request, workshop_id):
     workshop = get_object_or_404(Workshop,pk=workshop_id)
