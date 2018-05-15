@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -27,23 +27,24 @@ def moderation_submitted_workshop_decision(request):
     try:
         workshop = Workshop.objects.get(pk=workshop_pk)
     except Workshop.DoesNotExist:
-        #json response
-        pass
+        error = {'status': 'workshop_does_not_exist'}
+        return JsonResponse(error)
 
     if decision == ACCEPT:
         if workshop.accept():
-            pass
+            response = {'status': 'accepted'}
         else:
-            pass
+            response = {'status': "can't accept"}
 
     elif decision == REFUSE:
         if workshop.refuse():
-            pass
+            response = {'status': 'refused'}
         else:
-            pass
+            response = {'status': "can't refuse"}
     else:
-        #invalid decision
-        pass
+        response = {'status': 'invalid decision'}
+
+    return JsonResponse(response)
 
 
 def workshops_list(request):
