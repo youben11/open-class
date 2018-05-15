@@ -175,7 +175,8 @@ def register_to_workshop(request):
     try:
         workshop = Workshop.objects.get(pk=workshop_pk)
     except Workshop.DoesNotExist:
-        return HttpResponse("Invalid Workshop pk")
+        error = {'status': 'workshop_does_not_exist'}
+        return JsonResponse(error)
 
     registration = Registration()
     registration.workshop = workshop
@@ -183,7 +184,8 @@ def register_to_workshop(request):
     registration.status = Registration.PENDING
     registration.save()
 
-    return HttpResponse("Registrations Done")
+    response = {'status': 'registred'}
+    return JsonResponse(response)
 
 def user_registrations(request):
     registrations = request.user.profile.get_registrations
