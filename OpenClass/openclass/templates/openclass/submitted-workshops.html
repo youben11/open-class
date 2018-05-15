@@ -1,0 +1,105 @@
+{% extends 'openclass/base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+<script type="text/javascript">
+  $.ajaxSetup({ 
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+     } 
+  });
+</script>
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12 col-lg-9 col-md-9">
+			<div class="card hovercard">
+				<div class="info">
+					<div id="accordion">
+						<div class="card">
+							<div class="card-header text-center" id="headingOne">
+								<a href="#"><h3>{{workshop.title}}</h3></a>
+										<label>Date: </label><p>{{workshop.start_date}}</p>
+								<span>Attendence Management</span>
+							</div>
+							<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+								<div class="card-body">
+									<div class="list-group text-center">
+										<table class="table">
+											<thead>
+												<tr>
+													<th scope="col">submission_id</th>
+													<th scope="col">Title</th>
+													<th scope="col">Date</th>
+													<th scope="col">Action</th>
+												</tr>
+											</thead>
+											<tbody>
+												{% for s in submissions %}
+													<tr>
+														<th scope="row">
+															{{s.pk}}
+														</th>
+														<td>
+															{{s.}}
+														</td>
+														<td>
+
+														</td>
+														<td>
+								              <form method="post">
+								                {% csrf_token %}
+								                <button id="accept-btn" type="button" class="btn btn-success" >Accept</button>
+								              </form>
+														</td>
+													</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+										<a href="{% url 'openclass:moderation' %}"><span>Moderation Dashboard</span></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+  btnAccept = document.getElementById("accept-btn");
+  btnAccept.onclick = function accept() { 
+    $.ajax({
+      type: "POST",
+      url: "{% url 'openclass:moderation_submitted_workshops_decision' %}",
+      dataType: "json",
+      traditional: true,
+      data: {'workshop_pk': {{workshop.pk}},'decision': "accept"},
+      success: function(data) {
+               console.log(data["HTTPRESPONSE"]);
+       }
+    });
+    // $("#accept-btn").hide();
+  }
+</script>
+
+{% endblock %}
