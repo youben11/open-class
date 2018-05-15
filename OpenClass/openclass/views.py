@@ -12,8 +12,15 @@ def index(request):
     return render(request, "openclass/home.html")
 
 def workshops_list(request):
-    w = Workshop.objects.all()
-    return render(request, "openclass/listworkshop.html", {"list":w})
+    workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    return render(request, "openclass/listworkshop.html", {"workshops":workshops})
+
+def upcoming_wokshops_list(request):
+    workshops = Workshop.objects.filter(
+                                    start_date__gte=datetime.now(),
+                                    status=Workshop.ACCEPTED,
+                                    )
+    return render(request, "openclass/listworkshop.html", {"workshops":workshops})
 
 def workshops_detail(request, workshop_id):
     workshop = get_object_or_404(Workshop,pk=workshop_id)
@@ -25,14 +32,16 @@ def members_list(request):
 	return render(request, "openclass/member_list.html", {"profiles":profiles})
 
 
-def members_detail(request, member_id):
-    return HttpResponse('members_detail')
+def members_detail(request, username):
+    user = User.objects.get(username = username)
+    return render(request, "openclass/profile.html", {"user":user})
 
 def badges_list(request):
     return HttpResponse('badges_list')
 
 @login_required()
 def profile(request):
+    user = request.user
     return render(request, "openclass/profile.html")
 
 def prefs(request):
@@ -75,7 +84,10 @@ def submit_workshop(request):
     if request.method == "POST":
         workshop_form = WorkshopForm(request.POST)
         if workshop_form.is_valid():
-            workshop_form.save()
+            workshop = workshop_form.save(commit=False)
+            workshop.submission_date = datetime.now()
+            workshop.status = Workshop.PENDING
+            workshop.save()
             return HttpResponse("Thanks, Your workshop has been submitted")
 
     else:
@@ -140,4 +152,3 @@ def register_to_workshop(request):
 def user_registrations(request):
     registrations = request.user.profile.get_registrations
     return render(request, "openclass/user-registrations.html", {"registrations":registrations})
-
