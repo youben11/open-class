@@ -11,6 +11,41 @@ from .forms import *
 def index(request):
     return render(request, "openclass/home.html")
 
+#moderator
+def moderation_submitted_workshop(request):
+    pending_workshops = Workshop.objects.filter(status=Workshop.PENDING)
+    context = {'submissions': pending_workshops}
+    return render(request, 'openclass/submitted-workshops.html', context)
+
+#moderator
+def moderation_submitted_workshop_decision(request):
+    ACCEPT = "accept"
+    REFUSE = "refuse"
+    workshop_pk = request.POST['workshop_pk']
+    decision = request.POST['decision']
+
+    try:
+        workshop = Workshop.objects.get(pk=workshop_pk)
+    except Workshop.DoesNotExist:
+        #json response
+        pass
+
+    if decision == ACCEPT:
+        if workshop.accept():
+            pass
+        else:
+            pass
+
+    elif decision == REFUSE:
+        if workshop.refuse():
+            pass
+        else:
+            pass
+    else:
+        #invalid decision
+        pass
+
+
 def workshops_list(request):
     workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
     return render(request, "openclass/listworkshop.html", {"workshops":workshops})
@@ -136,7 +171,7 @@ def register_to_workshop(request):
     workshop_pk = request.POST['workshop_pk']
     # add checks
     try:
-        workshop = Workshop.objects.filter(pk=workshop_pk)[0]
+        workshop = Workshop.objects.get(pk=workshop_pk)
     except Workshop.DoesNotExist:
         return HttpResponse("Invalid Workshop pk")
 
@@ -144,7 +179,6 @@ def register_to_workshop(request):
     registration.workshop = workshop
     registration.profile = request.user.profile
     registration.status = Registration.PENDING
-    registration.date_registration = datetime.now()
     registration.save()
 
     return HttpResponse("Registrations Done")
