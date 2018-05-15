@@ -98,18 +98,23 @@ def user_settings(request):
     context = {"user_settings":settings_form}
     return render(request, "openclass/user-settings.html", context)
 
-def attendance(request,workshop):
-    attendance_form = AttendanceList(request.POST, instance = request.Registration)
-    if request.method=="GET":
-        r=Registration.objects.all().filter(workshop=workshop)
-        w=workshop
-        return render(request, "openclass/attendance.html", {"r": r,"w":w})
-    
-    elif request.method=="POST":
-        if attendance_form.is_valid():
-            Registration = attendance_form.save(commit=False)
-            Registration.save()
-            return render(request, "openclass/profile.html")
+def attendance(request,workshop_pk):
+    workshop = get_object_or_404(Workshop, pk = workshop_pk)
+    registrations = Registration.objects.all().filter(workshop=workshop)
+    context = {"registrations": registrations,"workshop":workshop}
+    return render(request, "openclass/attendance.html", context)
+
+def user_attendance(request, workshop_pk, user_pk):
+    workshop = get_object_or_404(Workshop, pk = workshop_pk)
+    profile = get_object_or_404(Profile, id = user_pk)
+    registration = Registration.objects.get(workshop=workshop,profile=profile)
+    if request.method=="POST":
+        registration.present = not registration.present
+        registration.save()
+        return redirect('/attendance/'+str(workshop_pk))
+
+    context = {"registration": registration, "workshop":workshop, "profile":profile}
+    return render(request, "openclass/user-attendance.html", context)
 
 @login_required()
 def register_to_workshop(request):

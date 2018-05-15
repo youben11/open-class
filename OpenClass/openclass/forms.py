@@ -12,12 +12,6 @@ class UserSettings(ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'email']
 
-class AttendanceList(ModelForm):
-    class meta:
-        model = Registration
-        presence = forms.BooleanField()
-        fields  = ['presence'] 
-
 class UserProfileForm(ModelForm):
     interests = forms.MultipleChoiceField(required=False)
     photo = forms.ImageField(required=False)

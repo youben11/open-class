@@ -18,7 +18,8 @@ urlpatterns = [
     path('submit_workshop/', views.submit_workshop, name='submit_workshop'),
     path('moderation/', views.moderation, name='moderation'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('attendance/<int:workshop_id>/', views.attendance, name='attendace_list'),
+    path('attendance/<int:workshop_pk>/', views.attendance, name='attendance'),
+    path('attendance/<int:workshop_pk>/<int:user_pk>/', views.user_attendance, name='user_attendance'),
     path('workshops/register/',views.register_to_workshop,name='register_to_workshop'),
     path('profile/registrations', views.user_registrations, name='user_registrations'),
 ]
