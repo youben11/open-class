@@ -42,7 +42,7 @@
 							</div>
 							<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
 								<div class="card-body">
-									<div class="list-group text-center">
+									<div class="list-group text-center table-reponsive">
 										<table class="table">
 											<thead>
 												<tr>
@@ -59,15 +59,16 @@
 															{{s.pk}}
 														</th>
 														<td>
-															{{s.}}
+															{{s.title}}
 														</td>
 														<td>
-
+															{{s.start_date}}
 														</td>
 														<td>
 								              <form method="post">
 								                {% csrf_token %}
-								                <button id="accept-btn" type="button" class="btn btn-success" onclick="accept({{s.pk}})">Accept</button>
+								                <button id="accept-btn" type="button" class="btn-success" onclick="decide({{s.pk}},'accept')">Accept</button>
+								                <button id="accept-btn" type="button" class="btn-danger" onclick="decide({{s.pk}},'refuse')">Refuse</button>
 								              </form>
 														</td>
 													</tr>
@@ -87,13 +88,13 @@
 </div>
 <script type="text/javascript">
   btnAccept = document.getElementById("accept-btn");
-  function accept(workshop_pk) { 
+  function decide(workshop_pk,decision) { 
     $.ajax({
       type: "POST",
       url: "{% url 'openclass:moderation_submitted_workshops_decision' %}",
       dataType: "json",
       traditional: true,
-      data: {'workshop_pk': workshop_pk,'decision': "accept"},
+      data: {'workshop_pk': workshop_pk,'decision': decision},
       success: function(data) {
                console.log(data);
        }
