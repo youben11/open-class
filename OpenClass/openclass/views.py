@@ -23,14 +23,16 @@ def workshops_detail(request, workshop_id):
 def members_list(request):
     return HttpResponse('members_list')
 
-def members_detail(request, member_id):
-    return HttpResponse('members_detail')
+def members_detail(request, username):
+    user = User.objects.get(username = username)
+    return render(request, "openclass/profile.html", {"user":user})
 
 def badges_list(request):
     return HttpResponse('badges_list')
 
 @login_required()
 def profile(request):
+    user = request.user
     return render(request, "openclass/profile.html")
 
 def prefs(request):

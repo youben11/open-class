@@ -27,7 +27,7 @@
                       <i class="fa fa-share-alt fa-2x"></i>
                     </div>
                   </div>
-                  <h4>Date:   {{workshop.start_date}} (4 days)</h4>
+                  <h4>Date: {{workshop.start_date}} (4 days)</h4>
                   <h4>Speaker: <a href="#" class="badge badge-light themebadges"> <img src="{{workshop.animator.photo}}" class="openbadge" /> {{workshop.animator.user.first_name}} {{workshop.animator.user.last_name}}</a></h4>
                   <p class="card-text">{{workshop.description}}</p>
                   {% for i in workshop.topics.all %}
