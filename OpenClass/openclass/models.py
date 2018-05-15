@@ -186,7 +186,7 @@ class Registration(models.Model):
                 choices=STATUS_CHOICES,
                 default=PENDING,
                 null=False)
-    date_registration = models.DateTimeField()
+    date_registration = models.DateTimeField(auto_now_add=True)
     date_cancel = models.DateTimeField(null=True)
     present = models.BooleanField(null=False, default=False)
 
