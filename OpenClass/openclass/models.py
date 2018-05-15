@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from django.utils import timezone
 
 from datetime import datetime
 
@@ -141,9 +142,8 @@ class Workshop(models.Model):
 
     def accept(self):
         # accept only a PENDING workshop
-        if self.status == self.PENDING:
-            timezone = self.start_date.tzinfo
-            self.decision_date = datetime.now(timezone)
+        if self.status == self.PENDING and self.start_date < timezone.now():
+            self.decision_date = timezone.now()
             self.status = self.ACCEPTED
             self.save()
             return True
@@ -157,8 +157,7 @@ class Workshop(models.Model):
             return False
 
     def days_left(self):
-        timezone = self.start_date.tzinfo
-        time_left = self.start_date - datetime.now(timezone)
+        time_left = self.start_date - timezone.now()
         return time_left.days   # return only days left
 
     def check_registration(self,qprofile):
@@ -343,8 +342,7 @@ class Profile(models.Model):
 
     def ask(self, workshop_pk, question):
         #check user permission
-        #is he registred ? accepted ?
-        #is he present ? maybe not
+        #registred?
         try:
             workshop = Workshop.objects.get(pk=workshop_pk)
             registration = Registration.objects.get(
@@ -353,15 +351,19 @@ class Profile(models.Model):
         except:
             return False
 
+        #present? => accepted ?
         if not registration.present:
             return False
 
-        #now() is the current time
-        #current_duration = now() - workshop.start_date
-        #if current_duration < workshop.duration:
+        #is the workshop currently animated?
+        start_date = workshop.start_date
+        end_date = start_date + workshop.duration
+        if start_date < timezone.now() < end_date:
+            self.asked.create(workshop=workshop, question=question)
+            return True
+        else:
+            return False
 
-        self.asked.create(workshop=workshop, question=question)
-        return True
 
     def get_interests(self):#don't use interests():conflict with field interests
         """Get the user's interests in form of Tags."""
@@ -371,16 +373,17 @@ class Profile(models.Model):
 
     def get_age(self):
         "calculate the age of a user from birthday"
-        age = datetime.now().date().year - self.birthday.year
-        if datetime.now().date().month < self.birthday.month and datetime.now().date().day < self.birthday.day:
-            return age-1
-        if datetime.now().date().month == self.birthday.month and datetime.now().date().day < self.birthday.day:
-            return age-1
-        else:
-            return age
+        current_date = timezone.now().date()
+        age = current_date.year - self.birthday.year
+
+        if (current_date.month, current_date.day) \
+                < (self.birthday.month, self.birthday.day):
+            age -= 1
+
+        return age
 
     def get_registrations(self):
-        registrations = Registration.objects.all().filter(profile = self)
+        registrations = Registration.objects.all().filter(profile=self)
         return registrations
 
 

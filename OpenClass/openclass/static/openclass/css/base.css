@@ -941,4 +941,23 @@ textarea {
    text-align: center;
 }
 
+/* NavBar customization by Nadir Bounoua */
+
+.openclass-navbar-logo {
+   font-size: 20px;
+   color: #ffffff;
+   font-family: 'Kaushan Script', 'Helvetica Neue', Helvetica, Arial, cursive;
+}
+
+.openclass-nav-link {
+  font-size: 90%;
+  font-weight: 400;
+  /*padding: 0.75em 0;*/
+  letter-spacing: 1px;
+  color: white;
+  text-transform: uppercase;
+  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+
 /*# sourceMappingURL=base.css.map */
