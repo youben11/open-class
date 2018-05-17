@@ -264,7 +264,6 @@ class Tag(models.Model):
 class Profile(models.Model):
     RE_PHONE_NB = r"^(\+[\d ]{3})?[\d ]+$"
     MAX_LEN_PHONE_NB = 20
-    MAX_LEN_CONF_VAL = 64
     MALE = 'M'
     FEMALE = 'F'
     NAG = 'X' #NotAGender
@@ -282,12 +281,34 @@ class Profile(models.Model):
                             max_length=MAX_LEN_PHONE_NB,
                             validators=[RegexValidator(regex=RE_PHONE_NB),])
     birthday = models.DateField(null=True)
-    verification_token = models.CharField(max_length=MAX_LEN_CONF_VAL)
-    verified = models.BooleanField(default=False)
     photo = models.ImageField()
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.user)
+
+    def generate_verification_token(self):
+        try:
+            verification_token = VerificationToken.objects.get(profile=self)
+        except VerificationToken.DoesNotExist:
+            verification_token = VerificationToken(profile=self)
+
+        token = verification.generate_new_token()
+        #render and send email
+
+    def verify(self, token):
+        try:
+            verification_token = VerificationToken.objects.get(profile=self)
+        except VerificationToken.DoesNotExist:
+            return False
+
+        if token == verification_token.value :
+            self.user.is_active = True
+            self.user.save()
+            verification_token.delete()
+            return True
+        else:
+            return False
+
 
     def update_email(self, email):
         """Update the user's email only if it is valid.
@@ -395,6 +416,25 @@ class Profile(models.Model):
     def get_registrations(self):
         registrations = Registration.objects.all().filter(profile=self)
         return registrations
+
+class VerificationToken(models.Model):
+    TOKEN_LEN = 32
+
+    value = models.CharField(max_length=TOKEN_LEN)
+    profile = models.OneToOneField(
+                            Profile,
+                            related_name='verification_token',
+                            on_delete=models.CASCADE,
+                            unique=True
+                            )
+
+    def generate_new_token(self):
+        TOKEN_LEN = VerificationToken.TOKEN_LEN
+        CHOICES = "ABCDEF0123456789abcdefg"
+        token = [random.choice(CHOICES) for i in range(TOKEN_LEN)]
+        self.value = "".join(token)
+        self.save()
+        return self.value
 
 
 class Preference(models.Model):
