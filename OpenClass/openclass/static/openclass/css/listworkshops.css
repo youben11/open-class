@@ -11,9 +11,7 @@
 
 }
 
-a:hover{
-  background-color: #afafb2;
-}
+
 
 .inscription-progress{
   padding-top: 10px;
@@ -45,6 +43,13 @@ a:hover{
 
 .badge-learn{
   color: #000;
-  margin-left: 5px;
-  margin-right: 5px;
+
+}
+
+.text-date{
+  color:#45494E;
+}
+
+.col-filter{
+  background:#f0f0f4; 
 }
