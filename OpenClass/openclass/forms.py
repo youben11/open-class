@@ -1,8 +1,8 @@
 from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile, Workshop
-from .models import Registration
+from .models import Profile, Workshop, Question
+
 
 class UserSettings(ModelForm):
     first_name = forms.CharField(required=True)
@@ -44,5 +44,16 @@ class WorkshopForm(ModelForm):
                 'required_materials',
                 'start_date',
                 'duration',
-                'cover_img',
+                #'cover_img',
                 ]
+        widgets = {
+                'start_date': forms.DateInput(attrs={'type':'date'}),
+                }
+
+
+class QuestionForm(ModelForm):
+    class Meta:
+        model = Question
+        fields = [
+            'question'
+        ]

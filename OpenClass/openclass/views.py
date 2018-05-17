@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -12,13 +12,13 @@ def index(request):
     return render(request, "openclass/home.html")
 
 #moderator
-def moderation_submitted_workshop(request):
+def moderation_submitted_workshops(request):
     pending_workshops = Workshop.objects.filter(status=Workshop.PENDING)
     context = {'submissions': pending_workshops}
     return render(request, 'openclass/submitted-workshops.html', context)
 
 #moderator
-def moderation_submitted_workshop_decision(request):
+def moderation_submitted_workshops_decision(request):
     ACCEPT = "accept"
     REFUSE = "refuse"
     workshop_pk = request.POST['workshop_pk']
@@ -27,23 +27,24 @@ def moderation_submitted_workshop_decision(request):
     try:
         workshop = Workshop.objects.get(pk=workshop_pk)
     except Workshop.DoesNotExist:
-        #json response
-        pass
+        error = {'status': 'workshop_does_not_exist'}
+        return JsonResponse(error)
 
     if decision == ACCEPT:
         if workshop.accept():
-            pass
+            response = {'status': 'accepted'}
         else:
-            pass
+            response = {'status': "can't accept"}
 
     elif decision == REFUSE:
         if workshop.refuse():
-            pass
+            response = {'status': 'refused'}
         else:
-            pass
+            response = {'status': "can't refuse"}
     else:
-        #invalid decision
-        pass
+        response = {'status': 'invalid decision'}
+
+    return JsonResponse(response)
 
 
 def workshops_list(request):
@@ -63,11 +64,16 @@ def workshops_detail(request, workshop_id):
     is_registered = workshop.check_registration(request.user.profile)
     return render(request, "openclass/workshop.html",{"workshop":workshop, "is_registered":is_registered})
 
+@login_required()
 def members_list(request):
+<<<<<<< HEAD
 	profiles = Profile.objects.all()
+=======
+	profiles = Profile.objects.filter(user__is_active=True)
+>>>>>>> 0bd55124336f76aa5dd6e4f8804d466d359d470a
 	return render(request, "openclass/member_list.html", {"profiles":profiles})
 
-
+@login_required()
 def members_detail(request, username):
     user = User.objects.get(username = username)
     return render(request, "openclass/profile.html", {"user":user})
@@ -77,20 +83,18 @@ def badges_list(request):
 
 @login_required()
 def profile(request):
-    user = request.user
     return render(request, "openclass/profile.html")
 
+@login_required()
 def prefs(request):
-    user = request.user
-    age = user.profile.get_age
-    return render(request, "openclass/user-preferences.html", {"age":age})
+    return render(request, "openclass/user-preferences.html")
 
 def signup(request):
 
     tags = Tag.objects.all()
 
     if request.user.is_authenticated:
-        return redirect('/profile')
+        return redirect(reverse('openclass:profile'))
 
     if request.method == "POST":
         user_form = UserForm(request.POST)
@@ -106,7 +110,7 @@ def signup(request):
             profile.save()
             #should verify the user via email
             login(request, user)
-            return redirect('/profile')
+            return redirect(reverse('openclass:profile'))
 
     else:
         user_form = UserForm()
@@ -115,7 +119,7 @@ def signup(request):
     context = {"user_form":user_form, "user_profile_form":user_profile_form}
     return render(request, 'openclass/signup.html', context)
 
-
+@login_required()
 def submit_workshop(request):
     if request.method == "POST":
         workshop_form = WorkshopForm(request.POST)
@@ -123,6 +127,7 @@ def submit_workshop(request):
             workshop = workshop_form.save(commit=False)
             workshop.submission_date = datetime.now()
             workshop.status = Workshop.PENDING
+            workshop.animator = request.user.profile
             workshop.save()
             return HttpResponse("Thanks, Your workshop has been submitted")
 
@@ -162,7 +167,8 @@ def user_attendance(request, workshop_pk, user_pk):
     if request.method=="POST":
         registration.present = not registration.present
         registration.save()
-        return redirect('/attendance/'+str(workshop_pk))
+        kwargs = {'workshop_pk': workshop_pk}
+        return redirect(reverse('openclass:attendance', kwargs=kwargs))
 
     context = {"registration": registration, "workshop":workshop, "profile":profile}
     return render(request, "openclass/user-attendance.html", context)
@@ -174,7 +180,8 @@ def register_to_workshop(request):
     try:
         workshop = Workshop.objects.get(pk=workshop_pk)
     except Workshop.DoesNotExist:
-        return HttpResponse("Invalid Workshop pk")
+        error = {'status': 'workshop_does_not_exist'}
+        return JsonResponse(error)
 
     registration = Registration()
     registration.workshop = workshop
@@ -182,8 +189,28 @@ def register_to_workshop(request):
     registration.status = Registration.PENDING
     registration.save()
 
-    return HttpResponse("Registrations Done")
+    response = {'status': 'registred'}
+    return JsonResponse(response)
 
 def user_registrations(request):
     registrations = request.user.profile.get_registrations
     return render(request, "openclass/user-registrations.html", {"registrations":registrations})
+
+
+@login_required()
+def ask_question(request, workshop_pk):
+    workshop = get_object_or_404(Workshop, pk=workshop_pk)
+    if request.method == "POST":
+        question_form = QuestionForm(request.POST)
+        if question_form .is_valid():
+            question = question_form .save(commit=False)
+            question.author = request.user.profile
+            question.workshop = workshop
+            question.save()
+            return HttpResponse("Thanks, Your Question has been submitted")
+
+    else:
+        question_form = QuestionForm()
+
+    context = {"question_form": question_form}
+    return render(request, "openclass/ask_question.html", context)

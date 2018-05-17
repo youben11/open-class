@@ -4228,4 +4228,40 @@ footer h4::after {
    margin-top: 3.6rem;
 }
 
+/* NavBar customization by Nadir Bounoua */
+
+.openclass-navbar-logo {
+   font-size: 20px;
+   color: #ffffff;
+   font-family: 'Kaushan Script', 'Helvetica Neue', Helvetica, Arial, cursive;
+   margin-left: 5%;
+   margin-top: 1vh;
+}
+@media only screen and (max-width: 800px) {
+   .openclass-navbar-logo {
+      font-size: 20px;
+      color: #ffffff;
+      font-family: 'Kaushan Script', 'Helvetica Neue', Helvetica, Arial, cursive;
+      margin-left: 35%;
+   }
+}
+
+.openclass-nav-link {
+  font-size: 90%;
+  font-weight: 400;
+  /*padding: 0.75em 0;*/
+  letter-spacing: 1px;
+  color: white;
+  text-transform: uppercase;
+  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+}
+
+.openclass-nav {
+   margin-left: 25% !important;
+   font-size: 16px !important;
+}
+
+.openclass-nav a {
+   color: #fff !important; 
+}
 /*# sourceMappingURL=main.css.map */
