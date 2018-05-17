@@ -48,7 +48,8 @@ def moderation_submitted_workshop_decision(request):
 
 def workshops_list(request):
     workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
-    return render(request, "openclass/listworkshop.html", {"workshops":workshops})
+    tags = Tag.objects.all()
+    return render(request, "openclass/listworkshop.html", {"workshops":workshops,"tags":tags})
 
 def upcoming_workshops_list(request):
     workshops = Workshop.objects.filter(
@@ -63,7 +64,7 @@ def workshops_detail(request, workshop_id):
     return render(request, "openclass/workshop.html",{"workshop":workshop, "is_registered":is_registered})
 
 def members_list(request):
-	profiles = Profile.objects.all() 
+	profiles = Profile.objects.all()
 	return render(request, "openclass/member_list.html", {"profiles":profiles})
 
 
