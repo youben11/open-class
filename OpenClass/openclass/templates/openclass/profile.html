@@ -35,27 +35,25 @@
                         <div class="card-header" id="headingOne">
                           <h5 class="mb-0 text-center">
                             <button class="btn" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                              Workshop Attended
+                              Workshops Attended
                             </button>
                           </h5>
                         </div>
-
                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                           <div class="card-body">
-                            <div class="list-group  text-center">
+                            <div class="list-group text-center">
                             {% for workshop in user.profile.workshops_attended %}
                               <a href="{% url 'openclass:workshops_detail' workshop.pk %}" class="list-group-item list-group-item-action">{{workshop.title}}</a>
                             {% endfor %}
-                            {% if user.profile.workshops_attended.count == 0 %}
-                              <p>You didn't attend to any workshop yet. Visit the <a href="{% url 'openclass:workshops_list' %}">Workshops List</a> now!</p>
-                            <!-- 
-                              <a href="#" class="list-group-item list-group-item-action">Example Workshop 1</a>
-                              <a href="#" class="list-group-item list-group-item-action">Example Workshop 2</a>
-                              <a href="#" class="list-group-item list-group-item-action">Example Workshop 3</a>
-                            -->
+                            {% if request.user == user %}
+                              {% if user.profile.workshops_attended.count == 0 %}
+                                <p>You didn't attend to any workshop yet. Visit the <a href="{% url 'openclass:workshops_list' %}">Workshops List</a> now!</p>
+                              {% else %}
+                                <a href="#"><span>View more</span></a>
+                              {% endif %}  
                             {% else %}
-                              <a href="#"><span>View more</span></a>
-                            {% endif %}  
+                                <p>@{{user.username}} didn't attend to any workshop yet.</p>
+                            {% endif %}
                             </div>
                           </div>
                         </div>
@@ -74,20 +72,15 @@
                             {% for workshop in user.profile.workshops_animated %}
                               <a href="{% url 'openclass:workshops_detail' workshop.pk %}" class="list-group-item list-group-item-action">{{workshop.title}}</a>
                             {% endfor %}
-                            <!--   <a href="#" class="list-group-item list-group-item-action">Example Workshop 1</a>
-                              <a href="#" class="list-group-item list-group-item-action">Example Workshop 2</a>
-                              <a href="#" class="list-group-item list-group-item-action">Example Workshop 3</a>
-                             -->
-                            {% if user.profile.workshops_animated.count == 0 %}
+                            {% if request.user == user %}
+                              {% if user.profile.workshops_animated.count == 0 %}
                               <p>You didn't animate any workshop yet. <a href="{% url 'openclass:submit_workshop' %}">Submit a Workshop now!</a></p>
-                            <!-- 
-                              <a href="#" class="list-group-item list-group-item-action">Example Workshop 1</a>
-                              <a href="#" class="list-group-item list-group-item-action">Example Workshop 2</a>
-                              <a href="#" class="list-group-item list-group-item-action">Example Workshop 3</a>
-                            -->
+                              {% else %}
+                                <a href="#"><span>View more</span></a>
+                              {% endif %}  
                             {% else %}
-                              <a href="#"><span>View more</span></a>
-                            {% endif %}  
+                                <p>@{{user.username}} didn't animate to any workshop yet.</p>
+                            {% endif %}
                             </div>
                           </div>
                         </div>
