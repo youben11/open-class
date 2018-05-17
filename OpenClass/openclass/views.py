@@ -175,6 +175,7 @@ def user_attendance(request, workshop_pk, user_pk):
     profile = get_object_or_404(Profile, id = user_pk)
     registration = Registration.objects.get(workshop=workshop,profile=profile)
     if request.method=="POST":
+        #?? POST only ??
         registration.present = not registration.present
         registration.save()
         kwargs = {'workshop_pk': workshop_pk}
@@ -193,13 +194,11 @@ def register_to_workshop(request):
         error = {'status': 'workshop_does_not_exist'}
         return JsonResponse(error)
 
-    registration = Registration()
-    registration.workshop = workshop
-    registration.profile = request.user.profile
-    registration.status = Registration.PENDING
-    registration.save()
+    if workshop.register(request.user):
+        response = {'status': 'registred'}
+    else:
+        response = {'statuts': "can't register"}
 
-    response = {'status': 'registred'}
     return JsonResponse(response)
 
 def user_registrations(request):

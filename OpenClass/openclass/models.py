@@ -1,6 +1,6 @@
 import re
 import random
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
@@ -13,11 +13,11 @@ class Workshop(models.Model):
     MAX_LEN_TITLE = 20
     MAX_LEN_LOCATION = 20
 
-    FIFO = 'F'
-    MANUAL = 'M'
+    POL_FIFO = 'F'
+    POL_MANUAL = 'M'
     POLITIC_CHOICES = (
-        (FIFO, 'FIFO'),
-        (MANUAL, 'Manual'),
+        (POL_FIFO, 'FIFO'),
+        (POL_MANUAL, 'Manual'),
     )
 
     PENDING = 'P'
@@ -52,7 +52,7 @@ class Workshop(models.Model):
     registration_politic = models.CharField(
                                 max_length=1,
                                 choices=POLITIC_CHOICES,
-                                default=FIFO)
+                                default=POL_FIFO)
     location = models.CharField(max_length=MAX_LEN_LOCATION)
     cover_img = models.ImageField()
     status = models.CharField(
@@ -63,6 +63,38 @@ class Workshop(models.Model):
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.title)
+
+    def register(self, user):
+        if timezone.now() > self.last_registration_date():
+            return False
+
+        registration = Registration(workshop=self, profile=user.profile)
+        if self.registration_politic == Workshop.POL_FIFO:
+            if self.seats_number == 0 :
+                registration.status == Registration.ACCEPTED
+                registration.save()
+                return True
+            else:
+                try:
+                    with transaction.atomic():
+                        registrations = Registration.objects.filter(
+                                            workshop=self,
+                                            status=Workshop.ACCEPTED,
+                                            )
+                        if len(registrations) + 1 > self.seats_number:
+                            registration.save()
+                            return False
+                        else:
+                            registration.status = Registration.ACCEPTED
+                            registration.save()
+                            return True
+                except DatabaseError:
+                    return False
+
+    def last_registration_date(self):
+        date = self.start_date
+        # put restriction here if needed
+        return date
 
     def update_title(self, new_title):
         if 0 < len(new_title) <= self.MAX_LEN_TITLE:
@@ -114,10 +146,10 @@ class Workshop(models.Model):
 
     def update_start_date(self, new_start_date):
         # all dates must have tzinfo
-        timezone = self.start_date.tzinfo
+        timezone_info = self.start_date.tzinfo
         if new_start_date.tzinfo == None:
             return False
-        if new_start_date > datetime.now(timezone):
+        if new_start_date > datetime.now(timezone_info):
             self.start_date = new_start_date
             self.save()
             return True
