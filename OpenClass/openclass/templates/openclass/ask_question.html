@@ -1,0 +1,11 @@
+{% extends 'openclass/base.html' %}
+
+
+{% block content %}
+<title>Ask Question</title>
+<form name="AskQuestionForm" method="post">
+    {% csrf_token %}
+    {{question_form.as_p}}
+	<button type="submit">Ask</button>
+</form>
+{% endblock %}
