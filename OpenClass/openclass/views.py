@@ -89,7 +89,7 @@ def signup(request):
     tags = Tag.objects.all()
 
     if request.user.is_authenticated:
-        return redirect('/profile')
+        return redirect(reverse('openclass:profile'))
 
     if request.method == "POST":
         user_form = UserForm(request.POST)
@@ -105,7 +105,7 @@ def signup(request):
             profile.save()
             #should verify the user via email
             login(request, user)
-            return redirect('/profile')
+            return redirect(reverse('openclass:profile'))
 
     else:
         user_form = UserForm()
@@ -162,7 +162,8 @@ def user_attendance(request, workshop_pk, user_pk):
     if request.method=="POST":
         registration.present = not registration.present
         registration.save()
-        return redirect('/attendance/'+str(workshop_pk))
+        kwargs = {'workshop_pk': workshop_pk}
+        return redirect(reverse('openclass:attendance', kwargs=kwargs))
 
     context = {"registration": registration, "workshop":workshop, "profile":profile}
     return render(request, "openclass/user-attendance.html", context)
