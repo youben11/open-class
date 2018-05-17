@@ -190,3 +190,22 @@ def register_to_workshop(request):
 def user_registrations(request):
     registrations = request.user.profile.get_registrations
     return render(request, "openclass/user-registrations.html", {"registrations":registrations})
+
+
+@login_required()
+def ask_question(request, workshop_pk):
+    workshop = get_object_or_404(Workshop, pk=workshop_pk)
+    if request.method == "POST":
+        question_form = QuestionForm(request.POST)
+        if question_form .is_valid():
+            question = question_form .save(commit=False)
+            question.author = request.user.profile
+            question.workshop = workshop
+            question.save()
+            return HttpResponse("Thanks, Your Question has been submitted")
+
+    else:
+        question_form = QuestionForm()
+
+    context = {"question_form": question_form}
+    return render(request, "openclass/ask_question.html", context)
