@@ -1,4 +1,5 @@
 import re
+import random
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
@@ -292,22 +293,9 @@ class Profile(models.Model):
         except VerificationToken.DoesNotExist:
             verification_token = VerificationToken(profile=self)
 
-        token = verification.generate_new_token()
+        token = verification_token.generate_new_token()
         #render and send email
-
-    def verify(self, token):
-        try:
-            verification_token = VerificationToken.objects.get(profile=self)
-        except VerificationToken.DoesNotExist:
-            return False
-
-        if token == verification_token.value :
-            self.user.is_active = True
-            self.user.save()
-            verification_token.delete()
-            return True
-        else:
-            return False
+        return token
 
 
     def update_email(self, email):
@@ -435,6 +423,15 @@ class VerificationToken(models.Model):
         self.value = "".join(token)
         self.save()
         return self.value
+
+    def verify(self, token):
+        if token == self.value :
+            self.profile.user.is_active = True
+            self.profile.user.save()
+            self.delete()
+            return self.profile.user
+        else:
+            return None
 
 
 class Preference(models.Model):

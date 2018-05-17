@@ -26,4 +26,5 @@ urlpatterns = [
     path('workshops/upcoming/', views.upcoming_workshops_list, name='upcoming_workshops_list'),
     path('profile/registrations', views.user_registrations, name='user_registrations'),
     path('workshops/<int:workshop_pk>/ask_question', views.ask_question, name='ask_question'),
+    path('verify/<token>/', views.verify, name='verify')
 ]

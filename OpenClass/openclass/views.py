@@ -101,11 +101,12 @@ def signup(request):
             user.save()
             profile = user_profile_form.save(commit=False)
             profile.user = user
+            profile.user.is_active = False
             profile.score = 0
             profile.save()
-            #should verify the user via email
-            login(request, user)
-            return redirect(reverse('openclass:profile'))
+            user.save()
+            token = profile.generate_verification_token()
+            return HttpResponse(token)
 
     else:
         user_form = UserForm()
@@ -113,6 +114,19 @@ def signup(request):
 
     context = {"user_form":user_form, "user_profile_form":user_profile_form}
     return render(request, 'openclass/signup.html', context)
+
+def verify(request, token):
+    try:
+        verification_token = VerificationToken.objects.get(value=token)
+    except VerificationToken.DoesNotExist:
+        return HttpResponse("Bad token")
+
+    user = verification_token.verify(token)
+    if user:
+        login(request, user)
+        return redirect(reverse('openclass:profile'))
+    else:
+        return HttpResponse("Bad token")
 
 @login_required()
 def submit_workshop(request):
