@@ -21,6 +21,7 @@ class UserProfileForm(ModelForm):
         widgets = {
                 'birthday': forms.DateInput(attrs={'type':'date'}),
                 }
+        # TODO: unique email, valide birthday (< now())
 
 class UserForm(ModelForm):
 
