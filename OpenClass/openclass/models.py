@@ -80,7 +80,7 @@ class Workshop(models.Model):
                                             )
                         if len(registrations) + 1 > self.seats_number:
                             registration.save()
-                            return False
+                            return True
                         else:
                             registration.status = Registration.ACCEPTED
                             registration.save()

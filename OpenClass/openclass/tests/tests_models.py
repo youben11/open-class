@@ -132,7 +132,7 @@ class WorkshopTest(TestCase):
     """Workshop model test cases"""
 
     @classmethod
-    def setUp(self):
+    def setUpTestData(cls):
         Workshop.objects.create(
                         title='PWNign in user_land',
                         description="exploit dev",
@@ -146,6 +146,63 @@ class WorkshopTest(TestCase):
                         duration=timezone.now() - timezone.now(),
                         location='amphi c',
                         status=Workshop.DONE)
+        Workshop.objects.create(
+                        title='tommorow',
+                        description="exploit dev",
+                        required_materials="laptop, linux OS",
+                        objectives="debuggin, exploit dev",
+                        requirements="C programming, Linux basics",
+                        seats_number=1,
+                        submission_date=timezone.now(),
+                        decision_date=timezone.now(),
+                        start_date=timezone.now() + timedelta(1),
+                        duration=timedelta(minutes=90),
+                        location='amphi c',
+                        registration_politic=Workshop.POL_FIFO,
+                        status=Workshop.ACCEPTED)
+        #first user
+        cls.profile = Profile(gender='M', score=100,
+                                phone_number='+21666',
+                                birthday=date.today(),
+                                photo=None,
+                                )
+        cls.user = User.objects.create(username='youben11',
+                                        email='youben@yopmail.com',
+                                        profile=cls.profile)
+        cls.profile.user = cls.user
+        cls.profile.save()
+        #second user
+        cls.profile2 = Profile(gender='M', score=100,
+                                phone_number='+21555',
+                                birthday=date.today(),
+                                photo=None,
+                                )
+        cls.user2 = User.objects.create(username='youben12',
+                                        email='youben2@yopmail.com',
+                                        profile=cls.profile2)
+        cls.profile2.user = cls.user2
+        cls.profile2.save()
+
+
+    def test_registration_fifo(self):
+        user = User.objects.get(username='youben11')
+        workshop = Workshop.objects.get(title='tommorow')
+        r = workshop.register(user.profile)
+        self.assertEqual(r, True)
+        registration = Registration.objects.get(
+                                workshop=workshop,
+                                profile=user.profile
+                                )
+        self.assertEqual(registration.status, Registration.ACCEPTED)
+        #second registration should
+        user = User.objects.get(username='youben12')
+        r = workshop.register(user.profile)
+        self.assertEqual(r, True)
+        registration = Registration.objects.get(
+                                workshop=workshop,
+                                profile=user.profile
+                                )
+        self.assertEqual(registration.status, Registration.PENDING)
 
 
     def test_update_title(self):
