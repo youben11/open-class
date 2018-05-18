@@ -182,6 +182,17 @@ class WorkshopTest(TestCase):
                                         profile=cls.profile2)
         cls.profile2.user = cls.user2
         cls.profile2.save()
+        #third user
+        cls.profile3 = Profile(gender='M', score=100,
+                                phone_number='+21555',
+                                birthday=date.today(),
+                                photo=None,
+                                )
+        cls.user3 = User.objects.create(username='youben13',
+                                        email='youben3@yopmail.com',
+                                        profile=cls.profile3)
+        cls.profile3.user = cls.user3
+        cls.profile3.save()
 
 
     def test_registration_fifo(self):
@@ -203,7 +214,24 @@ class WorkshopTest(TestCase):
                                 profile=user.profile
                                 )
         self.assertEqual(registration.status, Registration.PENDING)
-
+        #cancel registration for the first user
+        user = User.objects.get(username='youben11')
+        r = workshop.cancel_registration(user.profile)
+        self.assertEqual(r, True)
+        registration = Registration.objects.get(
+                                workshop=workshop,
+                                profile=user.profile
+                                )
+        self.assertEqual(registration.status, Registration.CANCELED)
+        #register a third one
+        user = User.objects.get(username='youben13')
+        r = workshop.register(user.profile)
+        self.assertEqual(r, True)
+        registration = Registration.objects.get(
+                                workshop=workshop,
+                                profile=user.profile
+                                )
+        self.assertEqual(registration.status, Registration.ACCEPTED)
 
     def test_update_title(self):
         w = Workshop.objects.all()[0]

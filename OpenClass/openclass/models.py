@@ -12,6 +12,7 @@ from datetime import datetime
 class Workshop(models.Model):
     MAX_LEN_TITLE = 20
     MAX_LEN_LOCATION = 20
+    INFINITE_SEATS_NB = 0
 
     POL_FIFO = 'F'
     POL_MANUAL = 'M'
@@ -67,7 +68,7 @@ class Workshop(models.Model):
     def register(self, profile):
         registration = Registration(workshop=self, profile=profile)
         if self.registration_politic == Workshop.POL_FIFO:
-            if self.seats_number == 0 :
+            if self.seats_number == Workshop.INFINITE_SEATS_NB :
                 registration.status == Registration.ACCEPTED
                 registration.save()
                 return True
@@ -78,13 +79,10 @@ class Workshop(models.Model):
                                             workshop=self,
                                             status=Workshop.ACCEPTED,
                                             )
-                        if len(registrations) + 1 > self.seats_number:
-                            registration.save()
-                            return True
-                        else:
+                        if len(registrations) + 1 <= self.seats_number:
                             registration.status = Registration.ACCEPTED
-                            registration.save()
-                            return True
+                        registration.save()
+                        return True
                 except DatabaseError:
                     return False
 
