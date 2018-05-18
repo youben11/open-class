@@ -59,10 +59,18 @@ def upcoming_workshops_list(request):
                                     )
     return render(request, "openclass/listworkshop.html", {"workshops":workshops})
 
-def workshops_detail(request, workshop_id):
-    workshop = get_object_or_404(Workshop,pk=workshop_id)
-    #context: is_registred, _pending, _accepted, _refused, _canceled : Boolean
-    context = workshop.check_registration(request.user.profile)
+def workshops_detail(request, workshop_pk):
+    workshop = get_object_or_404(
+                        Workshop,
+                        pk=workshop_pk,
+                        status=Workshop.ACCEPTED,
+                        )
+    context = {'workshop': workshop}
+    if request.user.is_authenticated:
+        context['is_registered'] = request.user.profile.is_registered(workshop)
+        if context['is_registered']:
+            context.update(workshop.check_registration(request.user.profile))
+
     return render(request, "openclass/workshop.html",context)
 
 @login_required()
@@ -195,8 +203,16 @@ def register_to_workshop(request):
         error = {'status': 'workshop_does_not_exist'}
         return JsonResponse(error)
 
-    if workshop.register(request.user):
-        response = {'status': 'registred'}
+    if request.user.profile.is_registered(workshop):
+        error = {'status': 'already_registred'}
+        return JsonResponse(error)
+
+    if not workshop.is_registration_open():
+        response = {'status': 'registration_closed'}
+        return JsonResponse(response)
+
+    if workshop.register(request.user.profile):
+        response = {'status': 'registered'}
     else:
         response = {'statuts': "can't register"}
 
@@ -212,7 +228,15 @@ def cancel_registration(request):
         error = {'status': 'workshop_does_not_exist'}
         return JsonResponse(error)
 
-    if workshop.cancel_registration(request.user):
+    if not request.user.profile.is_registered(workshop):
+        error = {'status': 'not_registred'}
+        return JsonResponse(error)
+
+    if not request.user.profile.can_cancel_registration(workshop):
+        response = {'status': "can't cancel"}
+        return JsonResponse(response)
+
+    if workshop.cancel_registration(request.user.profile):
         response = {'status': 'canceled'}
     else:
         response = {'status': "can't cancel"}

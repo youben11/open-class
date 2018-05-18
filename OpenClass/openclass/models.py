@@ -33,8 +33,8 @@ class Workshop(models.Model):
         (CANCELED, 'Canceled'),
     )
 
-    registred = models.ManyToManyField('Profile', through='Registration',
-                                        related_name='registred_to')
+    registered = models.ManyToManyField('Profile', through='Registration',
+                                        related_name='registered_to')
     mc_questions = models.ManyToManyField('MCQuestion')
     animator = models.ForeignKey('Profile', on_delete=models.SET_NULL,
                                 null=True, related_name='animated')
@@ -64,18 +64,12 @@ class Workshop(models.Model):
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.title)
 
-    def register(self, user):
-        if timezone.now() > self.last_registration_date():
-            return False
-
-        registration = Registration(workshop=self, profile=user.profile)
+    def register(self, profile):
+        registration = Registration(workshop=self, profile=profile)
         if self.registration_politic == Workshop.POL_FIFO:
             if self.seats_number == 0 :
                 registration.status == Registration.ACCEPTED
-                try:
-                    registration.save()
-                except:
-                    return False
+                registration.save()
                 return True
             else:
                 try:
@@ -85,30 +79,47 @@ class Workshop(models.Model):
                                             status=Workshop.ACCEPTED,
                                             )
                         if len(registrations) + 1 > self.seats_number:
-                            try:
-                                registration.save()
-                            except:
-                                pass
+                            registration.save()
                             return False
                         else:
                             registration.status = Registration.ACCEPTED
-                            try:
-                                registration.save()
-                            except:
-                                return False
+                            registration.save()
                             return True
                 except DatabaseError:
                     return False
+
+    def is_registration_open(self):
+        if timezone.now() > self.last_registration_date():
+            return False
+        else:
+            return True
 
     def last_registration_date(self):
         date = self.start_date
         # put restriction here if needed
         return date
 
-    def cancel_registration(self, user):
-        if timezone.now() > self.last_cancel_date():
+    def cancel_registration(self, profile):
+        try:
+            registration = Registration.objects.get(
+                                    profile=profile,
+                                    workshop=self,
+                                    )
+        except Registration.DoesNotExist:
             return False
+        if registration.status == Registration.CANCELED:
+            return False
+        else:
+            registration.date_cancel = timezone.now()
+            registration.status = Registration.CANCELED
+            registration.save()
+            return True
 
+
+    def last_cancel_date(self):
+        date = self.start_date
+        # put restriction here if needed
+        return date
 
     def update_title(self, new_title):
         if 0 < len(new_title) <= self.MAX_LEN_TITLE:
@@ -221,13 +232,11 @@ class Workshop(models.Model):
         flags = {}
         try:
             registration = Registration.objects.get(
-                                                workshop=self,
-                                                profile=profile
-                                                )
-            flags['is_registered'] = True
-        except Registration.DoesNotExist:
-            flags['is_registered'] = False
-
+                                    profile=profile,
+                                    workshop=self,
+                                    )
+        except:
+            return flags
         flags['is_pending'] = registration.status == Registration.PENDING
         flags['is_accepted'] = registration.status == Registration.ACCEPTED
         flags['is_refused'] = registration.status == Registration.REFUSED
@@ -354,6 +363,33 @@ class Profile(models.Model):
         #render and send email
         return token
 
+    def is_registered(self, workshop):
+        try:
+            registration = Registration.objects.get(
+                                    profile=self,
+                                    workshop=workshop,
+                                    )
+            return True
+        except Registration.DoesNotExist:
+            return False
+
+    def can_cancel_registration(self, workshop):
+        if timezone.now() > workshop.last_cancel_date():
+            return False
+
+        try:
+            registration = Registration.objects.get(
+                                    profile=self,
+                                    workshop=workshop,
+                                    )
+        except Registration.DoesNotExist:
+            return False
+
+        if registration.status == Registration.ACCEPTED or \
+            registration.status == Registration.PENDING:
+            return True
+        else:
+            return False
 
     def update_email(self, email):
         """Update the user's email only if it is valid.
@@ -413,12 +449,12 @@ class Profile(models.Model):
 
         accepted = Q(registration__status=Registration.ACCEPTED)
         present = Q(registration__present=True)
-        workshops = self.registred_to.filter(accepted, present)
+        workshops = self.registered_to.filter(accepted, present)
         return workshops
 
     def ask(self, workshop_pk, question):
         #check user permission
-        #registred?
+        #registered?
         try:
             workshop = Workshop.objects.get(pk=workshop_pk)
             registration = Registration.objects.get(

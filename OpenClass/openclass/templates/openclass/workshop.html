@@ -53,25 +53,27 @@
           </div>
         </div>
           <div class="col-xs-12 col-lg-12 col-xl-4 col-progress-btn">
+            {% if request.user.is_authenticated %}
             <div>
               {% if is_registered %}
-                <div id="registeredMessage2" class="alert alert-primary mt-3" role="alert">
+                <!--div id="registeredMessage2" class="alert alert-primary mt-3" role="alert">
                   You are registered to this workshop.
-                </div>
+                </div-->
                 <button id="register-btn" type="button" class="btn btn-success my-4" style="display:none;justify-content:center;align-items:center;">Register !</button>
                 <button id="cancel-btn" type="button" class="btn btn-success my-4" style="display:flex;justify-content:center;align-items:center;">Cancel !</button>
               {% else %}
                 <button id="register-btn" type="button" class="btn btn-success my-4" style="display:flex;justify-content:center;align-items:center;">Register !</button>
                 <button id="cancel-btn" type="button" class="btn btn-success my-4" style="display:none;justify-content:center;align-items:center;">Cancel !</button>
-                <div id="errorMessage" class="alert alert-primary mt-3" style="display:none;" role="alert">
-                  Error, Try later.
-                </div>
                 <!--div id="registeredMessage1" class="alert alert-primary" role="alert" style="display: none;">
                   You are <b>registered</b> to this workshop.
                 </div-->
               {% endif %}
+              <div id="errorMessage" class="alert alert-primary mt-3" style="display:none;" role="alert">
+                Error, Try later.
+              </div>
           </div>
-          </div>
+          {% endif %}
+        </div>
 
 
       </div>
@@ -154,7 +156,7 @@
             traditional: true,
             data: {'workshop_pk': {{workshop.pk}}},
             success: function(data) {
-                if (data['status'] === "registred"){
+                if (data['status'] === "registered"){
                   $("#register-btn").hide();
                   $("#cancel-btn").slideToggle("slow");
                 }else{
@@ -174,9 +176,9 @@
             traditional: true,
             data: {'workshop_pk': {{workshop.pk}}},
             success: function(data) {
-                if (data['status'] === "registred"){
-                  $("#register-btn").hide();
-                  $("#cancel-btn").slideToggle("slow");
+                if (data['status'] === "canceled"){
+                  $("#cancel-btn").hide();
+                  $("#register-btn").slideToggle("slow");
                 }else{
                   $("#errorMessage").slideToggle("slow")
                   $("#errorMessage").slideToggle("slow")
