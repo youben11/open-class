@@ -61,8 +61,9 @@ def upcoming_workshops_list(request):
 
 def workshops_detail(request, workshop_id):
     workshop = get_object_or_404(Workshop,pk=workshop_id)
-    is_registered = workshop.check_registration(request.user.profile)
-    return render(request, "openclass/workshop.html",{"workshop":workshop, "is_registered":is_registered})
+    #context: is_registred, _pending, _accepted, _refused, _canceled : Boolean
+    context = workshop.check_registration(request.user.profile)
+    return render(request, "openclass/workshop.html",context)
 
 @login_required()
 def members_list(request):
@@ -187,7 +188,7 @@ def user_attendance(request, workshop_pk, user_pk):
 @login_required()
 def register_to_workshop(request):
     workshop_pk = request.POST['workshop_pk']
-    # add checks
+
     try:
         workshop = Workshop.objects.get(pk=workshop_pk)
     except Workshop.DoesNotExist:
@@ -198,6 +199,23 @@ def register_to_workshop(request):
         response = {'status': 'registred'}
     else:
         response = {'statuts': "can't register"}
+
+    return JsonResponse(response)
+
+@login_required()
+def cancel_registration(request):
+    workshop_pk = request.POST['workshop_pk']
+
+    try:
+        workshop = Workshop.objects.get(pk=workshop_pk)
+    except Workshop.DoesNotExist:
+        error = {'status': 'workshop_does_not_exist'}
+        return JsonResponse(error)
+
+    if workshop.cancel_registration(request.user):
+        response = {'status': 'canceled'}
+    else:
+        response = {'status': "can't cancel"}
 
     return JsonResponse(response)
 

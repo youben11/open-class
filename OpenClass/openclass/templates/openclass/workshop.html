@@ -6,7 +6,7 @@
 <title>{{workshop.title}} workshop</title>
 <link rel="stylesheet" href="{% static 'openclass/css/workshop.css' %}">
 <script type="text/javascript">
-  $.ajaxSetup({ 
+  $.ajaxSetup({
      beforeSend: function(xhr, settings) {
          function getCookie(name) {
              var cookieValue = null;
@@ -27,7 +27,7 @@
              // Only send the token to relative URLs i.e. locally.
              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
          }
-     } 
+     }
   });
 </script>
 <div  class="container container-shape">
@@ -54,18 +54,21 @@
         </div>
           <div class="col-xs-12 col-lg-12 col-xl-4 col-progress-btn">
             <div>
-              {% if not is_registered %}
-              <form method="post">
-                {% csrf_token %}
-                <button id="register-btn" type="button" class="btn btn-success my-4" style="display:flex;justify-content:center;align-items:center;">Register !</button>
-              </form>
-              <div id="registeredMessage1" class="alert alert-primary" role="alert" style="display: none;">
-                  You are <b>registered</b> to this workshop.
-              </div>
-              {% else %}
+              {% if is_registered %}
                 <div id="registeredMessage2" class="alert alert-primary mt-3" role="alert">
                   You are registered to this workshop.
                 </div>
+                <button id="register-btn" type="button" class="btn btn-success my-4" style="display:none;justify-content:center;align-items:center;">Register !</button>
+                <button id="cancel-btn" type="button" class="btn btn-success my-4" style="display:flex;justify-content:center;align-items:center;">Cancel !</button>
+              {% else %}
+                <button id="register-btn" type="button" class="btn btn-success my-4" style="display:flex;justify-content:center;align-items:center;">Register !</button>
+                <button id="cancel-btn" type="button" class="btn btn-success my-4" style="display:none;justify-content:center;align-items:center;">Cancel !</button>
+                <div id="errorMessage" class="alert alert-primary mt-3" style="display:none;" role="alert">
+                  Error, Try later.
+                </div>
+                <!--div id="registeredMessage1" class="alert alert-primary" role="alert" style="display: none;">
+                  You are <b>registered</b> to this workshop.
+                </div-->
               {% endif %}
           </div>
           </div>
@@ -143,19 +146,44 @@
 
       <script type="text/javascript">
         btnRegister = document.getElementById("register-btn");
-        btnRegister.onclick = function register() { 
+        btnRegister.onclick = function register() {
           $.ajax({
             type: "POST",
-            url: "/workshops/register/",
+            url: "{% url 'openclass:register_to_workshop' %}",
             dataType: "json",
             traditional: true,
             data: {'workshop_pk': {{workshop.pk}}},
             success: function(data) {
-                     console.log(data["HTTPRESPONSE"]);
+                if (data['status'] === "registred"){
+                  $("#register-btn").hide();
+                  $("#cancel-btn").slideToggle("slow");
+                }else{
+                  $("#errorMessage").slideToggle("slow")
+                  $("#errorMessage").slideToggle("slow")
+                }
              }
           });
-          $("#register-btn").hide();
-          $("#registeredMessage1").slideToggle("slow");
+        }
+
+        btnCancel = document.getElementById("cancel-btn");
+        btnCancel.onclick = function cancel() {
+          $.ajax({
+            type: "POST",
+            url: "{% url 'openclass:cancel_registration' %}",
+            dataType: "json",
+            traditional: true,
+            data: {'workshop_pk': {{workshop.pk}}},
+            success: function(data) {
+                if (data['status'] === "registred"){
+                  $("#register-btn").hide();
+                  $("#cancel-btn").slideToggle("slow");
+                }else{
+                  $("#errorMessage").slideToggle("slow")
+                  $("#errorMessage").slideToggle("slow")
+                }
+             }
+          });
+
         }
       </script>
 

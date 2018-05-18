@@ -1,6 +1,6 @@
 import re
 import random
-from django.db import models, transaction
+from django.db import models, transaction, DatabaseError
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
@@ -72,7 +72,10 @@ class Workshop(models.Model):
         if self.registration_politic == Workshop.POL_FIFO:
             if self.seats_number == 0 :
                 registration.status == Registration.ACCEPTED
-                registration.save()
+                try:
+                    registration.save()
+                except:
+                    return False
                 return True
             else:
                 try:
@@ -82,11 +85,17 @@ class Workshop(models.Model):
                                             status=Workshop.ACCEPTED,
                                             )
                         if len(registrations) + 1 > self.seats_number:
-                            registration.save()
+                            try:
+                                registration.save()
+                            except:
+                                pass
                             return False
                         else:
                             registration.status = Registration.ACCEPTED
-                            registration.save()
+                            try:
+                                registration.save()
+                            except:
+                                return False
                             return True
                 except DatabaseError:
                     return False
@@ -95,6 +104,11 @@ class Workshop(models.Model):
         date = self.start_date
         # put restriction here if needed
         return date
+
+    def cancel_registration(self, user):
+        if timezone.now() > self.last_cancel_date():
+            return False
+
 
     def update_title(self, new_title):
         if 0 < len(new_title) <= self.MAX_LEN_TITLE:
@@ -203,12 +217,23 @@ class Workshop(models.Model):
         time_left = self.start_date - timezone.now()
         return time_left.days   # return only days left
 
-    def check_registration(self,qprofile):
+    def check_registration(self, profile):
+        flags = {}
         try:
-            registration = Registration.objects.get(workshop = self, profile = qprofile)
+            registration = Registration.objects.get(
+                                                workshop=self,
+                                                profile=profile
+                                                )
+            flags['is_registered'] = True
         except Registration.DoesNotExist:
-            return False
-        return True
+            flags['is_registered'] = False
+
+        flags['is_pending'] = registration.status == Registration.PENDING
+        flags['is_accepted'] = registration.status == Registration.ACCEPTED
+        flags['is_refused'] = registration.status == Registration.REFUSED
+        flags['is_canceled'] = registration.status == Registration.CANCELED
+
+        return flags
 
 class Registration(models.Model):
     PENDING = 'P'
