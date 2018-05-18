@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from datetime import datetime, date, timedelta
+from django.utils import timezone
 from openclass.models import *
 
 class ModelsTest(TestCase):
@@ -13,8 +14,6 @@ class ModelsTest(TestCase):
         cls.profile = Profile(gender='M', score=100,
                                 phone_number='+21600000',
                                 birthday=date.today(),
-                                verification_token='45abc3',
-                                verified=False,
                                 photo=None,
                                 )
         cls.user = User.objects.create(username='youben11',
@@ -25,10 +24,10 @@ class ModelsTest(TestCase):
         cls.workshop = Workshop.objects.create(title='Binary Analysis',
                                                 description="Learn how to RE B",
                                                 seats_number=100,
-                                                submission_date=datetime.now(),
-                                                decision_date=datetime.now(),
-                                                start_date=datetime.now(),
-                                                duration=datetime.now() - datetime.now(),
+                                                submission_date=timezone.now(),
+                                                decision_date=timezone.now(),
+                                                start_date=timezone.now(),
+                                                duration=timezone.now() - timezone.now(),
                                                 location='amphi c',
                                                 )
         cls.registration = None
@@ -44,7 +43,6 @@ class ModelsTest(TestCase):
     def test_user(self):
         self.assertEqual(self.user.username, 'youben11')
         self.assertEqual(self.user.profile, self.profile)
-        self.assertEqual(self.user.profile.verification_token, '45abc3')
 
 class ProfileTest(TestCase):
     """Tests the Profile model and its methods"""
@@ -59,8 +57,6 @@ class ProfileTest(TestCase):
                         gender='M', score=100,
                         phone_number='',
                         birthday=date.today(),
-                        verification_token='45abc3',
-                        verified=False,
                         photo=None,
                         user=cls.user,
                         )
@@ -70,10 +66,10 @@ class ProfileTest(TestCase):
                         title='Binary Analysis',
                         description="Learn how to RE B",
                         seats_number=100,
-                        submission_date=datetime.now(),
-                        decision_date=datetime.now(),
-                        start_date=datetime.now(),
-                        duration=datetime.now() - datetime.now(),
+                        submission_date=timezone.now(),
+                        decision_date=timezone.now(),
+                        start_date=timezone.now(),
+                        duration=timezone.now() - timezone.now(),
                         location='amphi c',
                         status=Workshop.DONE,
                         )
@@ -81,7 +77,7 @@ class ProfileTest(TestCase):
         cls.registration = Registration.objects.create(
                             workshop=cls.workshop,
                             profile=cls.profile,
-                            date_registration=datetime.now(),
+                            date_registration=timezone.now(),
                             present=True,
                             status=Registration.ACCEPTED,
                             )
@@ -144,10 +140,10 @@ class WorkshopTest(TestCase):
                         objectives="debuggin, exploit dev",
                         requirements="C programming, Linux basics",
                         seats_number=99,
-                        submission_date=datetime.now(),
-                        decision_date=datetime.now(),
-                        start_date=datetime.now(),
-                        duration=datetime.now() - datetime.now(),
+                        submission_date=timezone.now(),
+                        decision_date=timezone.now(),
+                        start_date=timezone.now(),
+                        duration=timezone.now() - timezone.now(),
                         location='amphi c',
                         status=Workshop.DONE)
 
@@ -270,24 +266,23 @@ class WorkshopTest(TestCase):
 
     def test_update_start_date(self):
         w = Workshop.objects.all()[0]
-        timezone = w.start_date.tzinfo
 
         # normal update
-        new_start_date = datetime.now(timezone) + timedelta(5)
+        new_start_date = timezone.now() + timedelta(5)
         old_start_date = w.start_date
         ret = w.update_start_date(new_start_date)
         self.assertEqual(ret, True)
         self.assertEqual(w.start_date, new_start_date)
 
         # date without timezone
-        new_start_date = datetime.now() + timedelta(5)
+        new_start_date = timezone.now() + timedelta(5)
         old_start_date = w.start_date
         ret = w.update_start_date(new_start_date)
         self.assertEqual(ret, False)
         self.assertEqual(w.start_date, old_start_date)
 
         # old date
-        new_start_date = datetime.now(timezone) - timedelta(16)
+        new_start_date = timezone.now() - timedelta(16)
         old_start_date = w.start_date
         ret = w.update_start_date(new_start_date)
         self.assertEqual(ret, False)
