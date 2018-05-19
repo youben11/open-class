@@ -223,8 +223,11 @@ class Workshop(models.Model):
             return False
 
     def days_left(self):
+        addend = 0
         time_left = self.start_date - timezone.now()
-        return time_left.days   # return only days left
+        if self.start_date.time() < timezone.now().time() :
+            addend = 1
+        return time_left.days + addend  # return only days left
 
     def check_registration(self, profile):
         flags = {}

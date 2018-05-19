@@ -102,7 +102,19 @@
                     </a>
                 </div>
                 <div class="col-xs-12 col-lg-6 col-xl-9">
-                  <h4 class="text-date">{{workshop.start_date}} ({{workshop.days_left}} days)</h4>
+                  <h4 class="text-date">{{workshop.start_date}}
+										{% if workshop.days_left < 0 %}
+											(Past)
+										{% else %}
+											{% if workshop.days_left == 0 %}
+												(Today)
+											{% elif workshop.days_left == 1 %}
+												(Tommorow)
+											{% else %}
+												({{workshop.days_left}} days)
+											{% endif %}
+										{% endif %}
+									</h4>
                   <div class="row">
                     <div class="col-xs-11 col-lg-6 col-xl-11">
                       <a href="{% url 'openclass:workshops_detail' workshop.pk %}">
