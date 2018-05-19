@@ -59,10 +59,27 @@ def upcoming_workshops_list(request):
                                     )
     return render(request, "openclass/listworkshop.html", {"workshops":workshops})
 
-def workshops_detail(request, workshop_id):
-    workshop = get_object_or_404(Workshop,pk=workshop_id)
-    is_registered = workshop.check_registration(request.user.profile)
-    return render(request, "openclass/workshop.html",{"workshop":workshop, "is_registered":is_registered})
+def workshops_detail(request, workshop_pk):
+    workshop = get_object_or_404(
+                        Workshop,
+                        pk=workshop_pk,
+                        status=Workshop.ACCEPTED,
+                        )
+    context = {'workshop': workshop}
+    if request.user.is_authenticated:
+        context['is_registered'] = request.user.profile.is_registered(workshop)
+        if context['is_registered']:
+            context.update(workshop.check_registration(request.user.profile))
+
+    return render(request, "openclass/workshop.html",context)
+
+def workshops_filter_tag(request):
+    tag_filtered = request.POST['tag']
+    tag= Tag.objects.get(name=tag_filtered)
+    workshop_list = list(Workshop.objects.filter(topics=tag.id).values())
+    result = {'data': workshop_list}
+    return JsonResponse(result)
+
 
 @login_required()
 def members_list(request):
@@ -187,17 +204,50 @@ def user_attendance(request, workshop_pk, user_pk):
 @login_required()
 def register_to_workshop(request):
     workshop_pk = request.POST['workshop_pk']
-    # add checks
+
     try:
         workshop = Workshop.objects.get(pk=workshop_pk)
     except Workshop.DoesNotExist:
         error = {'status': 'workshop_does_not_exist'}
         return JsonResponse(error)
 
-    if workshop.register(request.user):
-        response = {'status': 'registred'}
+    if request.user.profile.is_registered(workshop):
+        error = {'status': 'already_registred'}
+        return JsonResponse(error)
+
+    if not workshop.is_registration_open():
+        response = {'status': 'registration_closed'}
+        return JsonResponse(response)
+
+    if workshop.register(request.user.profile):
+        response = {'status': 'registered'}
     else:
         response = {'statuts': "can't register"}
+
+    return JsonResponse(response)
+
+@login_required()
+def cancel_registration(request):
+    workshop_pk = request.POST['workshop_pk']
+
+    try:
+        workshop = Workshop.objects.get(pk=workshop_pk)
+    except Workshop.DoesNotExist:
+        error = {'status': 'workshop_does_not_exist'}
+        return JsonResponse(error)
+
+    if not request.user.profile.is_registered(workshop):
+        error = {'status': 'not_registred'}
+        return JsonResponse(error)
+
+    if not request.user.profile.can_cancel_registration(workshop):
+        response = {'status': "can't cancel"}
+        return JsonResponse(response)
+
+    if workshop.cancel_registration(request.user.profile):
+        response = {'status': 'canceled'}
+    else:
+        response = {'status': "can't cancel"}
 
     return JsonResponse(response)
 
