@@ -27,5 +27,9 @@ urlpatterns = [
     path('workshops/upcoming/', views.upcoming_workshops_list, name='upcoming_workshops_list'),
     path('profile/registrations', views.user_registrations, name='user_registrations'),
     path('workshops/<int:workshop_pk>/ask_question', views.ask_question, name='ask_question'),
-    path('verify/<token>/', views.verify, name='verify')
+    path('verify/<token>/', views.verify, name='verify'),
+    path('workshops/tag/', views.workshops_filter_tag, name='workshops_filter_tag'),
+    #path('workshops/date/<str:filter>/', views.workshops_filter_date, name='workshops_filter_date')
+
+
 ]
