@@ -1,11 +1,40 @@
 {% extends 'openclass/base.html' %}
 {% load staticfiles %}
-{% block content %}
+{% block headercontent %}
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css"> -->
 <link rel="stylesheet" href="{% static 'openclass/css/listworkshops.css' %}"/>
+
+{% endblock %}
+{% block content %}
+<script type="text/javascript">
+	$.ajaxSetup({
+	   beforeSend: function(xhr, settings) {
+	       function getCookie(name) {
+	           var cookieValue = null;
+	           if (document.cookie && document.cookie != '') {
+	               var cookies = document.cookie.split(';');
+	               for (var i = 0; i < cookies.length; i++) {
+	                   var cookie = jQuery.trim(cookies[i]);
+	                   // Does this cookie string begin with the name we want?
+	                   if (cookie.substring(0, name.length + 1) == (name + '=')) {
+	                       cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+	                       break;
+	                   }
+	               }
+	           }
+	           return cookieValue;
+	       }
+	       if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+	           // Only send the token to relative URLs i.e. locally.
+	           xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+	       }
+	   }
+	});
+</script>
 <title>Workshop List</title>
 <div class="container">
   <div class="row">
-    <div class="col-xs-12 col-lg-12 col-xl-3 col-filter">
+    <div class="col-xs-12 col-lg-12 col-xl-3 col-filter px-0">
       <div class="input-group mb-2">
         <div class="input-group-prepend">
         </div>
@@ -14,7 +43,7 @@
 
 
   <div class="card">
-    
+
         <h4 class="collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
           Collapsible Group Item #1
         </h4>
@@ -33,7 +62,9 @@
     </div>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
       <div class="card-body">
-
+        {% for tag in tags %}
+            <a href="#" class="filter-tag card-link">{{tag.name}}</a>
+        {% endfor %}
       </div>
     </div>
   </div>
@@ -45,13 +76,16 @@
     </div>
     <div id="collapseThree" class="collapse" aria-labelledby="headingThree">
       <div class="card-body">
+        <a href="#" class="card-link">Tomorrow</a>
+        <a href="#" class="card-link">This week</a>
+        <a href="#" class="card-link">Next week</a>
+        <a href="#" class="card-link">This month</a>
+
       </div>
     </div>
   </div>
 
-  {% for tag in tags %}
-      <a>{{tag.name}}</a>
-  {% endfor %}
+
 
     </div>
   {% if workshops %}
@@ -68,7 +102,19 @@
                     </a>
                 </div>
                 <div class="col-xs-12 col-lg-6 col-xl-9">
-                  <h4 class="text-date">{{workshop.start_date}} ({{workshop.days_left}} days)</h4>
+                  <h4 class="text-date">{{workshop.start_date}}
+										{% if workshop.days_left < 0 %}
+											(Past)
+										{% else %}
+											{% if workshop.days_left == 0 %}
+												(Today)
+											{% elif workshop.days_left == 1 %}
+												(Tommorow)
+											{% else %}
+												({{workshop.days_left}} days)
+											{% endif %}
+										{% endif %}
+									</h4>
                   <div class="row">
                     <div class="col-xs-11 col-lg-6 col-xl-11">
                       <a href="{% url 'openclass:workshops_detail' workshop.pk %}">
@@ -108,4 +154,29 @@
 </div>
 <script type="text/javascript" src="{% static 'openclass/js/bootstrap-material-design.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'openclass/js/pooper.min.js' %}"></script>
+<script type="text/javascript">
+  filters = document.getElementsByClassName('filter-tag')
+
+
+    for (var i = 0; i < filters.length; i++) {
+
+      var filtertext= filters[i].text;
+      console.log(filters[i]);
+      filters[i].onclick = function search() {
+
+        $.ajax({
+          type: "POST",
+          url: "{% url 'openclass:workshops_filter_tag' %}",
+          dataType: "json",
+          traditional: true,
+          data: {'tag': filtertext},
+          success: function(data) {
+                   console.log(data);
+           }
+        });
+      }
+    }
+
+
+</script>
 {% endblock %}
