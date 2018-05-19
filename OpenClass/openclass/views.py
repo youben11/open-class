@@ -73,6 +73,14 @@ def workshops_detail(request, workshop_pk):
 
     return render(request, "openclass/workshop.html",context)
 
+def workshops_filter_tag(request):
+    tag_filtered = request.POST['tag']
+    tag= Tag.objects.get(name=tag_filtered)
+    workshop_list = list(Workshop.objects.filter(topics=tag.id).values())
+    result = {'data': workshop_list}
+    return JsonResponse(result)
+
+
 @login_required()
 def members_list(request):
 	profiles = Profile.objects.filter(user__is_active=True)
