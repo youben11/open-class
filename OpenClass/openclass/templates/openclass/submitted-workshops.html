@@ -58,36 +58,26 @@
 									<td>
 										{{s.title}}
 									</td>
+									{% if s.start_date < date_now %}
+									<td style="text-decoration: line-through;">
+									{% else %}
 									<td>
+									{% endif %}
 										{{s.start_date}}
 									</td>
 									<td>
 			              <form method="post">
 			                {% csrf_token %}
+			                {% if s.start_date > date_now %}
 			                <button id="accept-btn" type="button" class="btn-success cd-popup-trigger">Accept</button>
+			                {% else %}
+			                <button id="accept-btn" type="button" class="btn-secondary cd-popup-trigger" disabled="disabled">Accept</button>
+			          			{% endif %}
 			                <button id="refuse-btn" type="button" class="btn-danger cd-popup-trigger">Refuse</button>
 			              </form>
 									</td>
 								</tr>
 							{% endfor %}
-								<tr>
-									<th scope="row">
-										0
-									</th>
-									<td>
-										Example
-									</td>
-									<td>
-										IDK
-									</td>
-									<td>
-			              <form method="post">
-			                {% csrf_token %}
-			                <button id="accept-btn" type="button" class="btn-success cd-popup-trigger">Accept</button>
-			                <button id="refuse-btn" type="button" class="btn-danger cd-popup-trigger">Refuse</button>
-			              </form>
-									</td>
-								</tr>
 						</tbody>
 					</table>
 					<a href="{% url 'openclass:moderation' %}"><span>Moderation Dashboard</span></a>
