@@ -166,7 +166,7 @@ def submit_workshop(request):
 
 
 def moderation(request):
-    workshops = Workshop.objects.all()
+    workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
     return render(request, "openclass/moderation.html", {"workshops":workshops})
 
 @login_required()
