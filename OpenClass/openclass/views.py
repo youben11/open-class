@@ -14,7 +14,8 @@ def index(request):
 #moderator
 def moderation_submitted_workshops(request):
     pending_workshops = Workshop.objects.filter(status=Workshop.PENDING)
-    context = {'submissions': pending_workshops}
+    date_now = timezone.now()
+    context = {'submissions': pending_workshops, 'date_now': date_now}
     return render(request, 'openclass/submitted-workshops.html', context)
 
 #moderator
@@ -166,7 +167,7 @@ def submit_workshop(request):
 
 
 def moderation(request):
-    workshops = Workshop.objects.all()
+    workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
     return render(request, "openclass/moderation.html", {"workshops":workshops})
 
 @login_required()
