@@ -55,7 +55,7 @@ class Workshop(models.Model):
                                 choices=POLITIC_CHOICES,
                                 default=POL_FIFO)
     location = models.CharField(max_length=MAX_LEN_LOCATION)
-    cover_img = models.ImageField()
+    cover_img = models.ImageField(upload_to='workshop/covers')
     status = models.CharField(
                     max_length=1,
                     choices=STATUS_CHOICES,
@@ -349,7 +349,7 @@ class Profile(models.Model):
                             max_length=MAX_LEN_PHONE_NB,
                             validators=[RegexValidator(regex=RE_PHONE_NB),])
     birthday = models.DateField(null=True)
-    photo = models.ImageField()
+    photo = models.ImageField(upload_to='profile/photos')
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.user)
