@@ -344,7 +344,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     interests = models.ManyToManyField('Tag')
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=NAG)
-    score = models.PositiveIntegerField()
+    score = models.PositiveIntegerField(default=0)
     phone_number = models.CharField(
                             max_length=MAX_LEN_PHONE_NB,
                             validators=[RegexValidator(regex=RE_PHONE_NB),])

@@ -35,8 +35,6 @@
   border-bottom-width:1px;
   border-bottom-style: solid;
   border-bottom-color: rgb(204, 204, 204);
-  margin-top: 0px;
-  margin-bottom: 0px;
   background: #f0f0f4;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   }
@@ -51,5 +49,14 @@
 }
 
 .col-filter{
-  background:#f0f0f4; 
+  background:#f0f0f4;
+}
+
+h4, .h4 {
+	font-size: 1.6rem;
+	line-height: 1.286;
+}
+
+.img-background{
+  width: 40vw;
 }
