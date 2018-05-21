@@ -133,3 +133,6 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = 'openclass:profile'
 LOGOUT_REDIRECT_URL = 'openclass:index'
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
