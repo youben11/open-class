@@ -1,0 +1,48 @@
+.container-custom{
+  background: rgba(255, 255, 255,0.85);
+}
+
+.icon-box {
+  background: #fff;
+  background-size: cover;
+  padding: 0 0 30px 0;
+  margin-bottom: 5px;
+}
+
+.icon-box .icon {
+  float: left;
+  background: #fff;
+  padding: 4px;
+  margin: 12px;
+  border-radius: 50%;
+  border: 2px solid #2dc997;
+}
+
+.icon-box .icon i {
+  color: #2dc997;
+  font-size: 24px;
+}
+
+.icon-box .title {
+  margin-left: 80px;
+  font-weight: 500;
+  margin-bottom: 5px;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.icon-box .title a {
+  color: #111;
+}
+
+.icon-box .description {
+  margin-left: 80px;
+  line-height: 24px;
+  font-size: 14px;
+}
+
+.icon-box .icon img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}

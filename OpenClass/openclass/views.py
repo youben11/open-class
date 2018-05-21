@@ -93,7 +93,9 @@ def members_detail(request, username):
     return render(request, "openclass/profile.html", {"user":user})
 
 def badges_list(request):
-    return HttpResponse('badges_list')
+    badges = Badge.objects.all()
+    context = {"badges": badges}
+    return render(request, "openclass/badges.html", context)
 
 @login_required()
 def profile(request):
