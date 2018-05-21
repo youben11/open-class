@@ -14,7 +14,8 @@ def index(request):
 #moderator
 def moderation_submitted_workshops(request):
     pending_workshops = Workshop.objects.filter(status=Workshop.PENDING)
-    context = {'submissions': pending_workshops}
+    date_now = timezone.now()
+    context = {'submissions': pending_workshops, 'date_now': date_now}
     return render(request, 'openclass/submitted-workshops.html', context)
 
 #moderator
@@ -83,8 +84,8 @@ def workshops_filter_tag(request):
 
 @login_required()
 def members_list(request):
-	profiles = Profile.objects.filter(user__is_active=True)
-	return render(request, "openclass/member_list.html", {"profiles":profiles})
+	users = User.objects.filter()
+	return render(request, "openclass/member_list.html", {"users":users})
 
 @login_required()
 def members_detail(request, username):
@@ -166,7 +167,7 @@ def submit_workshop(request):
 
 
 def moderation(request):
-    workshops = Workshop.objects.all()
+    workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
     return render(request, "openclass/moderation.html", {"workshops":workshops})
 
 @login_required()

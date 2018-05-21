@@ -223,8 +223,11 @@ class Workshop(models.Model):
             return False
 
     def days_left(self):
+        addend = 0
         time_left = self.start_date - timezone.now()
-        return time_left.days   # return only days left
+        if self.start_date.time() < timezone.now().time() :
+            addend = 1
+        return time_left.days + addend  # return only days left
 
     def check_registration(self, profile):
         flags = {}
@@ -510,8 +513,14 @@ class VerificationToken(models.Model):
     def generate_new_token(self):
         TOKEN_LEN = VerificationToken.TOKEN_LEN
         CHOICES = "ABCDEF0123456789abcdefg"
-        token = [random.choice(CHOICES) for i in range(TOKEN_LEN)]
-        self.value = "".join(token)
+        while True:
+            token = [random.choice(CHOICES) for i in range(TOKEN_LEN)]
+            self.value = "".join(token)
+            try: #make sure the token is unique
+                v = VerificationToken.objects.get(value=self.value)
+            except VerificationToken.DoesNotExist:
+                break
+
         self.save()
         return self.value
 

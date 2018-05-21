@@ -90,7 +90,17 @@
                 <div class="col-8 col-lg-8 col-xl-8 px-0">
 									<div class="row">
 										<div class="col-10 col-lg-10 col-xl-10">
-											<h4 class="text-date">{{workshop.start_date}} ({{workshop.days_left}} days)</h4>
+											<h4 class="text-date">{% if workshop.days_left < 0 %}
+												(Past)
+											{% else %}
+												{% if workshop.days_left == 0 %}
+													(Today)
+												{% elif workshop.days_left == 1 %}
+													(Tommorow)
+												{% else %}
+													({{workshop.days_left}} days)
+												{% endif %}
+											{% endif %}</h4>
 										</div>
 										<div class="col-2 col-lg-2 col-xl-2 mt-3">
 											<i class="fa fa-share-alt fa-2x"></i>
@@ -157,7 +167,7 @@
 									if(i == cards_list.length){
 										console.log("k",i);
 										$('.card-workshop').slice(i).remove();
-									
+
 									}
 
 									if(i >= workshop_list.length){

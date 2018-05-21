@@ -2,7 +2,12 @@
 {% load staticfiles %}
 {% block headercontent %}
 <link rel="stylesheet" href="{% static 'openclass/css/member-list.css' %}">
-
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<script type="text/javascript">
+	$(document).ready(function() {
+    $('#member_list').DataTable();
+} );
+</script>>
     {% endblock %}
  
 {% block content %}
@@ -20,7 +25,8 @@
 										<div class="row">
 											<div class="col-lg-12">
 
-										    <input  type="search"  placeholder="Search..."> 
+										    <input  type="search" id="search" placeholder="Search..."> 
+										    
 										  </div>
 										</div>				
 										
@@ -29,7 +35,7 @@
 							<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
 								<div class="card-body">
 									<div class="list-group text-center">
-										<table class="table">
+										<table id="member_list" class="table">
 											<thead>
 												<tr>
 													<th scope ="col" >Avatar </th>
@@ -40,25 +46,25 @@
 												</tr>
 											</thead>
 											<tbody>
-												{% for p in profiles %}
+												{% for p in users %}
 													<tr>
 														<td >
 														    <div class="member-list">
-																<a href = "{% url 'openclass:members_detail' p.user.username %}" > <img src="{%  static 'openclass/img/avatars/something.jpg' %} " class="img-responsive"> </a>
+																<a href = "{% url 'openclass:members_detail' user.username %}" > <img src="{%  static 'openclass/img/avatars/something.jpg' %} " class="img-responsive"> </a>
 																</div>
 														</td> 
 														<th scope="row">
-														<a href = "{% url 'openclass:members_detail' p.user.username %}" >@{{p.user.username}} </a>
+														<a href = "{% url 'openclass:members_detail' user.username %}" >@{{p.username}} </a>
 														</th>
 														<td>
-															{{p.user.first_name}}
+															{{p.first_name}}
 														</td>
 														<td>
-															{{p.user.last_name}}
+															{{p.last_name}}
 														</td>
 																					
 														<td>
-															{{p.user.score}}
+															{{p.profile.score}}
 														</td>
 													</tr>
 												{% endfor %}
