@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.utils import timezone
+from .upload import *
 
 from datetime import datetime
 
@@ -55,7 +56,7 @@ class Workshop(models.Model):
                                 choices=POLITIC_CHOICES,
                                 default=POL_FIFO)
     location = models.CharField(max_length=MAX_LEN_LOCATION)
-    cover_img = models.ImageField(upload_to='workshop/covers')
+    cover_img = models.ImageField(upload_to=upload_to_workshop_cover)
     status = models.CharField(
                     max_length=1,
                     choices=STATUS_CHOICES,
@@ -349,7 +350,7 @@ class Profile(models.Model):
                             max_length=MAX_LEN_PHONE_NB,
                             validators=[RegexValidator(regex=RE_PHONE_NB),])
     birthday = models.DateField(null=True)
-    photo = models.ImageField(upload_to='profile/photos')
+    photo = models.ImageField(upload_to=upload_to_profile_photo)
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.user)
