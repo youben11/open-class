@@ -117,7 +117,7 @@ def signup(request):
 
     if request.method == "POST":
         user_form = UserForm(request.POST)
-        user_profile_form = UserProfileForm(request.POST)
+        user_profile_form = UserProfileForm(request.POST, request.FILES)
 
         if user_form.is_valid() and user_profile_form.is_valid():
             user = user_form.save(commit=False)
@@ -160,7 +160,7 @@ def verify(request, token):
 @login_required()
 def submit_workshop(request):
     if request.method == "POST":
-        workshop_form = WorkshopForm(request.POST)
+        workshop_form = WorkshopForm(request.POST, request.FILES)
         if workshop_form.is_valid():
             workshop = workshop_form.save(commit=False)
             workshop.submission_date = datetime.now()

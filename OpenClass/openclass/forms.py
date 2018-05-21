@@ -33,7 +33,7 @@ class UserForm(ModelForm):
         }
 
 class WorkshopForm(ModelForm):
-    cover_img = forms.ImageField(required=False)
+    #cover_img = forms.ImageField(required=False)
 
     class Meta:
         model = Workshop
