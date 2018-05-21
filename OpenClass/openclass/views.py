@@ -4,10 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.forms.models import model_to_dict
 from django.urls import reverse
-from django.core.mail import send_mail
 from django.conf import settings
+from django.db import transaction
 from .models import *
 from .forms import *
+from . import email
 
 
 def index(request):
@@ -105,6 +106,7 @@ def profile(request):
 def prefs(request):
     return render(request, "openclass/user-preferences.html")
 
+@transaction.atomic
 def signup(request):
     tags = Tag.objects.all()
 
@@ -127,11 +129,7 @@ def signup(request):
                 user.is_active = False
                 user.save()
                 token = profile.generate_verification_token()
-                subject = "OpenClass Email verification"
-                msg = """Welcome to openclass %s, here is the link to validate your account:
-                    http://localhost:8000/verify/%s""" % (user.username, token)
-                to = [user.email,]
-                send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
+                email.send_verification_mail(user, token)
                 return HttpResponse(token)
             else:
                 login(request, user)
