@@ -133,3 +133,16 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = 'openclass:profile'
 LOGOUT_REDIRECT_URL = 'openclass:index'
+
+# Email Config
+
+# Enable/Disable Email Verification
+EMAIL_VERIFICATION = False
+# https://support.google.com/mail/answer/7126229?visit_id=1-636624958052152112-3563882151&rd=1#cantsignin
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = 'xxxxxxxxxxxxx'
+EMAIL_HOST_USER = '' # Gmail Email
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
