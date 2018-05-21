@@ -131,8 +131,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#Login and Logout Redirect
 LOGIN_REDIRECT_URL = 'openclass:profile'
 LOGOUT_REDIRECT_URL = 'openclass:index'
+
+#Media
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Email Config
 

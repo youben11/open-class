@@ -542,7 +542,7 @@ class Badge(models.Model):
     MAX_LEN_BADGE_NAME = 20
     name = models.CharField(max_length=MAX_LEN_BADGE_NAME, blank=False)
     description = models.TextField(blank=False)
-    img = models.ImageField()
+    img = models.ImageField(upload_to="badges",blank=True,null=True)
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.name)
