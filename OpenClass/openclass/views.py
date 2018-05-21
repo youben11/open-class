@@ -86,8 +86,8 @@ def workshops_filter_tag(request):
 
 @login_required()
 def members_list(request):
-	profiles = Profile.objects.filter(user__is_active=True)
-	return render(request, "openclass/member_list.html", {"profiles":profiles})
+	users = User.objects.filter()
+	return render(request, "openclass/member_list.html", {"users":users})
 
 @login_required()
 def members_detail(request, username):
