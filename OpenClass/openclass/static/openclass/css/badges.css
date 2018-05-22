@@ -1,9 +1,17 @@
-.container-custom{
-  background: rgba(255, 255, 255,0.85);
+.container-custom {
+  background: rgba(255, 255, 255,0.92);
+  padding: 10px;
 }
 
 .icon-box {
   background: #fff;
+  background-size: cover;
+  padding: 0 0 30px 0;
+  margin-bottom: 5px;
+}
+
+.icon-box:hover {
+  background: #ccc;
   background-size: cover;
   padding: 0 0 30px 0;
   margin-bottom: 5px;
