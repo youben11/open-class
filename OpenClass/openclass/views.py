@@ -74,6 +74,7 @@ def workshops_detail(request, workshop_pk):
         context['is_registered'] = request.user.profile.is_registered(workshop)
         if context['is_registered']:
             context.update(workshop.check_registration(request.user.profile))
+            is_canceled = context['is_canceled']
 
     return render(request, "openclass/workshop.html",context)
 

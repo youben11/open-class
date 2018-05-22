@@ -55,7 +55,11 @@
           <div class="col-xs-12 col-lg-12 col-xl-4 col-progress-btn">
             {% if request.user.is_authenticated %}
             <div>
-              {% if is_registered %}
+              {% if is_canceled %}
+              <div id="errorMessage" class="alert alert-danger mt-3" role="alert">
+                You cancelled your registration, you cannot register again.
+              </div>
+              {% elif is_registered %}
                 <!--div id="registeredMessage2" class="alert alert-primary mt-3" role="alert">
                   You are registered to this workshop.
                 </div-->
@@ -160,7 +164,7 @@
                   $("#register-btn").hide();
                   $("#cancel-btn").slideToggle("slow");
                 }else{
-                  $("#errorMessage").slideToggle("slow")
+                  $("#errorMessage").hide()
                   $("#errorMessage").slideToggle("slow")
                 }
              }
@@ -180,7 +184,7 @@
                   $("#cancel-btn").hide();
                   $("#register-btn").slideToggle("slow");
                 }else{
-                  $("#errorMessage").slideToggle("slow")
+                  $("#errorMessage").hide()
                   $("#errorMessage").slideToggle("slow")
                 }
              }
