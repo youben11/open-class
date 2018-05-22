@@ -10,13 +10,13 @@
         </div>
         <div class="col-xs-12 col-lg-6 col-md-6">
 			<h2 class="text-white">SignUp</h2>
-			<form name="signupForm" method="post" onsubmit="return validateSignUpForm()">
+			<form name="signupForm" method="post" enctype="multipart/form-data" onsubmit="return validateSignUpForm()">
 				{% csrf_token %}
 				{{user_form.as_p}}
                 <div id="errorAlert" class="alert alert-danger" role="alert" style="display: none;">
                 </div>
 				<p>
-				<label for="pw2">Confim password:</label> 					
+				<label for="pw2">Confim password:</label>
 				<input id="pw2" type="password" name="pw2" required="true">
 				</p>
 				{{user_profile_form.as_p}}

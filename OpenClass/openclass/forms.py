@@ -33,6 +33,7 @@ class UserForm(ModelForm):
         }
 
 class WorkshopForm(ModelForm):
+    #cover_img = forms.ImageField(required=False)
 
     class Meta:
         model = Workshop
@@ -45,7 +46,7 @@ class WorkshopForm(ModelForm):
                 'required_materials',
                 'start_date',
                 'duration',
-                #'cover_img',
+                'cover_img',
                 ]
         widgets = {
                 'start_date': forms.DateInput(attrs={'type':'date'}),
