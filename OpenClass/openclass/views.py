@@ -285,3 +285,6 @@ def ask_question(request, workshop_pk):
 
     context = {"question_form": question_form}
     return render(request, "openclass/ask_question.html", context)
+
+def faq(request):
+    return render(request, "openclass/faq.html")
