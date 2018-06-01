@@ -1,7 +1,7 @@
 {% load staticfiles %} 
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -19,164 +19,133 @@
     <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-
     {% block headercontent %}
     {% endblock %}
-</head>
-
-<body>
+  </head>
+  <body>
     <header class="header">
-        <div class="header__content row text-center">
-
-                <a class="openclass-navbar-logo" href="{% url 'openclass:index' %}">
-                   OpenClass
-                </a>
-
-            <a class="header__toggle-menu" href="#0" title="Menu"><span>Menu</span></a>
-
-            <nav class="header__nav-wrap navbar navbar-expand-lg">
-
-                <h2 class="header__nav-heading h6">Site Navigation</h2>
-
-                <ul class="header__nav openclass-nav">
-                    <li class="has-children">
-                        <a class="openclass-nav-link" href="#0" title="">Workshops</a>
-                        <ul class="sub-menu">
-                        <li><a class="openclass-nav-link" href="{% url 'openclass:workshops_list' %}">Workshops List</a></li>
-                        <li><a class="openclass-nav-link" href="{% url 'openclass:upcoming_workshops_list' %}">Upcoming Workshops</a></li>
-                        </ul>
-                    </li>
-                    <li><a class="openclass-nav-link" href="#" title="">Awards</a></li>
-                    <li><a class="openclass-nav-link" href="#" title="">FAQ</a></li>
-                    <li><a class="openclass-nav-link" href="#" title="">About</a></li>
-                    <li><a class="openclass-nav-link" href="#" title="">Contact</a></li>
-                    {% if request.user.is_authenticated %}
-                    <li class="has-children">
-                        <a class="openclass-nav-link" href="{% url 'openclass:profile' %}">
-                        @{{ request.user.username }}
-                        </a>
-                        <ul class="sub-menu">
-                        <li><a class="openclass-nav-link" href="{% url 'openclass:profile' %}">Profile</a></li>
-                        <li><a class="openclass-nav-link" href="{% url 'openclass:prefs' %}">Preferences</a></li>
-                        <li><a class="openclass-nav-link" href="{% url 'openclass:user_registrations' %}">My Registrations</a></li>
-                        <li><a class="openclass-nav-link" href="{% url 'openclass:user_settings' %}">Settings</a></li>
-                        <li><a class="openclass-nav-link" href="{% url 'openclass:logout' %}">Logout</a></li>
-                        </ul>
-                    </li>
-                    {% else %}
-                    <li>
-                        <a href="{% url 'openclass:login' %}" title="">
-                        Login
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul> <!-- end header__nav -->
-
-                <a href="#0" title="Close Menu" class="header__overlay-close close-mobile-menu">Close</a>
-
-            </nav> <!-- end header__nav-wrap -->
-
-        </div> <!-- header-content -->
-    </header> <!-- header -->
-
+      <div class="header__content row text-center">
+        <a class="openclass-navbar-logo" href="{% url 'openclass:index' %}">
+        OpenClass
+        </a>
+        <a class="header__toggle-menu" href="#0" title="Menu"><span>Menu</span></a>
+        <nav class="header__nav-wrap navbar navbar-expand-lg">
+          <h2 class="header__nav-heading h6">Site Navigation</h2>
+          <ul class="header__nav openclass-nav">
+            <li class="has-children">
+              <a class="openclass-nav-link" href="#0" title="">Workshops</a>
+              <ul class="sub-menu">
+                <li><a class="openclass-nav-link" href="{% url 'openclass:workshops_list' %}">Workshops List</a></li>
+                <li><a class="openclass-nav-link" href="{% url 'openclass:upcoming_workshops_list' %}">Upcoming Workshops</a></li>
+              </ul>
+            </li>
+            <li><a class="openclass-nav-link" href="#" title="">Awards</a></li>
+            <li><a class="openclass-nav-link" href="#" title="">FAQ</a></li>
+            <li><a class="openclass-nav-link" href="#" title="">About</a></li>
+            <li><a class="openclass-nav-link" href="#" title="">Contact</a></li>
+            {% if request.user.is_authenticated %}
+            <li class="has-children">
+              <a class="openclass-nav-link" href="{% url 'openclass:profile' %}">
+              @{{ request.user.username }}
+              </a>
+              <ul class="sub-menu">
+                <li><a class="openclass-nav-link" href="{% url 'openclass:profile' %}">Profile</a></li>
+                <li><a class="openclass-nav-link" href="{% url 'openclass:prefs' %}">Preferences</a></li>
+                <li><a class="openclass-nav-link" href="{% url 'openclass:user_registrations' %}">My Registrations</a></li>
+                <li><a class="openclass-nav-link" href="{% url 'openclass:user_settings' %}">Settings</a></li>
+                <li><a class="openclass-nav-link" href="{% url 'openclass:logout' %}">Logout</a></li>
+              </ul>
+            </li>
+            {% else %}
+            <li>
+              <a href="{% url 'openclass:login' %}" title="">
+              Login
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+          <!-- end header__nav -->
+          <a href="#0" title="Close Menu" class="header__overlay-close close-mobile-menu">Close</a>
+        </nav>
+        <!-- end header__nav-wrap -->
+      </div>
+      <!-- header-content -->
+    </header>
+    <!-- header -->
     {% block content %}
     {% endblock %}
-
     <footer class="s-footer">
-
-        <div class="s-footer__main">
-            <div class="row">
-
-                <div class="col-two md-four mob-full s-footer__sitelinks">
-
-                    <h4>Quick Links</h4>
-
-                    <ul class="s-footer__linklist">
-                        <li><a href="{% url 'openclass:index' %}">Home</a></li>
-                        <li><a href="{% url 'openclass:workshops_list' %}">Workshops</a></li>
-                        <li><a href="#0">FAQ</a></li>
-                        <li><a href="#0">About</a></li>
-                        <li><a href="#0">Contact</a></li>
-                        <li><a href="#0">Terms of use</a></li>
-                    </ul>
-
-                </div> <!-- end s-footer__sitelinks -->
-
-                <div class="col-two md-four mob-full s-footer__archives">
-
-                    <h4>TRENDING</h4>
-
-                    <ul class="s-footer__linklist">
-                        <li><a href="#0">Security</a></li>
-                        <li><a href="#0">Design</a></li>
-                        <li><a href="#0">Web Development</a></li>
-                        <li><a href="#0">Mobile Development</a></li>
-                        <li><a href="#0">Sound Editing</a></li>
-                        <li><a href="#0">Soft Skills</a></li>
-                    </ul>
-
-                </div> <!-- end s-footer__archives -->
-
-                <div class="col-two md-four mob-full s-footer__social">
-
-                    <h4>Social</h4>
-
-                    <ul class="s-footer__linklist">
-                        <li><a href="#0">Facebook</a></li>
-                        <li><a href="#0">Instagram</a></li>
-                        <li><a href="#0">Twitter</a></li>
-                        <li><a href="#0">Pinterest</a></li>
-                        <li><a href="#0">Google+</a></li>
-                        <li><a href="#0">LinkedIn</a></li>
-                    </ul>
-
-                </div> <!-- end s-footer__social -->
-
-                <div class="col-five md-full end s-footer__subscribe">
-
-                    <h4>OpenClass</h4>
-
-                    <p>Sit vel delectus amet officiis repudiandae est voluptatem. Tempora maxime provident nisi et fuga et enim exercitationem ipsam. Culpa consequatur occaecati.</p>
-
-                    <div class="subscribe-form">
-                        <form id="mc-form" class="group" novalidate="true">
-
-                            <input type="email" value="" name="EMAIL" class="email" id="mc-email" placeholder="Find a workshop" required="">
-
-                            <input type="submit" name="subscribe" value="SEARCH">
-
-                            <label for="mc-email" class="subscribe-message"></label>
-
-                        </form>
-                    </div>
-
-                </div> <!-- end s-footer__subscribe -->
-
+      <div class="s-footer__main">
+        <div class="row">
+          <div class="col-two md-four mob-full s-footer__sitelinks">
+            <h4>OpenClass</h4>
+            <ul class="s-footer__linklist">
+              <li><a href="{% url 'openclass:index' %}">Home</a></li>
+              <li><a href="{% url 'openclass:workshops_list' %}">Workshops</a></li>
+              <li><a href="{% url 'openclass:faq' %}">FAQ</a></li>
+              <li><a href="#0">About</a></li>
+              <li><a href="#0">Contact</a></li>
+              <li><a href="#0">Terms of use</a></li>
+            </ul>
+          </div>
+          <!-- end s-footer__sitelinks -->
+          <div class="col-two md-four mob-full s-footer__archives">
+            <h4> </h4>
+            <ul class="s-footer__linklist">
+              <li><a href="{% url 'openclass:upcoming_workshops_list' %}">Upcoming Workshops</a></li>
+              <li><a href="{% url 'openclass:submit_workshop' %}">Submit a workshop</a></li>
+              <li><a href="{% url 'openclass:members_list' %}">Members</a></li>
+              <li><a href="#0">Animators</a></li>
+              <li><a href="{% url 'openclass:user_settings' %}">Settings</a></li>
+              <li><a href="#0">Logout</a></li>
+            </ul>
+          </div>
+          <!-- end s-footer__archives -->
+          <div class="col-two md-four mob-full s-footer__social">
+            <h4>Social</h4>
+            <ul class="s-footer__linklist">
+              <li><a href="#0">Facebook</a></li>
+              <li><a href="#0">Instagram</a></li>
+              <li><a href="#0">Twitter</a></li>
+              <li><a href="#0">Pinterest</a></li>
+              <li><a href="#0">Google+</a></li>
+              <li><a href="#0">LinkedIn</a></li>
+            </ul>
+          </div>
+          <!-- end s-footer__social -->
+          <div class="col-five md-full end s-footer__subscribe">
+            <h4>OpenClass</h4>
+            <p>Sit vel delectus amet officiis repudiandae est voluptatem. Tempora maxime provident nisi et fuga et enim exercitationem ipsam. Culpa consequatur occaecati.</p>
+            <div class="subscribe-form">
+              <form id="mc-form" class="group" novalidate="true">
+                <input type="email" value="" name="EMAIL" class="email" id="mc-email" placeholder="Find a workshop" required="">
+                <input type="submit" name="subscribe" value="SEARCH">
+                <label for="mc-email" class="subscribe-message"></label>
+              </form>
             </div>
-        </div> <!-- end s-footer__main -->
-
-        <div class="s-footer__bottom">
-            <div class="row">
-                <div class="col-full">
-                    <div class="s-footer__copyright">
-                        <span>© Copyright OpenClass 2018</span>
-                    </div>
-
-                    <div class="go-top">
-                        <a class="smoothscroll" title="Back to Top" href="#top"></a>
-                    </div>
-                </div>
+          </div>
+          <!-- end s-footer__subscribe -->
+        </div>
+      </div>
+      <!-- end s-footer__main -->
+      <div class="s-footer__bottom">
+        <div class="row">
+          <div class="col-full">
+            <div class="s-footer__copyright">
+              <span>© Copyright OpenClass 2018</span>
             </div>
-        </div> <!-- end s-footer__bottom -->
-</footer>
+          </div>
+        </div>
+      </div>
+      <!-- end s-footer__bottom -->
+    </footer>
     <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
     <script src="{% static 'openclass/js/plugins.js' %}"></script>
     <script src="{% static 'openclass/js/main.js' %}"></script>
     <script src="{% static 'openclass/js/forms-validators.js' %}"></script>
     {% block scripts %}
     {% endblock %}
-</body>
+  </body>
 </html>
