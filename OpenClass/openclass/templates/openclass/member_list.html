@@ -27,7 +27,7 @@
               <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
                   <div class="list-group text-center">
-                    <table id="member_list" class="table" data-order='[[ 1, "asc" ]]' data-page-length='25'>
+                    <table id="member_list" class="table table-responsive" data-order='[[ 1, "asc" ]]' data-page-length='25'>
                       <thead>
                         <tr>
                           <th scope="col" data-orderable='false'>Avatar</th>
@@ -63,7 +63,6 @@
                         {% endfor %}
                       </tbody>
                     </table>
-                    <a href="{% url 'openclass:moderation' %}"><span>Moderation Dashboard</span></a>
                   </div>
                 </div>
               </div>
