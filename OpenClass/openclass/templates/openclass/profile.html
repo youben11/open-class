@@ -11,7 +11,11 @@
             <div class="card-user hovercard">
                 <div class="cardheader"></div>
                 <div class="avatar">
-                    <img alt="" src="{% static 'openclass/img/nadir.png' %}">
+                  {% if user.profile.photo %} 
+                    <img alt="" src="/{{user.profile.photo.url}}">
+                  {% else %}
+                    <img alt="" src="{% static 'openclass/img/avatars/default-avatar.png' %}">
+                  {% endif %}
                 </div>
                 <div class="info">
                     <div class="title">@{{user.username}}</div>
