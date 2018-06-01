@@ -3,9 +3,21 @@
 
 {% block content %}
 <title>Ask Question</title>
-<form name="AskQuestionForm" method="post">
-    {% csrf_token %}
-    {{question_form.as_p}}
-	<button type="submit">Ask</button>
-</form>
+{% if is_done %}
+    <h2> this whorkshop is already done</h2>
+{% elif not_accepted %}
+    <h2> this whorkshop isn't accepted </h2>
+{% elif not_started %}
+    <h2> this whorkshop did't start yet </h2>
+{% elif not_registered %}
+    <h2> you are not registered to this workshop </h2>
+{% elif not_present %}
+    <h2> you are not present </h2>
+{% else %}
+    <form name="AskQuestionForm" method="post">
+        {% csrf_token %}
+        {{question_form.as_p}}
+        <button type="submit">Ask</button>
+    </form>
+{% endif %}
 {% endblock %}

@@ -271,10 +271,41 @@ def user_registrations(request):
 @login_required()
 def ask_question(request, workshop_pk):
     workshop = get_object_or_404(Workshop, pk=workshop_pk)
+    start_date = workshop.start_date
+    end_date = start_date + workshop.duration
+
+    # check if the workshop is already done
+    if workshop.status == Workshop.DONE or timezone.now() > end_date:
+        context = {"is_done": True}
+        return render(request, "openclass/ask_question.html", context)
+
+    # check if the workshop is accepted
+    # must check DONE status before this check
+    # (status == DONE) => (status != ACCEPTED)
+    if workshop.status != Workshop.ACCEPTED:
+        context = {"not_accepted": True}
+        return render(request, "openclass/ask_question.html", context)
+
+    # check if the workshop already started
+    if timezone.now() < start_date:
+        context = {"not_started": True}
+        return render(request, "openclass/ask_question.html", context)
+
+    registration = request.user.profile.get_workshop_registration(workshop)
+    # check if the member is registered to the workshop
+    if registration is None:
+        context = {"not_registered": True}
+        return render(request, "openclass/ask_question.html", context)
+
+    # check if the member is present
+    if not registration.present:
+        context = {"not_present": True}
+        return render(request, "openclass/ask_question.html", context)
+
     if request.method == "POST":
         question_form = QuestionForm(request.POST)
-        if question_form .is_valid():
-            question = question_form .save(commit=False)
+        if question_form.is_valid():
+            question = question_form.save(commit=False)
             question.author = request.user.profile
             question.workshop = workshop
             question.save()
@@ -285,6 +316,7 @@ def ask_question(request, workshop_pk):
 
     context = {"question_form": question_form}
     return render(request, "openclass/ask_question.html", context)
+
 
 def faq(request):
     return render(request, "openclass/faq.html")
