@@ -500,6 +500,15 @@ class Profile(models.Model):
         registrations = Registration.objects.all().filter(profile=self)
         return registrations
 
+    def get_workshop_registration(self, workshop):
+        try:
+            registration = Registration.objects.get(workshop=workshop,
+                                                    profile=self)
+            return registration
+        except Registration.DoesNotExist:
+            return None
+
+
 class VerificationToken(models.Model):
     TOKEN_LEN = 32
 
