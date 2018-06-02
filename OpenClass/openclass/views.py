@@ -21,16 +21,16 @@ def moderation(request):
     refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
     done_workshops = Workshop.objects.filter(status=Workshop.DONE)
     workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
-    context = { "workshops":workshops, 
-                "submitted_workshops":submitted_workshops, 
-                "accepted_workshops":accepted_workshops, 
+    context = { "workshops":workshops,
+                "submitted_workshops":submitted_workshops,
+                "accepted_workshops":accepted_workshops,
                 "refused_workshops":refused_workshops,
                 "done_workshops":done_workshops,
                 "menu_item":menu_item
               }
     return render(
-                request, 
-                "openclass/moderation_dashboard.html", 
+                request,
+                "openclass/moderation_dashboard.html",
                 context
                 )
 
@@ -338,4 +338,6 @@ def ask_question(request, workshop_pk):
 
 
 def faq(request):
-    return render(request, "openclass/faq.html")
+    faqs = FAQ.objects.all()
+    context = {'faqs': faqs}
+    return render(request, "openclass/faq.html", context)
