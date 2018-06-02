@@ -95,7 +95,6 @@ def workshops_detail(request, workshop_pk):
         context['is_registered'] = request.user.profile.is_registered(workshop)
         if context['is_registered']:
             context.update(workshop.check_registration(request.user.profile))
-            is_canceled = context['is_canceled']
 
     return render(request, "openclass/workshop.html",context)
 
@@ -222,8 +221,11 @@ def user_attendance(request, workshop_pk, user_pk):
     registration = Registration.objects.get(workshop=workshop,profile=profile)
     if request.method=="POST":
         #?? POST only ??
-        registration.present = not registration.present
-        registration.save()
+        if registration.present:
+            registration.absent()
+        else:
+            registration.confirm_presence()
+
         kwargs = {'workshop_pk': workshop_pk}
         return redirect(reverse('openclass:attendance', kwargs=kwargs))
 
