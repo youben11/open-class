@@ -13,7 +13,7 @@ class UserSettings(ModelForm):
         fields = ['first_name', 'last_name', 'email']
 
 class UserProfileForm(ModelForm):
-    interests = forms.MultipleChoiceField(required=False)
+    # interests = forms.MultipleChoiceField(required=False)
     photo = forms.ImageField(required=False)
     class Meta:
         model = Profile
