@@ -1,0 +1,173 @@
+{% extends 'openclass/moderation_base.html' %}
+{% load staticfiles %}
+{% block headcontent %}
+<link rel="stylesheet" href="{% static 'openclass/css/submitted.css' %}">
+{% endblock %}
+{% block content %}
+<!-- <script src="{% static 'openclass/js/csrf.js' %}"></script> -->
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header" data-background-color="red">
+            <h4 class="title">Submitted Workshops</h4>
+            <p class="category">Manage the submitted workshops</p>
+          </div>
+          <div class="card-content table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>Action</th>
+              </thead>
+              <tbody>
+              {% for s in submissions %}
+                <tr>
+                  <td><a href="">{{s.pk}}</a></td>
+                  <td>{{s.title}}</td>
+                  <td>{{s.animator.user.first_name}} {{s.animator.user.last_name}}</td>
+                  <td class="text-primary">{{s.start_date}}</td>
+                  <td>
+                    <form method="post">
+                      {% if s.start_date > date_now %}
+                      <button id="accept-btn" type="button" class="btn-success cd-popup-trigger">Accept</button>
+                      {% else %}
+                      <button id="accept-btn" type="button" class="btn-secondary cd-popup-trigger" disabled="disabled">Accept</button>
+                      {% endif %}
+                      <button id="refuse-btn" type="button" class="btn-danger cd-popup-trigger">Refuse</button>
+                    </form>
+                  </td>
+                </tr>  
+              {% endfor %}
+            </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="card card-plain">
+          <div class="card-header" data-background-color="red">
+            <h4 class="title">Refused Workshops</h4>
+            <p class="category">History of the refused workshops</p>
+          </div>
+          <div class="card-content table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <th>Title</th>
+                <th>Author</th>
+                <th>Field</th>
+                <th>Date</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="">Node.js</a></td>
+                  <td>Nadir Bounoua</td>
+                  <td>Web Dev</td>
+                  <td class="text-primary">JJ/MM/AAAA</td>
+                </tr>
+                <tr>
+                  <td><a href="">Workshop</a></td>
+                  <td>Attouche Abdelaziz</td>
+                  <td>Domaine</td>
+                  <td class="text-primary">JJ/MM/AAAA</td>
+                </tr>
+                <tr>
+                  <td><a href="">Workshop</a></td>
+                  <td>Benaissa Ayoub</td>
+                  <td>Domaine</td>
+                  <td class="text-primary">JJ/MM/AAAA</td>
+                </tr>
+                <tr>
+                  <td><a href="">Workshop</a></td>
+                  <td>Ahmed Derkaoui</td>
+                  <td>Domaine</td>
+                  <td class="text-primary">JJ/MM/AAAA</td>
+                </tr>
+                <tr>
+                  <td><a href="">Workshop</a></td>
+                  <td>Retiat Bilal</td>
+                  <td>Domaine</td>
+                  <td class="text-primary">JJ/MM/AAAA</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="cd-popup" role="alert">
+  <div class="cd-popup-container">
+    <p id="messageConfirm"></p>
+    <ul class="cd-buttons">
+      <li><button class="btn-success" href="#0" onclick="decide()">Yes</button></li>
+      <li><button id="no-btn" class="btn-danger" href="#0">No</button></li>
+    </ul>
+  </div> <!-- cd-popup-container -->
+</div> <!-- cd-popup -->
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+  btnAccept = document.getElementById("accept-btn");
+  btnAccept = document.getElementById("refuse-btn");
+  var workshop_pk;
+  var workshop_tr_id;
+  var decision;
+  $('.cd-popup-trigger').on('click', function(event){
+    event.preventDefault();
+    $('.cd-popup').addClass('is-visible');
+    $('#messageConfirm').text('Are you sure you want to '+ $(this).text().toLowerCase() + ' the workshop "'+$(this).parent().parent().parent().children('td:nth-child(2)').text() +'"?');
+    decision = $(this).text().toLowerCase();
+    workshop_pk = "5";
+    workshop_tr_id = 'w'+workshop_pk.replace(/\s/g,'');
+    console.log(workshop_tr_id);
+  });
+  
+  $('.cd-popup').on('click', function(event){
+    if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') ) {
+      event.preventDefault();
+      $(this).removeClass('is-visible');
+    }
+  });
+
+  $('#no-btn').on('click', function(event){
+      $('.cd-popup').removeClass('is-visible');
+  });
+  //close popup when clicking the esc keyboard button
+  $(document).keyup(function(event){
+    if(event.which=='27'){
+      $('.cd-popup').removeClass('is-visible');
+    }
+  });
+
+  function decide() { 
+    $('.cd-popup').removeClass('is-visible');
+    $.ajax({
+      type: "POST",
+      url: "{% url 'openclass:moderation_submitted_workshops_decision' %}",
+      dataType: "json",
+      traditional: true,
+      data: {'workshop_pk': workshop_pk,'decision': decision},
+      success: function(data) {
+        console.log(data);
+        if (data.status == 'accepted' || data.status == 'refused') {
+          $('#'+workshop_tr_id).hide("500");
+        }
+        else if (data.status == "can't accept") {
+          alert("This workshop can't be accepted")
+        }
+        else if (data.status == "can't refuse") {
+          alert("This workshop can't be refused")
+        }
+        else if (data.status == "invalid decision") {
+          alert("This decision is invalid")
+        }
+      }
+    });
+  }
+</script>
+{% endblock %}
