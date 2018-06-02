@@ -277,8 +277,18 @@ class Registration(models.Model):
                                         self.status)
 
     def confirm_presence(self):
-        #make sure the workshop has started
-        self.present = True
+        workshop = self.workshop
+        if timezone.now() > workshop.start_date and \
+           timezone.now() - workshop.start_date < workshop.duration:
+            self.present = True
+            self.save()
+
+    def absent(self):
+        workshop = self.workshop
+        if timezone.now() > workshop.start_date and \
+           timezone.now() - workshop.start_date < workshop.duration:
+            self.present = False
+            self.save()
 
 class Question(models.Model):
     author = models.ForeignKey(

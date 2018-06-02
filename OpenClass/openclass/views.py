@@ -205,8 +205,11 @@ def user_attendance(request, workshop_pk, user_pk):
     registration = Registration.objects.get(workshop=workshop,profile=profile)
     if request.method=="POST":
         #?? POST only ??
-        registration.present = not registration.present
-        registration.save()
+        if registration.present:
+            registration.absent()
+        else:
+            registration.confirm_presence()
+
         kwargs = {'workshop_pk': workshop_pk}
         return redirect(reverse('openclass:attendance', kwargs=kwargs))
 
