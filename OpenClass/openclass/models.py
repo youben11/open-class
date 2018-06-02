@@ -70,8 +70,7 @@ class Workshop(models.Model):
         registration = Registration(workshop=self, profile=profile)
         if self.registration_politic == Workshop.POL_FIFO:
             if self.seats_number == Workshop.INFINITE_SEATS_NB :
-                registration.status == Registration.ACCEPTED
-                registration.save()
+                registration.accept() #save
                 return True
             else:
                 try:
@@ -81,8 +80,9 @@ class Workshop(models.Model):
                                             status=Workshop.ACCEPTED,
                                             )
                         if len(registrations) + 1 <= self.seats_number:
-                            registration.status = Registration.ACCEPTED
-                        registration.save()
+                            registration.accept()
+                        else: # accept cause a save()
+                            registration.save()
                         return True
                 except DatabaseError:
                     return False
@@ -300,6 +300,16 @@ class Registration(models.Model):
             return True
         else:
             return False
+
+    def accept(self):
+        #notify user
+        self.status == Registration.ACCEPTED
+        self.save()
+
+    def refuse(self):
+        #notify user
+        self.status == Registration.REFUSED
+        self.save()
 
 class Question(models.Model):
     author = models.ForeignKey(
