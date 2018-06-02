@@ -14,12 +14,33 @@ from . import email
 def index(request):
     return render(request, "openclass/home.html")
 
+def moderation(request):
+    menu_item = "dashboard"
+    submitted_workshops = Workshop.objects.filter(status=Workshop.PENDING)
+    accepted_workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
+    done_workshops = Workshop.objects.filter(status=Workshop.DONE)
+    workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    context = { "workshops":workshops, 
+                "submitted_workshops":submitted_workshops, 
+                "accepted_workshops":accepted_workshops, 
+                "refused_workshops":refused_workshops,
+                "done_workshops":done_workshops,
+                "menu_item":menu_item
+              }
+    return render(
+                request, 
+                "openclass/moderation_dashboard.html", 
+                context
+                )
+
 #moderator
 def moderation_submitted_workshops(request):
+    menu_item = "submitted_workshops"
     pending_workshops = Workshop.objects.filter(status=Workshop.PENDING)
     date_now = timezone.now()
-    context = {'submissions': pending_workshops, 'date_now': date_now}
-    return render(request, 'openclass/submitted-workshops.html', context)
+    context = {'submissions': pending_workshops, 'date_now': date_now, 'menu_item': menu_item}
+    return render(request, 'openclass/moderation_submitted-workshops.html', context)
 
 #moderator
 def moderation_submitted_workshops_decision(request):
@@ -74,7 +95,6 @@ def workshops_detail(request, workshop_pk):
         context['is_registered'] = request.user.profile.is_registered(workshop)
         if context['is_registered']:
             context.update(workshop.check_registration(request.user.profile))
-            is_canceled = context['is_canceled']
 
     return render(request, "openclass/workshop.html",context)
 
@@ -85,11 +105,10 @@ def workshops_filter_tag(request):
     result = {'data': workshop_list}
     return JsonResponse(result)
 
-
 @login_required()
 def members_list(request):
-	users = User.objects.filter()
-	return render(request, "openclass/member_list.html", {"users":users})
+    users = User.objects.filter()
+    return render(request, "openclass/member_list.html", {"users":users})
 
 @login_required()
 def members_detail(request, username):
@@ -177,9 +196,6 @@ def submit_workshop(request):
     return render(request, "openclass/submit_workshop.html", context)
 
 
-def moderation(request):
-    workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
-    return render(request, "openclass/moderation.html", {"workshops":workshops})
 
 @login_required()
 def user_settings(request):
@@ -205,8 +221,11 @@ def user_attendance(request, workshop_pk, user_pk):
     registration = Registration.objects.get(workshop=workshop,profile=profile)
     if request.method=="POST":
         #?? POST only ??
-        registration.present = not registration.present
-        registration.save()
+        if registration.present:
+            registration.absent()
+        else:
+            registration.confirm_presence()
+
         kwargs = {'workshop_pk': workshop_pk}
         return redirect(reverse('openclass:attendance', kwargs=kwargs))
 

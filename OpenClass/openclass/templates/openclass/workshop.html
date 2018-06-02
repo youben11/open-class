@@ -34,7 +34,7 @@
     <div class="container container_infos px-0">
     <div class="row row-head">
         <div class="col-xs-12 col-lg-12 col-xl-8 mx-0 px-0">
-          <img src="https://www.newstatesman.com/sites/all/themes/creative-responsive-theme/images/new_statesman_events.jpg" class="img-fluid img-title" alt="Responsive image">
+          <img src="/{{workshop.cover_img.url}}" class="img-fluid img-title" alt="Responsive image">
         </div>
       <div class="col-xs-12 col-lg-12 col-xl-4 column-title">
         <div class="title-content">
@@ -127,10 +127,10 @@
           <div>
             <div class="row">
             <div class="col-xs-12 col-lg-12 col-xl-4">
-            <img src="{% static 'openclass/img/avatar.jpg' %}" class="rounded float-left" alt="...">
+            <img src="/{{workshop.animator.photo.url}}" class="rounded float-left" alt="...">
           </div>
             <div class="col-xs-12 col-lg-12 col-xl-8">
-              <h3>{{workshop.animator}}</h3>
+              <h3>{{workshop.animator.user.username}}</h3>
               <p class="text-description">Lorem ipsum dolor sit amet,
                  consectetur adipisicing elit, sed do eiusmod tempor
                  incididunt ut labore et dolore magna aliqua. Ut enim a
