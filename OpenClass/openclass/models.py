@@ -359,7 +359,7 @@ class Tag(models.Model):
     name = models.CharField(max_length=MAX_LEN_NAME, blank=False)
 
     def __str__(self):
-        return "[%02d] %s" % (self.pk, self.name)
+        return "#%s" % (self.name)
 
 class Profile(models.Model):
     RE_PHONE_NB = r"^(\+[\d ]{3})?[\d ]+$"
