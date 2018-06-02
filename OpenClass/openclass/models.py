@@ -596,3 +596,10 @@ class BadgeAttendance(Badge):
 
     def is_gained():
         pass
+
+
+class FAQ(models.Model):
+    MAX_LEN_QUESTION = 100
+
+    question = models.CharField(max_length=MAX_LEN_QUESTION)
+    answer = models.TextField(blank=False)
