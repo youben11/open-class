@@ -246,6 +246,14 @@ class Workshop(models.Model):
 
         return flags
 
+    def is_now(self):
+        start_date = self.start_date
+        end_date = start_date + self.duration
+        if start_date < timezone.now() < end_date:
+            return True
+        else:
+            return False
+
 class Registration(models.Model):
     PENDING = 'P'
     ACCEPTED = 'A'
@@ -277,18 +285,21 @@ class Registration(models.Model):
                                         self.status)
 
     def confirm_presence(self):
-        workshop = self.workshop
-        if timezone.now() > workshop.start_date and \
-           timezone.now() - workshop.start_date < workshop.duration:
+        if self.workshop.is_now():
             self.present = True
             self.save()
+            return True
+        else:
+            return False
+
 
     def absent(self):
-        workshop = self.workshop
-        if timezone.now() > workshop.start_date and \
-           timezone.now() - workshop.start_date < workshop.duration:
+        if self.workshop.is_now():
             self.present = False
             self.save()
+            return True
+        else:
+            return False
 
 class Question(models.Model):
     author = models.ForeignKey(
@@ -480,9 +491,7 @@ class Profile(models.Model):
             return False
 
         #is the workshop currently animated?
-        start_date = workshop.start_date
-        end_date = start_date + workshop.duration
-        if start_date < timezone.now() < end_date:
+        if workshop.is_now():
             self.asked.create(workshop=workshop, question=question)
             return True
         else:
