@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{% static 'openclass/css/submitted.css' %}">
 {% endblock %}
 {% block content %}
-<!-- <script src="{% static 'openclass/js/csrf.js' %}"></script> -->
+<script src="{% static 'openclass/js/csrf.js' %}"></script>
 <div class="content">
   <div class="container-fluid">
     <div class="row">
@@ -33,11 +33,11 @@
                   <td>
                     <form method="post">
                       {% if s.start_date > date_now %}
-                      <button id="accept-btn" type="button" class="btn-success cd-popup-trigger">Accept</button>
+                      <button type="button" class="btn-success cd-popup-trigger" data-workshop-id="{{s.pk}}">Accept</button>
                       {% else %}
-                      <button id="accept-btn" type="button" class="btn-secondary cd-popup-trigger" disabled="disabled">Accept</button>
+                      <button type="button" class="btn-secondary cd-popup-trigger" disabled="disabled">Accept</button>
                       {% endif %}
-                      <button id="refuse-btn" type="button" class="btn-danger cd-popup-trigger">Refuse</button>
+                      <button type="button" class="btn-danger cd-popup-trigger" data-workshop-id="{{s.pk}}">Refuse</button>
                     </form>
                   </td>
                 </tr>  
@@ -118,11 +118,12 @@
   var workshop_tr_id;
   var decision;
   $('.cd-popup-trigger').on('click', function(event){
+    console.log(event);
     event.preventDefault();
     $('.cd-popup').addClass('is-visible');
     $('#messageConfirm').text('Are you sure you want to '+ $(this).text().toLowerCase() + ' the workshop "'+$(this).parent().parent().parent().children('td:nth-child(2)').text() +'"?');
     decision = $(this).text().toLowerCase();
-    workshop_pk = "5";
+    workshop_pk = $(this).attr("data-workshop-id");
     workshop_tr_id = 'w'+workshop_pk.replace(/\s/g,'');
     console.log(workshop_tr_id);
   });

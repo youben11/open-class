@@ -70,8 +70,7 @@ class Workshop(models.Model):
         registration = Registration(workshop=self, profile=profile)
         if self.registration_politic == Workshop.POL_FIFO:
             if self.seats_number == Workshop.INFINITE_SEATS_NB :
-                registration.status == Registration.ACCEPTED
-                registration.save()
+                registration.accept() #save
                 return True
             else:
                 try:
@@ -81,8 +80,9 @@ class Workshop(models.Model):
                                             status=Workshop.ACCEPTED,
                                             )
                         if len(registrations) + 1 <= self.seats_number:
-                            registration.status = Registration.ACCEPTED
-                        registration.save()
+                            registration.accept()
+                        else: # accept cause a save()
+                            registration.save()
                         return True
                 except DatabaseError:
                     return False
@@ -246,6 +246,14 @@ class Workshop(models.Model):
 
         return flags
 
+    def is_now(self):
+        start_date = self.start_date
+        end_date = start_date + self.duration
+        if start_date < timezone.now() < end_date:
+            return True
+        else:
+            return False
+
 class Registration(models.Model):
     PENDING = 'P'
     ACCEPTED = 'A'
@@ -277,18 +285,31 @@ class Registration(models.Model):
                                         self.status)
 
     def confirm_presence(self):
-        workshop = self.workshop
-        if timezone.now() > workshop.start_date and \
-           timezone.now() - workshop.start_date < workshop.duration:
+        if self.workshop.is_now():
             self.present = True
             self.save()
+            return True
+        else:
+            return False
+
 
     def absent(self):
-        workshop = self.workshop
-        if timezone.now() > workshop.start_date and \
-           timezone.now() - workshop.start_date < workshop.duration:
+        if self.workshop.is_now():
             self.present = False
             self.save()
+            return True
+        else:
+            return False
+
+    def accept(self):
+        #notify user
+        self.status == Registration.ACCEPTED
+        self.save()
+
+    def refuse(self):
+        #notify user
+        self.status == Registration.REFUSED
+        self.save()
 
 class Question(models.Model):
     author = models.ForeignKey(
@@ -338,7 +359,7 @@ class Tag(models.Model):
     name = models.CharField(max_length=MAX_LEN_NAME, blank=False)
 
     def __str__(self):
-        return "[%02d] %s" % (self.pk, self.name)
+        return "#%s" % (self.name)
 
 class Profile(models.Model):
     RE_PHONE_NB = r"^(\+[\d ]{3})?[\d ]+$"
@@ -480,9 +501,7 @@ class Profile(models.Model):
             return False
 
         #is the workshop currently animated?
-        start_date = workshop.start_date
-        end_date = start_date + workshop.duration
-        if start_date < timezone.now() < end_date:
+        if workshop.is_now():
             self.asked.create(workshop=workshop, question=question)
             return True
         else:
@@ -577,3 +596,10 @@ class BadgeAttendance(Badge):
 
     def is_gained():
         pass
+
+
+class FAQ(models.Model):
+    MAX_LEN_QUESTION = 100
+
+    question = models.CharField(max_length=MAX_LEN_QUESTION)
+    answer = models.TextField(blank=False)

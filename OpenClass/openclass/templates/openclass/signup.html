@@ -1,9 +1,17 @@
 {% extends 'openclass/base.html' %}
 {% load staticfiles %}
-
-{% block content %}
-<title>SignUp - {{site.title}}</title>
+{% block headercontent %}
 <link rel="stylesheet" href="{% static 'openclass/css/signup.css' %}">
+<script src="https://selectize.github.io/selectize.js/js/selectize.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://selectize.github.io/selectize.js/css/selectize.default.css">
+<title>SignUp - {{site.title}}</title>
+{% endblock %}
+{% block content %}
+<script type="text/javascript">
+	$(function() {
+	$('#id_interests').selectize({maxItems:3, selectOnTab: true});
+});
+</script>
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-lg-3 col-md-3">

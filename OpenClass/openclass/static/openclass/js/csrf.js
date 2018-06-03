@@ -1,5 +1,11 @@
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
 $.ajaxSetup({ 
    beforeSend: function(xhr, settings) {
+        console.log(settings);
        function getCookie(name) {
            var cookieValue = null;
            if (document.cookie && document.cookie != '') {
@@ -15,7 +21,8 @@ $.ajaxSetup({
            }
            return cookieValue;
        }
-       if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+       // if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
            // Only send the token to relative URLs i.e. locally.
            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
        }
