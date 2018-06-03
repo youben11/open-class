@@ -355,6 +355,9 @@ class Choice(models.Model):
     question = models.ForeignKey('MCQuestion', on_delete=models.CASCADE)
     choice = models.CharField(max_length=MAX_LEN_CHOICE, blank=False)
 
+    class Meta:
+        unique_together = (('question', 'choice'),)
+
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.choice)
 
