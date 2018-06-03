@@ -34,7 +34,9 @@
     <div class="container container_infos px-0">
     <div class="row row-head">
         <div class="col-xs-12 col-lg-12 col-xl-8 mx-0 px-0">
-          <img src="/{{workshop.cover_img.url}}" class="img-fluid img-title" alt="Responsive image">
+          {% if workshop.cover_img %}  
+            <img src="/{{workshop.cover_img.url}}" class="img-fluid img-title" alt="Responsive image">
+          {% endif %}
         </div>
       <div class="col-xs-12 col-lg-12 col-xl-4 column-title">
         <div class="title-content">
