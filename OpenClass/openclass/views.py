@@ -337,5 +337,24 @@ def ask_question(request, workshop_pk):
     return render(request, "openclass/ask_question.html", context)
 
 
+@login_required()
+def workshop_questions_list(request, workshop_pk):
+    workshop = get_object_or_404(Workshop, pk=workshop_pk)
+    questions_list = Question.objects.filter(workshop=workshop)
+    context = {"questions_list": questions_list}
+
+    # only the animator have permission to see the asked questions
+    if workshop.animator != request.user.profile:
+        context["permission_denied"] = True
+        return render(request, "openclass/workshop_questions_list.html", context)
+
+    # if it's an ajax GET request return the questions_list only
+    if request.is_ajax():
+        return render(request, "openclass/questions_list.html", context)
+    # if it's a normal GET return the hole page
+    else:
+        return render(request, "openclass/workshop_questions_list.html", context)
+
+
 def faq(request):
     return render(request, "openclass/faq.html")

@@ -1,0 +1,8 @@
+{% if questions_list %}
+    <h1>Questions list:</h1>
+    {% for question in questions_list %}
+        <p>{{ question.author.user.username }}: {{ question.question }}</p>
+    {% endfor %}
+{% else %}
+    <p>there are no questions for the moment</p>
+{% endif %}

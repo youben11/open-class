@@ -1,0 +1,27 @@
+{% extends 'openclass/base.html' %}
+
+<title>Questions List</title>
+{% block content %}
+{% if permission_denied %}
+    <p>Permission denied !!!</p>
+{% else %}
+    <div id="questions_list">
+        {% include 'openclass/questions_list.html' %}
+    </div>
+    <script type="text/javascript">
+    function refresh_questions_list() {
+        $.ajax({
+            type: "GET",
+            url: "{{ request.path }}",
+            success: function(data) {
+                $("#questions_list").html(data)
+            },
+            error: function(error) {
+                alert("refresh questions_list error");
+            }
+        });
+    }
+    setInterval("refresh_questions_list()", 2000);
+    </script>
+{% endif %}
+{% endblock %}
