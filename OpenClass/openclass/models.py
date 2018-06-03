@@ -342,6 +342,10 @@ class MCQuestion(models.Model):
 
     question = models.CharField(max_length=MAX_LEN_QST, blank=False)
 
+    def get_choices(self):
+        choices = self.choice_set.all()
+        return choices
+
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.question)
 
