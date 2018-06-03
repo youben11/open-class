@@ -361,3 +361,10 @@ def faq(request):
     faqs = FAQ.objects.all()
     context = {'faqs': faqs}
     return render(request, "openclass/faq.html", context)
+
+@login_required
+def feedback(request, workshop_pk):
+    workshop = get_object_or_404(Workshop, pk=workshop_pk)
+    mc_questions = workshop.mc_questions.all()
+    context = {'questions': mc_questions}
+    return render(request, "openclass/feedback.html", context)
