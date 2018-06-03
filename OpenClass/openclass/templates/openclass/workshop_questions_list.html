@@ -1,7 +1,15 @@
 {% extends 'openclass/base.html' %}
+{% load staticfiles %}
 
+{% block headercontent %}
+<link rel="stylesheet" href="{% static 'openclass/css/openclass.css' %}">
 <title>Questions List</title>
+{% endblock %}
+
 {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-4 offset-md-4 container-custom">
 {% if permission_denied %}
     <p>Permission denied !!!</p>
 {% else %}
@@ -24,4 +32,7 @@
     setInterval("refresh_questions_list()", 2000);
     </script>
 {% endif %}
+</div>
+</div>
+</div>
 {% endblock %}
