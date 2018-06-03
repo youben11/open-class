@@ -2,3 +2,25 @@
   background: rgba(255, 255, 255,0.92);
   padding: 10px;
 }
+
+.message {
+  margin: 0 0 0.5em;
+  border-radius: 1em;
+  padding: 0.5em 1em;
+  color: #fff;
+  background: #333;
+  max-width: 75%;
+  clear: both;
+  position: relative;
+}
+.message:after {
+	content: "";
+	position: absolute;
+	left: -0.5em;
+	bottom: 0;
+	width: 0.5em;
+	height: 1em;
+	border-right: 0.5em solid #333;
+	border-bottom-right-radius: 1em 0.5em;
+}
+    

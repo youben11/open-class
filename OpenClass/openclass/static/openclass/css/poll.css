@@ -1,19 +1,10 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
-body {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 400;
-  background-color: #e4edf4;
-  color: #53626E;
-}
 
 .poll {
-  width: 300px;
-  height: 400px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin: -200px 0 0 -150px;
-  border: #bfccd6 3px solid;
+  width: 50vh;
+  max-width: 100%;
+  margin: auto;
+  border: #333 3px solid;
   padding: 20px 40px 20px 40px;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -44,4 +35,40 @@ body {
   height: 40px;
   font-size: 10pt;
   border-radius: 4px;
+}
+.poll textarea {
+  width: 100%;
+  height: 10vh !important;
+}
+
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
+  letter-spacing: 0.3px;
+  font-size: 13px;
+    width: 79%;
+    height: 37px;
+    border: none;
+    padding: 0px;
+    padding-left: 8px;
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+   -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-bottomright: 3px;
+   -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+   border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    margin-bottom: 0px;
+    background: #333;
 }
