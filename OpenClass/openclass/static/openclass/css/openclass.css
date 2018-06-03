@@ -2,25 +2,25 @@
   background: rgba(255, 255, 255,0.92);
   padding: 10px;
 }
-
 .message {
-  margin: 0 0 0.5em;
-  border-radius: 1em;
-  padding: 0.5em 1em;
-  color: #fff;
-  background: #333;
-  max-width: 75%;
-  clear: both;
-  position: relative;
+	position: relative;
+	color: #fff;
+	background: #333;
+	border-radius: .4em;
+	padding: 0.5em;
+
 }
-.message:after {
-	content: "";
+.message::after {
+	content: '';
 	position: absolute;
-	left: -0.5em;
-	bottom: 0;
-	width: 0.5em;
-	height: 1em;
-	border-right: 0.5em solid #333;
-	border-bottom-right-radius: 1em 0.5em;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 0.625em solid transparent;
+	border-right-color: #333;
+	border-left: 0;
+	border-top: 0;
+	margin-top: -0.312em;
+	margin-left: -0.625em;
 }
-    
