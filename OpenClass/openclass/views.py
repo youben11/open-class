@@ -398,3 +398,7 @@ def feedback(request, workshop_pk):
                 mc_question_pk = mc_question_pk.split('_')[-1]
                 #checks here
                 feedback.choices.add(choice_pk)
+        title = 'Feedback submitted'
+        msg = 'Thank you, your feedback has been submitted'
+        context = {'title': title, 'msg': msg}
+        return render(request, 'openclass/info.html', context)
