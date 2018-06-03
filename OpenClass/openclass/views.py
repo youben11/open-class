@@ -146,6 +146,7 @@ def signup(request):
             profile = user_profile_form.save(commit=False)
             profile.user = user
             profile.save()
+            user_profile_form.save_m2m()
             user.save()
             if settings.EMAIL_VERIFICATION:
                 user.is_active = False
