@@ -3,16 +3,17 @@
 
 {% block headercontent %}
 <link rel="stylesheet" href="{% static 'openclass/css/badges.css' %}">
+<link rel="stylesheet" href="{% static 'openclass/css/openclass.css' %}">
 <title>Badges</title>
 {% endblock %}
 
 {% block content %}
-<div class="container py-4">
+<div class="container">
     <div class="row">
-        <div class="col-xs-12 col-lg-10 col-md-10 offset-md-1 offset-lg-1 container-custom">
+        <div class="col-xs-12 col-md-10  container-custom">
           <h3>Badges</h3>
           {% for b in badges %}
-          <div class="icon-box pt-4">
+          <div class="icon-box">
             <div class="icon">
               <img src="/{{b.img.url}}">
             </div>
