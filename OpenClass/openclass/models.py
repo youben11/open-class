@@ -11,8 +11,8 @@ from datetime import datetime
 
 
 class Workshop(models.Model):
-    MAX_LEN_TITLE = 20
-    MAX_LEN_LOCATION = 20
+    MAX_LEN_TITLE = 80
+    MAX_LEN_LOCATION = 80
     INFINITE_SEATS_NB = 0
 
     POL_FIFO = 'F'
@@ -338,7 +338,7 @@ class Feedback(models.Model):
 
 #Multiple Choice Question
 class MCQuestion(models.Model):
-    MAX_LEN_QST = 20
+    MAX_LEN_QST = 80
 
     question = models.CharField(max_length=MAX_LEN_QST, blank=False)
 
@@ -350,7 +350,7 @@ class MCQuestion(models.Model):
         return "[%02d] %s" % (self.pk, self.question)
 
 class Choice(models.Model):
-    MAX_LEN_CHOICE = 20
+    MAX_LEN_CHOICE = 50
 
     question = models.ForeignKey('MCQuestion', on_delete=models.CASCADE)
     choice = models.CharField(max_length=MAX_LEN_CHOICE, blank=False)

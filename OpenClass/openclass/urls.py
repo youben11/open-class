@@ -27,6 +27,7 @@ urlpatterns = [
     path('workshops/', views.workshops_list, name='workshops_list'),
     path('workshops/<int:workshop_pk>/', views.workshops_detail, name='workshops_detail'),
     path('workshops/<int:workshop_pk>/ask_question', views.ask_question, name='ask_question'),
+    path('workshops/<int:workshop_pk>/feedback', views.feedback, name='feedback'),
     path('workshops/<int:workshop_pk>/questions', views.workshop_questions_list, name='workshop_questions_list'),
     path('workshops/register/',views.register_to_workshop, name='register_to_workshop'),
     path('workshops/tag/', views.workshops_filter_tag, name='workshops_filter_tag'),
