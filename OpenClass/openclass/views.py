@@ -366,6 +366,39 @@ def faq(request):
 @login_required
 def feedback(request, workshop_pk):
     workshop = get_object_or_404(Workshop, pk=workshop_pk)
-    mc_questions = workshop.mc_questions.all()
-    context = {'questions': mc_questions}
-    return render(request, "openclass/feedback.html", context)
+    profile = request.user.profile
+    context = {}
+    try:
+        feedback = Feedback.objects.get(workshop=workshop, author=profile)
+        context['is_feedbacked'] = True
+    except Feedback.DoesNotExist:
+        context['is_feedbacked'] = False
+
+    if context['is_feedbacked']:
+        return render(request, "openclass/feedback.html", context)
+
+    mc_questions_prefix = "mc_question_"
+    context['mc_questions_prefix'] = mc_questions_prefix
+    if request.method == "GET":
+        mc_questions = workshop.mc_questions.all()
+        context['questions'] = mc_questions
+        return render(request, "openclass/feedback.html", context)
+
+    elif request.method == "POST":
+        mc_questions_re = "^%s\d+$" % mc_questions_prefix
+        comment = request.POST['comment']
+        feedback = Feedback.objects.create(
+                        workshop=workshop,
+                        author=profile,
+                        submission_date=timezone.now(),
+                        comment=comment
+                        )
+        for mc_question_pk, choice_pk in request.POST.items():
+            if re.match(mc_questions_re, mc_question_pk):
+                mc_question_pk = mc_question_pk.split('_')[-1]
+                #checks here
+                feedback.choices.add(choice_pk)
+        title = 'Feedback submitted'
+        msg = 'Thank you, your feedback has been submitted'
+        context = {'title': title, 'msg': msg}
+        return render(request, 'openclass/info.html', context)

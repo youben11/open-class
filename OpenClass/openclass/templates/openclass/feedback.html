@@ -10,18 +10,30 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-xs-12 col-md-10  container-custom">
-          <form class="poll">
-          {% for q in questions %}                
-              <h3>{{q.question}}</h3>
-              <ul>
-                {% for c in q.get_choices %}
-                  <li><input name="poll_value" type="radio" data-question-id="{{q.pk}}" data-choice-id="{{c.pk}}" />{{c.choice}}</li>
-                {% endfor %}
-              </ul>
-              <input type="submit" value="Submit" />
-          {% endfor %}
+        <div class="col-xs-12 col-md-4 offset-md-4 container-custom">
+          {% if is_feedbacked %}
+          <h3>You already sent your feedback</h3>
+          {% else %}
+          <form class="poll" method="post">
+            {% csrf_token %}
+            {% for q in questions %}                
+                <h3>{{q.question}}</h3>
+                <div>
+                    <ul>
+                      <fieldset id="question{{q.pk}}">
+                          {% for c in q.get_choices %}
+                            <li><input type="radio" name="{{mc_questions_prefix}}{{q.pk}}" data-choice-id="{{c.pk}}" value="{{c.pk}}"/>{{c.choice}}</li>
+                          {% endfor %}
+                      </fieldset>
+                    </ul>
+                </div>
+            {% endfor %}
+            <label for="comment">Comment:</label>
+            <textarea type="text" name="comment" ></textarea>
+            <input type="submit" value="Submit" />
           </form>
+          {% endif %}
+
         </div>
     </div>
 </div>

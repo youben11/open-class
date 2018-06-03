@@ -77,7 +77,7 @@ class Workshop(models.Model):
                     with transaction.atomic():
                         registrations = Registration.objects.filter(
                                             workshop=self,
-                                            status=Workshop.ACCEPTED,
+                                            status=Registration.ACCEPTED,
                                             )
                         if len(registrations) + 1 <= self.seats_number:
                             registration.accept()
@@ -303,12 +303,12 @@ class Registration(models.Model):
 
     def accept(self):
         #notify user
-        self.status == Registration.ACCEPTED
+        self.status = Registration.ACCEPTED
         self.save()
 
     def refuse(self):
         #notify user
-        self.status == Registration.REFUSED
+        self.status = Registration.REFUSED
         self.save()
 
 class Question(models.Model):
@@ -328,7 +328,7 @@ class Feedback(models.Model):
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     choices = models.ManyToManyField('Choice')
     submission_date = models.DateTimeField()
-    comment = models.TextField(blank=False)
+    comment = models.TextField(blank=True)
 
     class Meta:
         unique_together = (('workshop', 'author'),)
@@ -354,6 +354,9 @@ class Choice(models.Model):
 
     question = models.ForeignKey('MCQuestion', on_delete=models.CASCADE)
     choice = models.CharField(max_length=MAX_LEN_CHOICE, blank=False)
+
+    class Meta:
+        unique_together = (('question', 'choice'),)
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.choice)
