@@ -1,0 +1,47 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  background-color: #e4edf4;
+  color: #53626E;
+}
+
+.poll {
+  width: 300px;
+  height: 400px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -200px 0 0 -150px;
+  border: #bfccd6 3px solid;
+  padding: 20px 40px 20px 40px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: #FFF;
+}
+.poll h3 {
+  margin: 20px 0 10px 0;
+}
+.poll ul, .poll li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.poll li {
+  padding: 10px 0 10px 0;
+}
+.poll input[type="radio"] {
+  margin: 0 10px 0 0;
+}
+.poll input[type="submit"] {
+  margin: 20px 0 0 0;
+  background-color: #53626E;
+  color: #FFF;
+  border: 0;
+  width: 100%;
+  height: 40px;
+  font-size: 10pt;
+  border-radius: 4px;
+}

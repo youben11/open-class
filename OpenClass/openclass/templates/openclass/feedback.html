@@ -1,0 +1,28 @@
+{% extends 'openclass/base.html' %}
+{% load staticfiles %}
+
+{% block headercontent %}
+<link rel="stylesheet" href="{% static 'openclass/css/openclass.css' %}">
+<link rel="stylesheet" href="{% static 'openclass/css/poll.css' %}">
+<title>Feedback</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-10  container-custom">
+          <form class="poll">
+          {% for q in questions %}                
+              <h3>{{q.question}}</h3>
+              <ul>
+                {% for c in q.get_choices %}
+                  <li><input name="poll_value" type="radio" data-question-id="{{q.pk}}" data-choice-id="{{c.pk}}" />{{c.choice}}</li>
+                {% endfor %}
+              </ul>
+              <input type="submit" value="Submit" />
+          {% endfor %}
+          </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
