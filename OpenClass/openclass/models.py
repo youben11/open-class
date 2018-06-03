@@ -77,7 +77,7 @@ class Workshop(models.Model):
                     with transaction.atomic():
                         registrations = Registration.objects.filter(
                                             workshop=self,
-                                            status=Workshop.ACCEPTED,
+                                            status=Registration.ACCEPTED,
                                             )
                         if len(registrations) + 1 <= self.seats_number:
                             registration.accept()
@@ -303,12 +303,12 @@ class Registration(models.Model):
 
     def accept(self):
         #notify user
-        self.status == Registration.ACCEPTED
+        self.status = Registration.ACCEPTED
         self.save()
 
     def refuse(self):
         #notify user
-        self.status == Registration.REFUSED
+        self.status = Registration.REFUSED
         self.save()
 
 class Question(models.Model):
