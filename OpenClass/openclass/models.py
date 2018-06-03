@@ -328,7 +328,7 @@ class Feedback(models.Model):
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     choices = models.ManyToManyField('Choice')
     submission_date = models.DateTimeField()
-    comment = models.TextField(blank=False)
+    comment = models.TextField(blank=True)
 
     class Meta:
         unique_together = (('workshop', 'author'),)
