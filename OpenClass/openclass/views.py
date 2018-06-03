@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -295,7 +295,7 @@ def ask_question(request, workshop_pk):
     end_date = start_date + workshop.duration
 
     # check if the workshop is already done
-    if workshop.status == Workshop.DONE or timezone.now() > end_date:
+    if workshop.status == Workshop.DONE:
         context = {"is_done": True}
         return render(request, "openclass/ask_question.html", context)
 
@@ -329,7 +329,8 @@ def ask_question(request, workshop_pk):
             question.author = request.user.profile
             question.workshop = workshop
             question.save()
-            return HttpResponse("Thanks, Your Question has been submitted")
+            kwargs = {"workshop_pk":workshop_pk}
+            return redirect(reverse('openclass:workshops_detail',kwargs=kwargs))
 
     else:
         question_form = QuestionForm()
