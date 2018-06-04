@@ -33,31 +33,26 @@
                 </div>
                 <div class="info">
                   <form method="post">
-
                     {% csrf_token %}
                     {{ user_prefs_form.as_p }}
-
-
-
-
-
-
-                  
-
-
-
-
                     <input type="submit"/>
                   </form>
                 </div>
+    <div class="pretty p-switch">
+        <input type="checkbox" />
+        <div class="state">
+            <label>Outline</label>
+        </div>
+    </div>
             </div>
         </div>
+
 
     </div>
 </div>
     {% endblock %}
 {% block scripts %}
-<script type="text/javascript">
-    $('input[type="checkbox"').parent().append('<div class="switcher__indicator"></div>');
-</script>
+<!-- <script type="text/javascript">
+    $('input[type="checkbox"').after('<div class="switcher__indicator"></div>');
+</script> -->
 {% endblock %}
