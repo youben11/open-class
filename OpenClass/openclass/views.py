@@ -74,11 +74,19 @@ def moderation_submitted_workshops_decision(request):
 
 
 def workshops_list(request):
+    if request.is_ajax() and request.method == "POST":
+        # ERROR here
+        tag_filtered = request.POST['tag']
+        tag = Tag.objects.get(name=tag_filtered)
+        workshop_list = Workshop.objects.filter(topics=tag.id)
+        context = {'workshop_list': workshop_list}
+        return render(request, "openclass/listworkshop_item.html", context)
+
     workshops = Workshop.objects.filter(
                         Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
                         )
     tags = Tag.objects.all()
-    return render(request, "openclass/listworkshop.html", {"workshops":workshops,"tags":tags})
+    return render(request, "openclass/listworkshop.html", {"workshop_list":workshops, "tags":tags})
 
 def upcoming_workshops_list(request):
     workshops = Workshop.objects.filter(
@@ -106,7 +114,7 @@ def workshops_filter_tag(request):
     tag= Tag.objects.get(name=tag_filtered)
     workshop_list = list(Workshop.objects.filter(topics=tag.id).values())
     result = {'data': workshop_list}
-    return JsonResponse(result)
+    return render(request,"openclass/listworkshop_item.html",result)
 
 @login_required()
 def members_list(request):

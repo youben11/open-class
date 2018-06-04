@@ -105,21 +105,12 @@
         <div class="col-xs-12 col-lg-12 col-xl-6 col-infos">
           <h3>What you will learn:</h3>
           <div>
+            {% for tag in workshop.topics.all %}
+            <a href="#" class="badge badge-light badge-learn themebadges px-4 py-4">
+              {{tag.name}}
+            </a>
+            {% endfor %}
 
-            <a href="#" class="badge badge-light badge-learn themebadges px-4 py-4">
-              Lorem ipsum
-            </a>
-            <a href="#" class="badge badge-success badge-learn themebadges px-4 py-4">
-              Lorem ipsum
-            </a>
-            <a href="#" class="badge badge-light badge-learn themebadges px-4 py-4">
-              Lorem ipsum
-            </a>
-            <a href="#" class="badge badge-light badge-learn themebadges px-4 py-4">
-              Lorem ipsum
-            </a>
-
-          </button>
           </div>
         </div>
       </div>
@@ -136,7 +127,7 @@
               {% endif %}
           </div>
             <div class="col-xs-12 col-lg-12 col-xl-8">
-              <h3>{{workshop.animator.user.username}}</h3>
+              <h3>{{workshop.animator.user.first_name}} {{workshop.animator.user.last_name}}</h3>
               <p class="text-description">Lorem ipsum dolor sit amet,
                  consectetur adipisicing elit, sed do eiusmod tempor
                  incididunt ut labore et dolore magna aliqua. Ut enim a
