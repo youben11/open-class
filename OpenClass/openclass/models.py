@@ -587,7 +587,13 @@ class VerificationToken(models.Model):
 
 class Preference(models.Model):
     profile = models.OneToOneField('Profile', on_delete=models.CASCADE)
-    confidentiality = models.IntegerField()
+
+    show_email = models.BooleanField(null=False, default=False)
+    show_birth_date = models.BooleanField(null=False, default=False)
+    show_phone_number = models.BooleanField(null=False, default=False)
+
+    notify_new_workshop = models.BooleanField(null=False, default=True)
+    notify_registration_status = models.BooleanField(null=False, default=True)
 
 class Badge(models.Model):
     MAX_LEN_BADGE_NAME = 20
