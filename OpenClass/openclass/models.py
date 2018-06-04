@@ -66,6 +66,10 @@ class Workshop(models.Model):
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.title)
 
+
+    def end_date(self):
+        return self.start_date + self.duration
+
     def register(self, profile):
         registration = Registration(workshop=self, profile=profile)
         if self.registration_politic == Workshop.POL_FIFO:
@@ -364,6 +368,7 @@ class Choice(models.Model):
 class Tag(models.Model):
     MAX_LEN_NAME = 20
     name = models.CharField(max_length=MAX_LEN_NAME, blank=False)
+    description = models.TextField(null=True, blank=True, default=None)
 
     def __str__(self):
         return "#%s" % (self.name)
@@ -582,7 +587,13 @@ class VerificationToken(models.Model):
 
 class Preference(models.Model):
     profile = models.OneToOneField('Profile', on_delete=models.CASCADE)
-    confidentiality = models.IntegerField()
+
+    show_email = models.BooleanField(null=False, default=False)
+    show_birth_date = models.BooleanField(null=False, default=False)
+    show_phone_number = models.BooleanField(null=False, default=False)
+
+    notify_new_workshop = models.BooleanField(null=False, default=True)
+    notify_registration_status = models.BooleanField(null=False, default=True)
 
 class Badge(models.Model):
     MAX_LEN_BADGE_NAME = 20

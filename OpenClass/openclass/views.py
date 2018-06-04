@@ -6,6 +6,7 @@ from django.forms.models import model_to_dict
 from django.urls import reverse
 from django.conf import settings
 from django.db import transaction
+from django.db.models import Q
 from .models import *
 from .forms import *
 from . import email
@@ -103,7 +104,8 @@ def workshops_list(request):
             context = {'workshop_list': workshop_list}
             return render(request,"openclass/listworkshop_item.html",context)
     else :
-        workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+        workshops = Workshop.objects.filter(Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
+        )
         tags = Tag.objects.all()
         return render(request, "openclass/listworkshop.html", {"workshop_list":workshops, "tags":tags})
 
@@ -117,8 +119,8 @@ def upcoming_workshops_list(request):
 def workshops_detail(request, workshop_pk):
     workshop = get_object_or_404(
                         Workshop,
+                        Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE),
                         pk=workshop_pk,
-                        status=Workshop.ACCEPTED,
                         )
     context = {'workshop': workshop}
     if request.user.is_authenticated:
@@ -156,7 +158,15 @@ def profile(request):
 
 @login_required()
 def prefs(request):
-    return render(request, "openclass/user-preferences.html")
+    preference = request.user.profile.preference
+    if request.method == 'POST':
+        user_prefs_form = UserPrefsForm(request.POST, instance=preference)
+        if user_prefs_form.is_valid():
+            user_prefs_form.save()
+    else:
+        user_prefs_form = UserPrefsForm(instance=preference)
+    context = {'user_prefs_form': user_prefs_form}
+    return render(request, "openclass/user-preferences.html", context)
 
 @transaction.atomic
 def signup(request):
@@ -176,6 +186,7 @@ def signup(request):
             profile = user_profile_form.save(commit=False)
             profile.user = user
             profile.save()
+            profile.preference = Preference.objects.create(profile=p)
             user_profile_form.save_m2m()
             user.save()
             if settings.EMAIL_VERIFICATION:
@@ -233,13 +244,14 @@ def user_settings(request):
     if request.method == "POST":
         settings_form = UserSettings(request.POST, instance=request.user)
         if settings_form.is_valid():
-            user = settings_form.save()
+            settings_form.save()
     else:
-        settings_form = UserSettings(initial=model_to_dict(request.user))
+        settings_form = UserSettings(instance=request.user)
 
     context = {"user_settings":settings_form}
     return render(request, "openclass/user-settings.html", context)
 
+#TODO only moderator
 def attendance(request,workshop_pk):
     workshop = get_object_or_404(Workshop, pk = workshop_pk)
     registrations = Registration.objects.all().filter(workshop=workshop)
@@ -266,7 +278,7 @@ def user_attendance(request, workshop_pk, user_pk):
 @login_required()
 def register_to_workshop(request):
     workshop_pk = request.POST['workshop_pk']
-
+    # TODO : register only to accepted workshops
     try:
         workshop = Workshop.objects.get(pk=workshop_pk)
     except Workshop.DoesNotExist:
@@ -291,7 +303,7 @@ def register_to_workshop(request):
 @login_required()
 def cancel_registration(request):
     workshop_pk = request.POST['workshop_pk']
-
+    #TODO can't cancel a registration for a DONE workshop
     try:
         workshop = Workshop.objects.get(pk=workshop_pk)
     except Workshop.DoesNotExist:
@@ -395,7 +407,16 @@ def faq(request):
 
 @login_required
 def feedback(request, workshop_pk):
-    workshop = get_object_or_404(Workshop, pk=workshop_pk)
+    workshop = get_object_or_404(
+                        Workshop,
+                        Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE),
+                        pk=workshop_pk
+                        )
+    if timezone.now() < workshop.end_date():
+        title = "Openclass - Feedback"
+        msg = 'You can submit your feedback after the completion of the workshop'
+        context = {'title': title, 'msg': msg}
+        return render(request, 'openclass/info.html', context)
     profile = request.user.profile
     context = {}
     try:
@@ -426,7 +447,15 @@ def feedback(request, workshop_pk):
         for mc_question_pk, choice_pk in request.POST.items():
             if re.match(mc_questions_re, mc_question_pk):
                 mc_question_pk = mc_question_pk.split('_')[-1]
-                #checks here
+                try:
+                    mc_question = MCQuestion.objects.get(pk=mc_question_pk)
+                    if workshop not in mc_question.workshop_set.all():
+                        continue
+                    choice = Choice.objects.get(pk=choice_pk)
+                    if choice not in mc_question.choices.all():
+                        continue
+                except:
+                    pass
                 feedback.choices.add(choice_pk)
         title = 'Feedback submitted'
         msg = 'Thank you, your feedback has been submitted'

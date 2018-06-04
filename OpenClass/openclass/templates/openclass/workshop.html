@@ -34,7 +34,8 @@
     <div class="container container_infos px-0">
     <div class="row row-head">
         <div class="col-xs-12 col-lg-12 col-xl-8 mx-0 px-0">
-          {% if workshop.cover_img %}  
+          <!-- to avoid error before adding default photo -->
+          {% if workshop.cover_img %}
             <img src="/{{workshop.cover_img.url}}" class="img-fluid img-title" alt="Responsive image">
           {% endif %}
         </div>
@@ -120,7 +121,10 @@
           <div>
             <div class="row">
             <div class="col-xs-12 col-lg-12 col-xl-4">
+              <!-- to avoid error before adding default photo -->
+              {% if workshop.animator.photo %}
             <img src="/{{workshop.animator.photo.url}}" class="rounded float-left" alt="...">
+              {% endif %}
           </div>
             <div class="col-xs-12 col-lg-12 col-xl-8">
               <h3>{{workshop.animator.user.first_name}} {{workshop.animator.user.last_name}}</h3>
