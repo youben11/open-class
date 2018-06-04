@@ -156,17 +156,17 @@ def signup(request):
 
     if request.method == "POST":
         user_form = UserForm(request.POST)
-        user_profile_form = UserProfileForm(request.POST, request.FILES)
+        profile_form = ProfileForm(request.POST, request.FILES)
 
-        if user_form.is_valid() and user_profile_form.is_valid():
+        if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save(commit=False)
             user.set_password(user.password)
             user.save()
-            profile = user_profile_form.save(commit=False)
+            profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
-            profile.preference = Preference.objects.create(profile=p)
-            user_profile_form.save_m2m()
+            profile.preference = Preference.objects.create(profile=profile)
+            profile_form.save_m2m()
             user.save()
             if settings.EMAIL_VERIFICATION:
                 user.is_active = False
@@ -180,9 +180,9 @@ def signup(request):
 
     else:
         user_form = UserForm()
-        user_profile_form = UserProfileForm()
+        profile_form = ProfileForm()
 
-    context = {"user_form":user_form, "user_profile_form":user_profile_form}
+    context = {"user_form":user_form, "profile_form":profile_form}
     return render(request, 'openclass/signup.html', context)
 
 def verify(request, token):
@@ -221,13 +221,17 @@ def submit_workshop(request):
 @login_required()
 def user_settings(request):
     if request.method == "POST":
-        settings_form = UserSettings(request.POST, instance=request.user)
-        if settings_form.is_valid():
-            settings_form.save()
+        user_settings_form = UserSettingsForm(request.POST, instance=request.user)
+        profile_settings_form = ProfileSettingsFrom(request.POST, request.FILES, instance=request.user.profile)
+        if user_settings_form.is_valid():
+            user_settings_form.save()
+        if profile_settings_form.is_valid():
+            profile_settings_form.save()
     else:
-        settings_form = UserSettings(instance=request.user)
+        user_settings_form = UserSettingsForm(instance=request.user)
+        profile_settings_form = ProfileSettingsFrom(instance=request.user.profile)
 
-    context = {"user_settings":settings_form}
+    context = {"user_settings_form": user_settings_form, "profile_settings_form": profile_settings_form}
     return render(request, "openclass/user-settings.html", context)
 
 #TODO only moderator
