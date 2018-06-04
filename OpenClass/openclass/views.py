@@ -74,7 +74,9 @@ def moderation_submitted_workshops_decision(request):
 
 
 def workshops_list(request):
-    workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    workshops = Workshop.objects.filter(
+                        Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
+                        )
     tags = Tag.objects.all()
     return render(request, "openclass/listworkshop.html", {"workshops":workshops,"tags":tags})
 
@@ -88,8 +90,8 @@ def upcoming_workshops_list(request):
 def workshops_detail(request, workshop_pk):
     workshop = get_object_or_404(
                         Workshop,
+                        Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE),
                         pk=workshop_pk,
-                        status=Workshop.ACCEPTED,
                         )
     context = {'workshop': workshop}
     if request.user.is_authenticated:
@@ -211,6 +213,7 @@ def user_settings(request):
     context = {"user_settings":settings_form}
     return render(request, "openclass/user-settings.html", context)
 
+#TODO only moderator
 def attendance(request,workshop_pk):
     workshop = get_object_or_404(Workshop, pk = workshop_pk)
     registrations = Registration.objects.all().filter(workshop=workshop)
@@ -237,7 +240,7 @@ def user_attendance(request, workshop_pk, user_pk):
 @login_required()
 def register_to_workshop(request):
     workshop_pk = request.POST['workshop_pk']
-
+    # TODO : register only to accepted workshops
     try:
         workshop = Workshop.objects.get(pk=workshop_pk)
     except Workshop.DoesNotExist:
@@ -262,7 +265,7 @@ def register_to_workshop(request):
 @login_required()
 def cancel_registration(request):
     workshop_pk = request.POST['workshop_pk']
-
+    #TODO can't cancel a registration for a DONE workshop
     try:
         workshop = Workshop.objects.get(pk=workshop_pk)
     except Workshop.DoesNotExist:
