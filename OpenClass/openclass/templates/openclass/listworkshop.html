@@ -38,10 +38,10 @@
     </div>
     <div id="collapseThree" class="collapse" aria-labelledby="headingThree">
       <div class="card-body">
-        <a href="#" class="card-link">Tomorrow</a>
-        <a href="#" class="card-link">This week</a>
-        <a href="#" class="card-link">Next week</a>
-        <a href="#" class="card-link">This month</a>
+        <a href="#" class="card-link filter-time">Tomorrow</a>
+        <a href="#" class="card-link filter-time">This week</a>
+        <a href="#" class="card-link filter-time">Next week</a>
+        <a href="#" class="card-link filter-time">This month</a>
 
       </div>
     </div>
@@ -58,22 +58,36 @@
 <script type="text/javascript" src="{% static 'openclass/js/bootstrap-material-design.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'openclass/js/pooper.min.js' %}"></script>
 <script type="text/javascript">
-  	var filters = document.getElementsByClassName('filter-tag');
-		var cards_list=document.getElementsByClassName('card-workshop');
-		var tag_filters_list=[];
-		var cards_date_list=document.getElementsByClassName('text-date')
-		var cards_title_list=document.getElementsByClassName('title')
+  	var tag_filters = document.getElementsByClassName('filter-tag');
+		var cards_list = document.getElementsByClassName('card-workshop');
+    var time_filters = document.getElementsByClassName('filter-time');
 
-	  for (var i = 0; i < filters.length; i++) {
-
-      var filtertext= filters[i].text;
-      filters[i].onclick = function search() {
-        var tag=this.text;
-        console.log(tag_filters_list);
+    for (var i = 0; i < time_filters.length; i++) {
+      time_filters[i].onclick = function search() {
+        var data=this.text;
         $.ajax({
           type: "POST",
           url: "{{ request.path }}",
-          data: {'tag': tag},
+          data: {'filter': 'TIME','time': data},
+          success: function(result) {
+                console.log(result);
+                $("#workshopsContainer").html(result)
+          },
+          error: function(error) {
+              alert("ERROR");
+                console.log(error);
+          }
+        });
+    }
+  }
+
+	  for (var i = 0; i < tag_filters.length; i++) {
+      tag_filters[i].onclick = function search() {
+        var data=this.text;
+        $.ajax({
+          type: "POST",
+          url: "{{ request.path }}",
+          data: {'filter': 'TAG','tag': data},
           success: function(result) {
                 console.log(result);
                 $("#workshopsContainer").html(result)

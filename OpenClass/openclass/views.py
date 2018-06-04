@@ -10,7 +10,7 @@ from django.db.models import Q
 from .models import *
 from .forms import *
 from . import email
-
+import datetime
 
 def index(request):
     return render(request, "openclass/home.html")
@@ -74,19 +74,40 @@ def moderation_submitted_workshops_decision(request):
 
 
 def workshops_list(request):
-    if request.is_ajax() and request.method == "POST":
-        # ERROR here
-        tag_filtered = request.POST['tag']
-        tag = Tag.objects.get(name=tag_filtered)
-        workshop_list = Workshop.objects.filter(topics=tag.id)
-        context = {'workshop_list': workshop_list}
-        return render(request, "openclass/listworkshop_item.html", context)
+    if request.is_ajax():
+        tag_method = request.POST['filter']
+        if tag_method == 'TAG':
+            tag_filtere = request.POST['tag']
+            tag = Tag.objects.get(name=tag_filtere)
+            workshop_list = Workshop.objects.filter(topics=tag.id)
+            context = {'workshop_list': workshop_list}
+            return render(request, "openclass/listworkshop_item.html", context)
 
-    workshops = Workshop.objects.filter(
-                        Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
-                        )
-    tags = Tag.objects.all()
-    return render(request, "openclass/listworkshop.html", {"workshop_list":workshops, "tags":tags})
+        elif tag_method == 'TIME':
+            time_filter = request.POST['time']
+            today = datetime.datetime.today()
+            this_week = today + datetime.timedelta(6)
+            tomorrow = today + datetime.timedelta(1)
+            if time_filter == 'Tomorrow':
+                workshop_list = Workshop.objects.filter(start_date__date = tomorrow.date())
+
+            elif time_filter == 'This week':
+                workshop_list = Workshop.objects.filter(start_date__lte = this_week.date(),start_date__gte = today.date())
+
+            elif time_filter == 'Next week':
+                next_week = this_week + datetime.timedelta(6)
+                workshop_list = Workshop.objects.filter(start_date__lte = next_week.date(),start_date__gte = this_week.date())
+
+            elif time_filter == 'This month':
+                workshop_list = Workshop.objects.filter(start_date__month = today.month,start_date__year = today.year)
+
+            context = {'workshop_list': workshop_list}
+            return render(request,"openclass/listworkshop_item.html",context)
+    else :
+        workshops = Workshop.objects.filter(Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
+        )
+        tags = Tag.objects.all()
+        return render(request, "openclass/listworkshop.html", {"workshop_list":workshops, "tags":tags})
 
 def upcoming_workshops_list(request):
     workshops = Workshop.objects.filter(
