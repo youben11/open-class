@@ -1,20 +1,27 @@
 from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile, Workshop, Question
+from .models import Profile, Workshop, Question, Preference
 
 
 class UserSettings(ModelForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     email = forms.EmailField(required=True)
+
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
 
+class UserPrefs(ModelForm):
+
+    class Meta:
+        model = Preference
+        exclude = ['profile']
+
 class UserProfileForm(ModelForm):
-    # interests = forms.MultipleChoiceField(required=False)
     photo = forms.ImageField(required=False)
+
     class Meta:
         model = Profile
         fields = ['gender', 'birthday', 'phone_number', 'interests', 'photo']
@@ -33,7 +40,6 @@ class UserForm(ModelForm):
         }
 
 class WorkshopForm(ModelForm):
-    #cover_img = forms.ImageField(required=False)
 
     class Meta:
         model = Workshop
@@ -56,6 +62,4 @@ class WorkshopForm(ModelForm):
 class QuestionForm(ModelForm):
     class Meta:
         model = Question
-        fields = [
-            'question'
-        ]
+        fields = ['question']
