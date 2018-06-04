@@ -46,113 +46,42 @@
       </div>
     </div>
   </div>
-
-
-
-    </div>
-  {% if workshops %}
-    <div class="col-12 col-lg-9 col-xl-9">
-    {% for workshop in workshops %}
-      <div class="row">
-        <div class="col-12 col-lg-12 col-xl-12">
-          <div class="card card-workshop my-1">
-            <div class="card-body px-0 py-0">
-              <div class="row">
-                <div class="col-4 col-lg-4 col-xl-4">
-                    <a href="{% url 'openclass:workshops_detail' workshop.pk %}">
-                    <img  src="https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&h=350" class="img-background" alt="...">
-                    </a>
-                </div>
-                <div class="col-8 col-lg-8 col-xl-8 px-0">
-									<div class="row">
-										<div class="col-10 col-lg-10 col-xl-10">
-											<h4 class="text-date">{% if workshop.days_left < 0 %}
-												(Past)
-											{% else %}
-												{% if workshop.days_left == 0 %}
-													(Today)
-												{% elif workshop.days_left == 1 %}
-													(Tommorow)
-												{% else %}
-													({{workshop.days_left}} days)
-												{% endif %}
-											{% endif %}</h4>
-										</div>
-										<div class="col-2 col-lg-2 col-xl-2 mt-3">
-											<i class="fa fa-share-alt fa-2x"></i>
-										</div>
-									</div>
-                  <div class="row">
-                    <div class="col-10 col-lg-6 col-xl-10">
-                      <a href="{% url 'openclass:workshops_detail' workshop.pk %}">
-                        <h2 class="title">{{workshop.title}}</h2>
-                      </a>
-                    </div>
-                  </div>
-
-                  {% for i in workshop.topics.all %}
-                  <a href="#" class="">
-                    #{{i.name}}
-                  </a>
-                  {% endfor %}
-                  <div class="row mt-4">
-                    <div class="col-5 col-lg-6 col-xl-5">
-                    <h4>Inscription progress: </h4>
-                    </div>
-                    <div class="col-7 col-lg-6 col-xl-7">
-                      <div class="progress">
-                      <div class="inscription-progress-bar progress-bar bg-success " role="progressbar" style="width: 100%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
+</div>
+  <div id="workshopsContainer" class="col-12 col-lg-9 col-xl-9">
+    {% include 'openclass/listworkshop_item.html' %}
   </div>
-  {% endif %}
+
+
+
 </div>
 </div>
 <script type="text/javascript" src="{% static 'openclass/js/bootstrap-material-design.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'openclass/js/pooper.min.js' %}"></script>
 <script type="text/javascript">
-  	filters = document.getElementsByClassName('filter-tag');
-		cards_list=document.getElementsByClassName('card-workshop');
-		tag_filters_list=[];
-		cards_date_list=document.getElementsByClassName('text-date')
-		cards_title_list=document.getElementsByClassName('title')
+  	var filters = document.getElementsByClassName('filter-tag');
+		var cards_list=document.getElementsByClassName('card-workshop');
+		var tag_filters_list=[];
+		var cards_date_list=document.getElementsByClassName('text-date')
+		var cards_title_list=document.getElementsByClassName('title')
+
 	  for (var i = 0; i < filters.length; i++) {
 
       var filtertext= filters[i].text;
       filters[i].onclick = function search() {
-				tag_filters_list.push(this.text);
+        var tag=this.text;
+        console.log(tag_filters_list);
         $.ajax({
           type: "POST",
-          url: "{% url 'openclass:workshops_filter_tag' %}",
-          dataType: "json",
-          traditional: true,
-          data: {'tag': tag_filters_list},
+          url: "{{ request.path }}",
+          data: {'tag': tag},
           success: function(result) {
-								workshop_list=result.data;
-								console.log("g",cards_list.length);
-								for (var i = 0; i <= cards_list.length+1; i++) {
-									console.log("d",i);
-									if(i == cards_list.length){
-										console.log("k",i);
-										$('.card-workshop').slice(i).remove();
-
-									}
-
-									if(i >= workshop_list.length){
-										console.log(i);
-										$('.card-workshop').slice(i	,i+1).remove()
-
-									}
-								}
-           }
+                console.log(result);
+                $("#workshopsContainer").html(result)
+					},
+          error: function(error) {
+              alert("ERROR");
+                console.log(error);
+          }
         });
       }
     }
