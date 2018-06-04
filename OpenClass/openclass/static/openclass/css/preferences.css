@@ -1,18 +1,24 @@
-.switcher {
+.switcher, label, .info p {
   position: relative;
-  display: inline-block;
+  /*display: inline-block;*/
   cursor: pointer;
-  padding-left: 60px;
+  padding-left: 30px;
   height: 16px;
   line-height: 16px;
   margin: 5px;
+  margin-bottom: 15px;
   font-size: 14px;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
 }
-.switcher input {
+.switcher input, 
+#id_show_email, 
+#id_show_birth_date, 
+#id_show_phone_number, 
+#id_notify_new_workshop, 
+#id_notify_registration_status {
   display: none;
 }
 
