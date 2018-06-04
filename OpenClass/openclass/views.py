@@ -6,6 +6,7 @@ from django.forms.models import model_to_dict
 from django.urls import reverse
 from django.conf import settings
 from django.db import transaction
+from django.db.models import Q
 from .models import *
 from .forms import *
 from . import email
@@ -365,7 +366,16 @@ def faq(request):
 
 @login_required
 def feedback(request, workshop_pk):
-    workshop = get_object_or_404(Workshop, pk=workshop_pk)
+    workshop = get_object_or_404(
+                        Workshop,
+                        Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE),
+                        pk=workshop_pk
+                        )
+    if timezone.now() < workshop.end_date():
+        title = "Openclass - Feedback"
+        msg = 'You can submit your feedback after the completion of the workshop'
+        context = {'title': title, 'msg': msg}
+        return render(request, 'openclass/info.html', context)
     profile = request.user.profile
     context = {}
     try:
@@ -396,7 +406,15 @@ def feedback(request, workshop_pk):
         for mc_question_pk, choice_pk in request.POST.items():
             if re.match(mc_questions_re, mc_question_pk):
                 mc_question_pk = mc_question_pk.split('_')[-1]
-                #checks here
+                try:
+                    mc_question = MCQuestion.objects.get(pk=mc_question_pk)
+                    if workshop not in mc_question.workshop_set.all():
+                        continue
+                    choice = Choice.objects.get(pk=choice_pk)
+                    if choice not in mc_question.choices.all():
+                        continue
+                except:
+                    pass
                 feedback.choices.add(choice_pk)
         title = 'Feedback submitted'
         msg = 'Thank you, your feedback has been submitted'

@@ -66,6 +66,10 @@ class Workshop(models.Model):
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.title)
 
+
+    def end_date(self):
+        return self.start_date + self.duration
+
     def register(self, profile):
         registration = Registration(workshop=self, profile=profile)
         if self.registration_politic == Workshop.POL_FIFO:
