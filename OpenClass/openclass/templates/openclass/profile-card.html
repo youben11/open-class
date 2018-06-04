@@ -1,0 +1,26 @@
+{% load staticfiles %}
+
+            <div class="card-user hovercard">
+                <div class="cardheader"></div>
+                <div class="avatar">
+                  {% if user.profile.photo %} 
+                    <img alt="" src="/{{user.profile.photo.url}}">
+                  {% else %}
+                    <img alt="" src="{% static 'openclass/img/avatars/default-avatar.png' %}">
+                  {% endif %}
+                </div>
+                <div class="info">
+                    <div class="title">@{{user.username}}</div>
+                    <div class="desc">{{user.first_name}}</div>
+                    <div class="desc">{{user.last_name}}</div>
+                    {% if user.profile.preference.show_email %}
+                    <div class="desc">{{user.email}}</div>
+                    {% endif %}
+                    {% if user.profile.preference.show_birth_date %}
+                    <div class="desc">{{user.profile.get_age}} years</div>
+                    {% endif %}
+                    {% if user.profile.preference.show_phone_number %}
+                    <div class="desc">{{user.profile.phone_number}}</div>
+                    {% endif %}
+                </div>
+            </div>

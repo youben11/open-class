@@ -9,20 +9,7 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-lg-3 col-md-3">
-            <div class="card-user hovercard">
-                <div class="cardheader"></div>
-                <div class="avatar">
-                    <img alt="" src="{% static 'openclass/img/nadir.png' %}">
-                </div>
-                <div class="info">
-                    <div class="title">@{{user.username}}</div>
-                    <div class="desc">{{user.first_name}}</div>
-                    <div class="desc">{{user.last_name}}</div>
-                    <div class="desc">{{user.email}}</div>
-                    <div class="desc">{{user.profile.get_age}} years</div>
-                    <div class="desc">{{user.phone_number}}</div>
-                </div>
-            </div>
+        {% include 'openclass/profile-card.html' %}
 
         </div>
         <div class="col-xs-12 col-lg-9 col-md-9">
@@ -34,16 +21,11 @@
                 <div class="info">
                   <form method="post">
                     {% csrf_token %}
-                    {{ user_prefs_form.as_p }}
+                    {{ user_prefs_form.as_table }}
+                    <br>
                     <input type="submit"/>
                   </form>
                 </div>
-    <div class="pretty p-switch">
-        <input type="checkbox" />
-        <div class="state">
-            <label>Outline</label>
-        </div>
-    </div>
             </div>
         </div>
 
