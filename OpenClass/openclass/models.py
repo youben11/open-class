@@ -368,6 +368,7 @@ class Choice(models.Model):
 class Tag(models.Model):
     MAX_LEN_NAME = 20
     name = models.CharField(max_length=MAX_LEN_NAME, blank=False)
+    description = models.TextField(null=True, blank=True, default=None)
 
     def __str__(self):
         return "#%s" % (self.name)
