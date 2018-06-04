@@ -34,6 +34,7 @@ class Workshop(models.Model):
         (DONE, 'Done'),
         (CANCELED, 'Canceled'),
     )
+    DEFAULT_PHOTO = "default/default-workshop.jpg"
 
     registered = models.ManyToManyField('Profile', through='Registration',
                                         related_name='registered_to')
@@ -56,7 +57,10 @@ class Workshop(models.Model):
                                 choices=POLITIC_CHOICES,
                                 default=POL_FIFO)
     location = models.CharField(max_length=MAX_LEN_LOCATION)
-    cover_img = models.ImageField(upload_to=upload_to_workshop_cover)
+    cover_img = models.ImageField(
+                        upload_to=upload_to_workshop_cover,
+                        default=DEFAULT_PHOTO,
+                        )
     status = models.CharField(
                     max_length=1,
                     choices=STATUS_CHOICES,
@@ -384,6 +388,7 @@ class Profile(models.Model):
         (FEMALE, 'Female'),
         (NAG, 'Not mentioned')
     )
+    DEFAULT_PHOTO = "default/default-avatar.png"
     badges = models.ManyToManyField('Badge', through='Have_badge')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     interests = models.ManyToManyField('Tag')
@@ -393,7 +398,10 @@ class Profile(models.Model):
                             max_length=MAX_LEN_PHONE_NB,
                             validators=[RegexValidator(regex=RE_PHONE_NB),])
     birthday = models.DateField(null=True)
-    photo = models.ImageField(upload_to=upload_to_profile_photo)
+    photo = models.ImageField(
+                    upload_to=upload_to_profile_photo,
+                    default=DEFAULT_PHOTO,
+                    )
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.user)
