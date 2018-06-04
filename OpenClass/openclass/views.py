@@ -137,7 +137,15 @@ def profile(request):
 
 @login_required()
 def prefs(request):
-    return render(request, "openclass/user-preferences.html")
+    preference = request.user.profile.preference
+    if request.method == 'POST':
+        user_prefs_form = UserPrefsForm(request.POST, instance=preference)
+        if user_prefs_form.is_valid():
+            user_prefs_form.save()
+    else:
+        user_prefs_form = UserPrefsForm(instance=preference)
+    context = {'user_prefs_form': user_prefs_form}
+    return render(request, "openclass/user-preferences.html", context)
 
 @transaction.atomic
 def signup(request):
@@ -157,6 +165,7 @@ def signup(request):
             profile = user_profile_form.save(commit=False)
             profile.user = user
             profile.save()
+            profile.preference = Preference.objects.create(profile=p)
             user_profile_form.save_m2m()
             user.save()
             if settings.EMAIL_VERIFICATION:
@@ -214,9 +223,9 @@ def user_settings(request):
     if request.method == "POST":
         settings_form = UserSettings(request.POST, instance=request.user)
         if settings_form.is_valid():
-            user = settings_form.save()
+            settings_form.save()
     else:
-        settings_form = UserSettings(initial=model_to_dict(request.user))
+        settings_form = UserSettings(instance=request.user)
 
     context = {"user_settings":settings_form}
     return render(request, "openclass/user-settings.html", context)

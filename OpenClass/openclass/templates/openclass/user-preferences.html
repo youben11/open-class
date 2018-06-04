@@ -32,25 +32,11 @@
                   <h6>Choose the informations you want to hide:</h6>
                 </div>
                 <div class="info">
-                    <label class="switcher">
-                    <input type="checkbox"/>
-                    <div class="switcher__indicator"></div>
-                    <span>Email</span>
-                    </label>
-                    <br/><br/>
-                    <label class="switcher">
-                    <input type="checkbox" checked="checked"/>
-                    <div class="switcher__indicator"></div>
-                    <span>Phone Number</span>
-                    </label>
-                    <br/><br/>
-                    <label class="switcher">
-                    <input type="checkbox"/>
-                    <div class="switcher__indicator"></div>
-                    <span>Age</span>
-                    </label>
-                    <br/><br/>
-                    </label>
+                  <form method="post">
+                    {% csrf_token %}
+                    {{ user_prefs_form.as_p }}
+                    <input type="submit"/>
+                  </form>
                 </div>
             </div>
         </div>

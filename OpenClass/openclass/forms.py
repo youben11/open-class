@@ -13,7 +13,7 @@ class UserSettings(ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'email']
 
-class UserPrefs(ModelForm):
+class UserPrefsForm(ModelForm):
 
     class Meta:
         model = Preference
