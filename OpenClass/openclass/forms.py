@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from .models import Profile, Workshop, Question, Preference
 
 
-class UserSettings(ModelForm):
+class UserSettingsForm(ModelForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     email = forms.EmailField(required=True)
@@ -13,13 +13,20 @@ class UserSettings(ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'email']
 
+class ProfileSettingsFrom(ModelForm):
+    photo = forms.ImageField(required=False)
+
+    class Meta:
+        model = Profile
+        fields = ['interests', 'photo']
+
 class UserPrefsForm(ModelForm):
 
     class Meta:
         model = Preference
         exclude = ['profile']
 
-class UserProfileForm(ModelForm):
+class ProfileForm(ModelForm):
     photo = forms.ImageField(required=False)
 
     class Meta:

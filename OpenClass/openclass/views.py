@@ -10,7 +10,7 @@ from django.db.models import Q
 from .models import *
 from .forms import *
 from . import email
-
+import datetime
 
 def index(request):
     return render(request, "openclass/home.html")
@@ -74,19 +74,40 @@ def moderation_submitted_workshops_decision(request):
 
 
 def workshops_list(request):
-    if request.is_ajax() and request.method == "POST":
-        # ERROR here
-        tag_filtered = request.POST['tag']
-        tag = Tag.objects.get(name=tag_filtered)
-        workshop_list = Workshop.objects.filter(topics=tag.id)
-        context = {'workshop_list': workshop_list}
-        return render(request, "openclass/listworkshop_item.html", context)
+    if request.is_ajax():
+        tag_method = request.POST['filter']
+        if tag_method == 'TAG':
+            tag_filtere = request.POST['tag']
+            tag = Tag.objects.get(name=tag_filtere)
+            workshop_list = Workshop.objects.filter(topics=tag.id)
+            context = {'workshop_list': workshop_list}
+            return render(request, "openclass/listworkshop_item.html", context)
 
-    workshops = Workshop.objects.filter(
-                        Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
-                        )
-    tags = Tag.objects.all()
-    return render(request, "openclass/listworkshop.html", {"workshop_list":workshops, "tags":tags})
+        elif tag_method == 'TIME':
+            time_filter = request.POST['time']
+            today = datetime.datetime.today()
+            this_week = today + datetime.timedelta(6)
+            tomorrow = today + datetime.timedelta(1)
+            if time_filter == 'Tomorrow':
+                workshop_list = Workshop.objects.filter(start_date__date = tomorrow.date())
+
+            elif time_filter == 'This week':
+                workshop_list = Workshop.objects.filter(start_date__lte = this_week.date(),start_date__gte = today.date())
+
+            elif time_filter == 'Next week':
+                next_week = this_week + datetime.timedelta(6)
+                workshop_list = Workshop.objects.filter(start_date__lte = next_week.date(),start_date__gte = this_week.date())
+
+            elif time_filter == 'This month':
+                workshop_list = Workshop.objects.filter(start_date__month = today.month,start_date__year = today.year)
+
+            context = {'workshop_list': workshop_list}
+            return render(request,"openclass/listworkshop_item.html",context)
+    else :
+        workshops = Workshop.objects.filter(Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
+        )
+        tags = Tag.objects.all()
+        return render(request, "openclass/listworkshop.html", {"workshop_list":workshops, "tags":tags})
 
 def upcoming_workshops_list(request):
     workshops = Workshop.objects.filter(
@@ -156,17 +177,17 @@ def signup(request):
 
     if request.method == "POST":
         user_form = UserForm(request.POST)
-        user_profile_form = UserProfileForm(request.POST, request.FILES)
+        profile_form = ProfileForm(request.POST, request.FILES)
 
-        if user_form.is_valid() and user_profile_form.is_valid():
+        if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save(commit=False)
             user.set_password(user.password)
             user.save()
-            profile = user_profile_form.save(commit=False)
+            profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
-            profile.preference = Preference.objects.create(profile=p)
-            user_profile_form.save_m2m()
+            profile.preference = Preference.objects.create(profile=profile)
+            profile_form.save_m2m()
             user.save()
             if settings.EMAIL_VERIFICATION:
                 user.is_active = False
@@ -180,9 +201,9 @@ def signup(request):
 
     else:
         user_form = UserForm()
-        user_profile_form = UserProfileForm()
+        profile_form = ProfileForm()
 
-    context = {"user_form":user_form, "user_profile_form":user_profile_form}
+    context = {"user_form":user_form, "profile_form":profile_form}
     return render(request, 'openclass/signup.html', context)
 
 def verify(request, token):
@@ -221,13 +242,17 @@ def submit_workshop(request):
 @login_required()
 def user_settings(request):
     if request.method == "POST":
-        settings_form = UserSettings(request.POST, instance=request.user)
-        if settings_form.is_valid():
-            settings_form.save()
+        user_settings_form = UserSettingsForm(request.POST, instance=request.user)
+        profile_settings_form = ProfileSettingsFrom(request.POST, request.FILES, instance=request.user.profile)
+        if user_settings_form.is_valid():
+            user_settings_form.save()
+        if profile_settings_form.is_valid():
+            profile_settings_form.save()
     else:
-        settings_form = UserSettings(instance=request.user)
+        user_settings_form = UserSettingsForm(instance=request.user)
+        profile_settings_form = ProfileSettingsFrom(instance=request.user.profile)
 
-    context = {"user_settings":settings_form}
+    context = {"user_settings_form": user_settings_form, "profile_settings_form": profile_settings_form}
     return render(request, "openclass/user-settings.html", context)
 
 #TODO only moderator
