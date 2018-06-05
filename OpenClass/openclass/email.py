@@ -65,11 +65,14 @@ def notify_new_workshop(workshop):
     site_url = get_url()
     subject = "Openclass has added a workshop"
     msg = """We are happy to announce that we have added a new workshop
-            Link to the workshop here: %s""" % \
+            Link to the workshop here: %s%s""" % \
+            (
+            site_url,
             reverse(
                 'openclass:workshops_detail',
                 kwargs={'workshop_pk': workshop.pk}
-                )
+                ),
+            )
     to = [u.email for u in \
             Users.objects.filter(profile__preference__notify_new_workshop=True)]
     send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
