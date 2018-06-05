@@ -2,9 +2,10 @@ from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.models import User
 from .models import Profile, Workshop, Question, Preference
+from .validators import UserFormValidator
 
 
-class UserSettingsForm(ModelForm):
+class UserSettingsForm(ModelForm, UserFormValidator):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     email = forms.EmailField(required=True)
@@ -38,9 +39,9 @@ class ProfileForm(ModelForm):
         widgets = {
                 'birthday': forms.DateInput(attrs={'type':'date'}),
                 }
-        # TODO: unique email, valide birthday (< now())
 
-class UserForm(ModelForm):
+
+class UserForm(ModelForm, UserFormValidator):
 
     class Meta:
         model = User
