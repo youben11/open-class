@@ -7,6 +7,7 @@ from django.core.validators import RegexValidator
 from django.utils import timezone
 from .upload import *
 from .validators import *
+from . import email
 
 from datetime import datetime
 
@@ -311,12 +312,12 @@ class Registration(models.Model):
             return False
 
     def accept(self):
-        #notify user
+        email.notify_user_acceptance(self.workshop, self.profile.user)
         self.status = Registration.ACCEPTED
         self.save()
 
     def refuse(self):
-        #notify user
+        email.notify_user_refusal(self.workshop, self.profile.user)
         self.status = Registration.REFUSED
         self.save()
 
