@@ -315,12 +315,20 @@ class Registration(models.Model):
             return False
 
     def accept(self):
-        email.notify_registration_acceptance(self.workshop, self.profile.user)
+        if self.profile.preference.notify_registration_status:
+            email.notify_registration_acceptance(
+                                    self.workshop,
+                                    self.profile.user
+                                    )
         self.status = Registration.ACCEPTED
         self.save()
 
     def refuse(self):
-        email.notify_registration_acceptance(self.workshop, self.profile.user)
+        if self.profile.preference.notify_registration_status:
+            email.notify_registration_refusal(
+                                    self.workshop,
+                                    self.profile.user
+                                    )
         self.status = Registration.REFUSED
         self.save()
 
