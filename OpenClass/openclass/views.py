@@ -114,7 +114,7 @@ def upcoming_workshops_list(request):
                                     start_date__gte = datetime.datetime.now(),
                                     status=Workshop.ACCEPTED,
                                     )
-    return render(request, "openclass/listworkshop.html", {"workshops":workshops})
+    return render(request, "openclass/listworkshop.html", {"workshop_list":workshops})
 
 def workshops_detail(request, workshop_pk):
     workshop = get_object_or_404(
