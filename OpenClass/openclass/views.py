@@ -111,7 +111,7 @@ def workshops_list(request):
 
 def upcoming_workshops_list(request):
     workshops = Workshop.objects.filter(
-                                    start_date__gte=datetime.now(),
+                                    start_date__gte = datetime.datetime.now(),
                                     status=Workshop.ACCEPTED,
                                     )
     return render(request, "openclass/listworkshop.html", {"workshops":workshops})
