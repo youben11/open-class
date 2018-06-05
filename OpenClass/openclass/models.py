@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.utils import timezone
 from .upload import *
+from .validators import *
 
 from datetime import datetime
 
@@ -397,7 +398,7 @@ class Profile(models.Model):
     phone_number = models.CharField(
                             max_length=MAX_LEN_PHONE_NB,
                             validators=[RegexValidator(regex=RE_PHONE_NB),])
-    birthday = models.DateField(null=True)
+    birthday = models.DateField(null=True, validators=[validate_birthday])
     photo = models.ImageField(
                     upload_to=upload_to_profile_photo,
                     default=DEFAULT_PHOTO,

@@ -18,7 +18,10 @@ class ProfileSettingsFrom(ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['interests', 'photo']
+        fields = ['phone_number', 'birthday', 'interests', 'photo']
+        widgets = {
+                'birthday': forms.DateInput(attrs={'type':'date'}),
+                }
 
 class UserPrefsForm(ModelForm):
 
