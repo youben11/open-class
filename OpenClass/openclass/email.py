@@ -35,7 +35,7 @@ def ask_for_feedback(workshop):
             for u in workshop.registration_set.filter(present=True).profile]
     send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
 
-def notify_user_acceptance(workshop, user):
+def notify_registration_acceptance(workshop, user):
     site_url = get_url()
     subject = "Congratulations"
     msg = """Congratulations,\
@@ -52,10 +52,32 @@ def notify_user_acceptance(workshop, user):
     to = [user.email,]
     send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
 
-def notify_user_refusal(workshop, user):
-        site_url = get_url()
-        subject = "We are really sorry"
-        msg = """We are really sorry,\
-                You have been refused to the %s workshop.""" % workshop.title
-        to = [user.email,]
-        send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
+def notify_registration_refusal(workshop, user):
+    site_url = get_url()
+    subject = "We are really sorry"
+    msg = """We are really sorry,\
+            You have been refused to the %s workshop.""" % workshop.title
+    to = [user.email,]
+    send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
+
+
+def notify_new_workshop(workshop):
+    site_url = get_url()
+    subject = "Openclass has added a workshop"
+    msg = """We are happy to announce that we have added a new workshop
+            Link to the workshop here: %s""" % \
+            reverse(
+                'openclass:workshops_detail',
+                kwargs={'workshop_pk': workshop.pk}
+                )
+    to = [u.email for u in \
+            Users.objects.filter(profile__preference__notify_new_workshop=True)]
+    send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
+
+
+def notify_workshop_accepted(workshop):
+    pass
+
+
+def notify_workshop_refused(workshop):
+    pass

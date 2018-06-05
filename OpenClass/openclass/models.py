@@ -213,6 +213,8 @@ class Workshop(models.Model):
             self.decision_date = timezone.now()
             self.status = Workshop.ACCEPTED
             self.save()
+            email.notify_new_workshop(self)
+            email.notify_workshop_accepted(self)
             return True
         else:
             return False
@@ -223,6 +225,7 @@ class Workshop(models.Model):
             self.decision_date = timezone.now()
             self.status = Workshop.REFUSED
             self.save()
+            email.notify_workshop_refused(self)
             return True
         else:
             return False
