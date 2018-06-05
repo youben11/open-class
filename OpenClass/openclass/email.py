@@ -36,7 +36,26 @@ def ask_for_feedback(workshop):
     send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
 
 def notify_user_acceptance(workshop, user):
-    pass
+    site_url = get_url()
+    subject = "Congratulations"
+    msg = """Congratulations,\
+            You have been accepted to the %s workshop.
+            link to the workshop here: %s%s""" % \
+            (
+            workshop.title,
+            site_url,
+            reverse(
+                    'openclass:workshops_detail',
+                    kwargs={'workshop_pk':workshop.pk}
+                    )
+            )
+    to = [user.email,]
+    send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
 
 def notify_user_refusal(workshop, user):
-    pass
+        site_url = get_url()
+        subject = "We are really sorry"
+        msg = """We are really sorry,\
+                You have been refused to the %s workshop.""" % workshop.title
+        to = [user.email,]
+        send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
