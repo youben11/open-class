@@ -53,6 +53,7 @@ def moderation_submitted_workshops_decision(request):
     REFUSE = "refuse"
     workshop_pk = request.POST['workshop_pk']
     decision = request.POST['decision']
+    profile = request.user.profile
 
     try:
         workshop = Workshop.objects.get(pk=workshop_pk)
@@ -61,13 +62,13 @@ def moderation_submitted_workshops_decision(request):
         return JsonResponse(error)
 
     if decision == ACCEPT:
-        if workshop.accept():
+        if workshop.accept(profile):
             response = {'status': 'accepted'}
         else:
             response = {'status': "can't accept"}
 
     elif decision == REFUSE:
-        if workshop.refuse():
+        if workshop.refuse(profile):
             response = {'status': 'refused'}
         else:
             response = {'status': "can't refuse"}

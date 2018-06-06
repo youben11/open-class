@@ -39,12 +39,25 @@ class Workshop(models.Model):
     )
     DEFAULT_PHOTO = "default/default-workshop.jpg"
 
-    registered = models.ManyToManyField('Profile', through='Registration',
-                                        related_name='registered_to')
+    registered = models.ManyToManyField(
+                                'Profile',
+                                through='Registration',
+                                related_name='registered_to'
+                                )
     mc_questions = models.ManyToManyField('MCQuestion')
-    animator = models.ForeignKey('Profile', on_delete=models.SET_NULL,
-                                null=True, related_name='animated')
+    animator = models.ForeignKey(
+                                'Profile',
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                related_name='animated'
+                                )
     topics = models.ManyToManyField('Tag')
+    decision_author = models.ForeignKey(
+                                'Profile',
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                related_name='decided'
+                                )
     title = models.CharField(max_length=MAX_LEN_TITLE, blank=False)
     description = models.TextField(blank=False)
     required_materials = models.TextField()
@@ -208,10 +221,11 @@ class Workshop(models.Model):
     def get_topics(self):
         pass
 
-    def accept(self):
+    def accept(self, profile):
         # accept only a PENDING workshop
         if self.status == Workshop.PENDING and self.start_date > timezone.now():
             self.decision_date = timezone.now()
+            self.decision_author = profile
             self.status = Workshop.ACCEPTED
             self.save()
             if settings.EMAIL_ENABLED:
@@ -221,10 +235,11 @@ class Workshop(models.Model):
         else:
             return False
 
-    def refuse(self):
+    def refuse(self, profile):
         # refuse only a PENDING workshop
         if self.status == Workshop.PENDING:
             self.decision_date = timezone.now()
+            self.decision_author = profile
             self.status = Workshop.REFUSED
             self.save()
             if settings.EMAIL_ENABLED:
