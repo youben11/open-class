@@ -90,6 +90,17 @@ class Workshop(models.Model):
     def end_date(self):
         return self.start_date + self.duration
 
+    def count_registrations(self):
+        count = Registration.objects.filter(workshop=self).count()
+        return count
+
+    def count_presents(self):
+        count = Registration.objects.filter(
+                                    workshop=self,
+                                    present=True
+                                    ).count()
+        return count
+
     def register(self, profile):
         registration = Registration(workshop=self, profile=profile)
         if self.registration_politic == Workshop.POL_FIFO:
