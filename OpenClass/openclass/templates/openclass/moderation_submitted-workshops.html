@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card">
-          <div class="card-header" data-background-color="red">
+          <div class="card-header" data-background-color="blue">
             <h4 class="title">Submitted Workshops</h4>
             <p class="category">Manage the submitted workshops</p>
           </div>
@@ -33,11 +33,11 @@
                   <td>
                     <form method="post">
                       {% if s.start_date > date_now %}
-                      <button type="button" class="btn-success cd-popup-trigger" data-workshop-id="{{s.pk}}">Accept</button>
+                      <button type="button" class="btn btn-sm btn-success cd-popup-trigger" data-workshop-id="{{s.pk}}">Accept</button>
                       {% else %}
-                      <button type="button" class="btn-secondary cd-popup-trigger" disabled="disabled">Accept</button>
+                      <button type="button" class="btn btn-sm cd-popup-trigger" disabled="disabled">Accept</button>
                       {% endif %}
-                      <button type="button" class="btn-danger cd-popup-trigger" data-workshop-id="{{s.pk}}">Refuse</button>
+                      <button type="button" class="btn btn-sm btn-danger cd-popup-trigger" data-workshop-id="{{s.pk}}">Refuse</button>
                     </form>
                   </td>
                 </tr>  
@@ -56,43 +56,23 @@
           <div class="card-content table-responsive">
             <table class="table">
               <thead class="text-primary">
+                <th>ID</th>
                 <th>Title</th>
                 <th>Author</th>
-                <th>Field</th>
-                <th>Date</th>
+                <th>Decision date</th>
+                <th>Refused by</th>
               </thead>
               <tbody>
+              {% for s in refused_workshops %}
                 <tr>
-                  <td><a href="">Node.js</a></td>
-                  <td>Nadir Bounoua</td>
-                  <td>Web Dev</td>
-                  <td class="text-primary">JJ/MM/AAAA</td>
-                </tr>
-                <tr>
-                  <td><a href="">Workshop</a></td>
-                  <td>Attouche Abdelaziz</td>
-                  <td>Domaine</td>
-                  <td class="text-primary">JJ/MM/AAAA</td>
-                </tr>
-                <tr>
-                  <td><a href="">Workshop</a></td>
-                  <td>Benaissa Ayoub</td>
-                  <td>Domaine</td>
-                  <td class="text-primary">JJ/MM/AAAA</td>
-                </tr>
-                <tr>
-                  <td><a href="">Workshop</a></td>
-                  <td>Ahmed Derkaoui</td>
-                  <td>Domaine</td>
-                  <td class="text-primary">JJ/MM/AAAA</td>
-                </tr>
-                <tr>
-                  <td><a href="">Workshop</a></td>
-                  <td>Retiat Bilal</td>
-                  <td>Domaine</td>
-                  <td class="text-primary">JJ/MM/AAAA</td>
-                </tr>
-              </tbody>
+                  <td><a href="">{{s.pk}}</a></td>
+                  <td>{{s.title}}</td>
+                  <td>{{s.animator.user.first_name}} {{s.animator.user.last_name}}</td>
+                  <td class="text-primary">{{s.decision_date}}</td>
+                  <td>{{s.decision_author.user.username}}</td>
+                </tr>  
+              {% endfor %}
+            </tbody>
             </table>
           </div>
         </div>
