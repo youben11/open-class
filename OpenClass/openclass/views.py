@@ -18,6 +18,7 @@ def is_moderator(user):
 def index(request):
     return render(request, "openclass/home.html")
 
+@login_required
 @user_passes_test(is_moderator)
 def moderation(request):
     menu_item = "dashboard"
@@ -38,7 +39,7 @@ def moderation(request):
                 "openclass/moderation_dashboard.html",
                 context
                 )
-
+@login_required
 @user_passes_test(is_moderator)
 def moderation_submitted_workshops(request):
     menu_item = "submitted_workshops"
@@ -47,6 +48,7 @@ def moderation_submitted_workshops(request):
     context = {'submissions': pending_workshops, 'date_now': date_now, 'menu_item': menu_item}
     return render(request, 'openclass/moderation_submitted-workshops.html', context)
 
+@login_required
 @user_passes_test(is_moderator)
 def moderation_submitted_workshops_decision(request):
     ACCEPT = "accept"
@@ -263,6 +265,7 @@ def user_settings(request):
     context = {"user_settings_form": user_settings_form, "profile_settings_form": profile_settings_form}
     return render(request, "openclass/user-settings.html", context)
 
+@login_required
 @user_passes_test(is_moderator)
 def attendance(request,workshop_pk):
     workshop = get_object_or_404(Workshop, pk = workshop_pk)
@@ -270,6 +273,7 @@ def attendance(request,workshop_pk):
     context = {"registrations": registrations,"workshop":workshop}
     return render(request, "openclass/attendance.html", context)
 
+@login_required
 @user_passes_test(is_moderator)
 def user_attendance(request, workshop_pk, user_pk):
     workshop = get_object_or_404(Workshop, pk = workshop_pk)
