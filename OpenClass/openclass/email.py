@@ -79,8 +79,24 @@ def notify_new_workshop(workshop):
 
 
 def notify_workshop_accepted(workshop):
-    pass
+    site_url = get_url()
+    subject = "Your workshop has been accepted"
+    msg = """Congratulations, your workshop has been accepted.
+            here is the link: %s%s""" % \
+            (
+            site_url,
+            reverse(
+                'openclass:workshops_detail',
+                kwargs={'workshop_pk':workshop.pk}
+                ),
+            )
+    to = [workshop.animator.user.email,]
+    send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
 
 
 def notify_workshop_refused(workshop):
-    pass
+    site_url = get_url()
+    subject = "Your workshop has been refused"
+    msg = """We are really sorry, your workshop has been refused."""
+    to = [workshop.animator.user.email,]
+    send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
