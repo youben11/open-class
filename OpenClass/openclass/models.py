@@ -110,11 +110,11 @@ class Workshop(models.Model):
             else:
                 try:
                     with transaction.atomic():
-                        registrations = Registration.objects.filter(
+                        count = Registration.objects.filter(
                                             workshop=self,
                                             status=Registration.ACCEPTED,
-                                            )
-                        if len(registrations) + 1 <= self.seats_number:
+                                            ).count()
+                        if count + 1 <= self.seats_number:
                             registration.accept()
                         else: # accept cause a save()
                             registration.save()
@@ -382,6 +382,7 @@ class Question(models.Model):
                     null=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     question = models.TextField(blank=False)
+    #TODO time field and order them according to the time in question_list
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.question)
