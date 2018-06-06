@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'constance',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'constance.context_processors.config',
             ],
         },
     },
@@ -152,3 +154,14 @@ EMAIL_HOST_PASSWORD = 'xxxxxxxxxxxxx'
 EMAIL_HOST_USER = '' # Gmail Email
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# constance app config
+CONSTANCE_BACKEND = 'constance.backends.redisd.RedisBackend'
+CONSTANCE_REDIS_CONNECTION = {
+    'host': 'db_redis',
+    'port': 6379,
+    'db': 0,
+}
+
+# import constance
+from .constance_config import *
