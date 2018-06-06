@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.shortcuts import render, redirect,get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
 from django.forms.models import model_to_dict
 from django.urls import reverse
@@ -13,9 +13,14 @@ from .forms import *
 from . import email
 import datetime
 
+def is_moderator(user):
+    return user.is_staff
+
 def index(request):
     return render(request, "openclass/home.html")
 
+@login_required
+@user_passes_test(is_moderator)
 def moderation(request):
     menu_item = "dashboard"
     submitted_workshops = Workshop.objects.filter(status=Workshop.PENDING)
@@ -35,8 +40,8 @@ def moderation(request):
                 "openclass/moderation_dashboard.html",
                 context
                 )
-
-#moderator
+@login_required
+@user_passes_test(is_moderator)
 def moderation_submitted_workshops(request):
     menu_item = "submitted_workshops"
     pending_workshops = Workshop.objects.filter(status=Workshop.PENDING)
@@ -44,12 +49,14 @@ def moderation_submitted_workshops(request):
     context = {'submissions': pending_workshops, 'date_now': date_now, 'menu_item': menu_item}
     return render(request, 'openclass/moderation_submitted-workshops.html', context)
 
-#moderator
+@login_required
+@user_passes_test(is_moderator)
 def moderation_submitted_workshops_decision(request):
     ACCEPT = "accept"
     REFUSE = "refuse"
     workshop_pk = request.POST['workshop_pk']
     decision = request.POST['decision']
+    profile = request.user.profile
 
     try:
         workshop = Workshop.objects.get(pk=workshop_pk)
@@ -58,13 +65,13 @@ def moderation_submitted_workshops_decision(request):
         return JsonResponse(error)
 
     if decision == ACCEPT:
-        if workshop.accept():
+        if workshop.accept(profile):
             response = {'status': 'accepted'}
         else:
             response = {'status': "can't accept"}
 
     elif decision == REFUSE:
-        if workshop.refuse():
+        if workshop.refuse(profile):
             response = {'status': 'refused'}
         else:
             response = {'status': "can't refuse"}
@@ -143,12 +150,12 @@ def workshops_filter_tag(request):
     result = {'data': workshop_list}
     return render(request,"openclass/listworkshop_item.html",result)
 
-@login_required()
+@login_required
 def members_list(request):
     users = User.objects.filter()
     return render(request, "openclass/member_list.html", {"users":users})
 
-@login_required()
+@login_required
 def members_detail(request, username):
     user = User.objects.get(username = username)
     return render(request, "openclass/profile.html", {"user":user})
@@ -158,11 +165,11 @@ def badges_list(request):
     context = {"badges": badges}
     return render(request, "openclass/badges.html", context)
 
-@login_required()
+@login_required
 def profile(request):
     return render(request, "openclass/profile.html")
 
-@login_required()
+@login_required
 def prefs(request):
     preference = request.user.profile.preference
     if request.method == 'POST':
@@ -195,12 +202,15 @@ def signup(request):
             profile.preference = Preference.objects.create(profile=profile)
             profile_form.save_m2m()
             user.save()
-            if settings.EMAIL_VERIFICATION:
+            if settings.EMAIL_ENABLED and settings.EMAIL_VERIFICATION:
                 user.is_active = False
                 user.save()
                 token = profile.generate_verification_token()
                 email.send_verification_mail(user, token)
-                return HttpResponse(token)
+                title = "Openclass - Confirmation"
+                msg = 'Check your inbox to confirm your registration'
+                context = {'title': title, 'msg': msg}
+                return render(request, 'openclass/info.html', context)
             else:
                 login(request, user)
                 return redirect(reverse('openclass:profile'))
@@ -225,7 +235,7 @@ def verify(request, token):
     else:
         return HttpResponse("Bad token")
 
-@login_required()
+@login_required
 def submit_workshop(request):
     if request.method == "POST":
         workshop_form = WorkshopForm(request.POST, request.FILES)
@@ -245,7 +255,7 @@ def submit_workshop(request):
 
 
 
-@login_required()
+@login_required
 def user_settings(request):
     if request.method == "POST":
         user_settings_form = UserSettingsForm(request.POST, instance=request.user)
@@ -261,13 +271,16 @@ def user_settings(request):
     context = {"user_settings_form": user_settings_form, "profile_settings_form": profile_settings_form}
     return render(request, "openclass/user-settings.html", context)
 
-#TODO only moderator
+@login_required
+@user_passes_test(is_moderator)
 def attendance(request,workshop_pk):
     workshop = get_object_or_404(Workshop, pk = workshop_pk)
     registrations = Registration.objects.all().filter(workshop=workshop)
     context = {"registrations": registrations,"workshop":workshop}
     return render(request, "openclass/attendance.html", context)
 
+@login_required
+@user_passes_test(is_moderator)
 def user_attendance(request, workshop_pk, user_pk):
     workshop = get_object_or_404(Workshop, pk = workshop_pk)
     profile = get_object_or_404(Profile, id = user_pk)
@@ -285,7 +298,7 @@ def user_attendance(request, workshop_pk, user_pk):
     context = {"registration": registration, "workshop":workshop, "profile":profile}
     return render(request, "openclass/user-attendance.html", context)
 
-@login_required()
+@login_required
 def register_to_workshop(request):
     workshop_pk = request.POST['workshop_pk']
     # TODO : register only to accepted workshops
@@ -310,7 +323,7 @@ def register_to_workshop(request):
 
     return JsonResponse(response)
 
-@login_required()
+@login_required
 def cancel_registration(request):
     workshop_pk = request.POST['workshop_pk']
     #TODO can't cancel a registration for a DONE workshop
@@ -335,12 +348,13 @@ def cancel_registration(request):
 
     return JsonResponse(response)
 
+@login_required
 def user_registrations(request):
     registrations = request.user.profile.get_registrations
     return render(request, "openclass/user-registrations.html", {"registrations":registrations})
 
 
-@login_required()
+@login_required
 def ask_question(request, workshop_pk):
     workshop = get_object_or_404(Workshop, pk=workshop_pk)
     start_date = workshop.start_date
@@ -391,7 +405,7 @@ def ask_question(request, workshop_pk):
     return render(request, "openclass/ask_question.html", context)
 
 
-@login_required()
+@login_required
 def workshop_questions_list(request, workshop_pk):
     workshop = get_object_or_404(Workshop, pk=workshop_pk)
     questions_list = Question.objects.filter(workshop=workshop)
@@ -422,13 +436,28 @@ def feedback(request, workshop_pk):
                         Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE),
                         pk=workshop_pk
                         )
-    if timezone.now() < workshop.end_date():
-        title = "Openclass - Feedback"
-        msg = 'You can submit your feedback after the completion of the workshop'
-        context = {'title': title, 'msg': msg}
-        return render(request, 'openclass/info.html', context)
     profile = request.user.profile
     context = {}
+    if timezone.now() < workshop.end_date():
+        title = "Openclass - Feedback"
+        msg = 'Attendees can submit their feedback after the completion of the workshop'
+        context = {'title': title, 'msg': msg}
+        return render(request, 'openclass/info.html', context)
+    try:
+        registration = Registration.objects.get(
+                                        workshop=workshop,
+                                        profile=profile
+                                        )
+        if not registration.present:
+            title = "Openclass - Feedback"
+            msg = 'Only attendees can submit a feedback'
+            context = {'title': title, 'msg': msg}
+            return render(request, 'openclass/info.html', context)
+    except:
+        title = "Openclass - Feedback"
+        msg = 'You are not registred to this workshop'
+        context = {'title': title, 'msg': msg}
+        return render(request, 'openclass/info.html', context)
     try:
         feedback = Feedback.objects.get(workshop=workshop, author=profile)
         context['is_feedbacked'] = True

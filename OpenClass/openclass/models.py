@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.utils import timezone
+from django.conf import settings
 from .upload import *
 from .validators import *
 from . import email
@@ -38,12 +39,25 @@ class Workshop(models.Model):
     )
     DEFAULT_PHOTO = "default/default-workshop.jpg"
 
-    registered = models.ManyToManyField('Profile', through='Registration',
-                                        related_name='registered_to')
+    registered = models.ManyToManyField(
+                                'Profile',
+                                through='Registration',
+                                related_name='registered_to'
+                                )
     mc_questions = models.ManyToManyField('MCQuestion')
-    animator = models.ForeignKey('Profile', on_delete=models.SET_NULL,
-                                null=True, related_name='animated')
+    animator = models.ForeignKey(
+                                'Profile',
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                related_name='animated'
+                                )
     topics = models.ManyToManyField('Tag')
+    decision_author = models.ForeignKey(
+                                'Profile',
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                related_name='decided'
+                                )
     title = models.CharField(max_length=MAX_LEN_TITLE, blank=False)
     description = models.TextField(blank=False)
     required_materials = models.TextField()
@@ -207,25 +221,29 @@ class Workshop(models.Model):
     def get_topics(self):
         pass
 
-    def accept(self):
+    def accept(self, profile):
         # accept only a PENDING workshop
         if self.status == Workshop.PENDING and self.start_date > timezone.now():
             self.decision_date = timezone.now()
+            self.decision_author = profile
             self.status = Workshop.ACCEPTED
             self.save()
-            email.notify_new_workshop(self)
-            email.notify_workshop_accepted(self)
+            if settings.EMAIL_ENABLED:
+                email.notify_new_workshop(self)
+                email.notify_workshop_accepted(self)
             return True
         else:
             return False
 
-    def refuse(self):
+    def refuse(self, profile):
         # refuse only a PENDING workshop
         if self.status == Workshop.PENDING:
             self.decision_date = timezone.now()
+            self.decision_author = profile
             self.status = Workshop.REFUSED
             self.save()
-            email.notify_workshop_refused(self)
+            if settings.EMAIL_ENABLED:
+                email.notify_workshop_refused(self)
             return True
         else:
             return False
@@ -235,7 +253,8 @@ class Workshop(models.Model):
             if timezone.now() > self.end_date():
                 self.status = Workshop.DONE
                 self.save()
-                email.ask_for_feedback(self)
+                if settings.EMAIL_ENABLED:
+                    email.ask_for_feedback(self)
                 return True
         return False
 
@@ -325,20 +344,22 @@ class Registration(models.Model):
             return False
 
     def accept(self):
-        if self.profile.preference.notify_registration_status:
-            email.notify_registration_acceptance(
-                                    self.workshop,
-                                    self.profile.user
-                                    )
+        if settings.EMAIL_ENABLED:
+            if self.profile.preference.notify_registration_status:
+                email.notify_registration_acceptance(
+                                        self.workshop,
+                                        self.profile.user
+                                        )
         self.status = Registration.ACCEPTED
         self.save()
 
     def refuse(self):
-        if self.profile.preference.notify_registration_status:
-            email.notify_registration_refusal(
-                                    self.workshop,
-                                    self.profile.user
-                                    )
+        if settings.EMAIL_ENABLED:
+            if self.profile.preference.notify_registration_status:
+                email.notify_registration_refusal(
+                                        self.workshop,
+                                        self.profile.user
+                                        )
         self.status = Registration.REFUSED
         self.save()
 
@@ -475,7 +496,7 @@ class Profile(models.Model):
         if re.match(email_re, email):
             self.user.email = email
             self.user.save()
-            #do the verification: send email...
+            # TODO the verification: send email...
             return True
         else:
             return False
