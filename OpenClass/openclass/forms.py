@@ -49,6 +49,9 @@ class UserForm(ModelForm, UserFormValidator):
         widgets = {
                 'password':forms.PasswordInput()
         }
+        help_texts = {
+            'username': '20 characters or fewer. Letters, digits and @/./+/-/_ only.',
+        }
 
 class WorkshopForm(ModelForm):
 

@@ -32,6 +32,7 @@ class UserFormValidator:
                             )
             except User.DoesNotExist:
                 pass
+        return username
 
     def clean_email(self):
         email = self.cleaned_data.get('email', False)
@@ -44,3 +45,4 @@ class UserFormValidator:
                             )
             except User.DoesNotExist:
                 pass
+        return email

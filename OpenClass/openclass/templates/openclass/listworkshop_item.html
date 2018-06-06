@@ -1,3 +1,14 @@
+<div class="row">
+  <div id="tag-list" class="container">
+    {% for tag in tag_names %}
+        <a href="#" class="tag-list-item card-link">{{tag}}</a>
+    {% endfor %}
+    {% for time in times %}
+        <a href="#" class="time-list-item card-link">{{time}}</a>
+    {% endfor %}
+
+  </div>
+</div>
 {% if workshop_list %}
   {% for workshop in workshop_list %}
     <div class="row">
