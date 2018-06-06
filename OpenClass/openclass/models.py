@@ -445,6 +445,7 @@ class Profile(models.Model):
         (NAG, 'Not mentioned')
     )
     DEFAULT_PHOTO = "default/default-avatar.png"
+
     badges = models.ManyToManyField('Badge', through='Have_badge')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     interests = models.ManyToManyField('Tag')
@@ -602,7 +603,7 @@ class Profile(models.Model):
         return age
 
     def get_registrations(self):
-        registrations = Registration.objects.all().filter(profile=self)
+        registrations = Registration.objects.filter(profile=self)
         return registrations
 
     def get_workshop_registration(self, workshop):
