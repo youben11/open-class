@@ -205,7 +205,7 @@ def workshops_filter_tag(request):
 
 @login_required
 def members_list(request):
-    users = User.objects.filter(is_active=True)
+    users = User.objects.filter(is_active=True).prefetch_related('profile')
     return render(request, "openclass/member_list.html", {"users":users})
 
 @login_required
