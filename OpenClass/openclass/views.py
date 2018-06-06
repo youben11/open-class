@@ -5,6 +5,7 @@ from django.contrib.auth import login
 from django.forms.models import model_to_dict
 from django.urls import reverse
 from django.conf import settings
+from django.utils import timezone
 from django.db import transaction
 from django.db.models import Q
 from .models import *
@@ -74,35 +75,40 @@ def moderation_submitted_workshops_decision(request):
 
 
 def workshops_list(request):
+    workshop_list = []
+
     if request.is_ajax():
-        tag_method = request.POST['filter']
-        if tag_method == 'TAG':
-            tag_filtere = request.POST['tag']
-            tag = Tag.objects.get(name=tag_filtere)
-            workshop_list = Workshop.objects.filter(topics=tag.id)
-            context = {'workshop_list': workshop_list}
-            return render(request, "openclass/listworkshop_item.html", context)
+        tag_objects = []
+        tag_names = list(set(request.POST.getlist('tag[]')))
 
-        elif tag_method == 'TIME':
-            time_filter = request.POST['time']
-            today = datetime.datetime.today()
-            this_week = today + datetime.timedelta(6)
-            tomorrow = today + datetime.timedelta(1)
+        for tag_name in tag_names:
+            tag_objects.append(Tag.objects.get(name=tag_name))
+
+        for tags in tag_objects:
+            workshop_list += Workshop.objects.filter(topics=tags)
+
+        time_filters = list(set(request.POST.getlist('time[]')))
+
+        today = timezone.now().date()
+        this_week = today + datetime.timedelta(6)
+        tomorrow = today + datetime.timedelta(1)
+        for time_filter in time_filters:
             if time_filter == 'Tomorrow':
-                workshop_list = Workshop.objects.filter(start_date__date = tomorrow.date())
+                workshop_list += Workshop.objects.filter(start_date__date = tomorrow)
 
-            elif time_filter == 'This week':
-                workshop_list = Workshop.objects.filter(start_date__lte = this_week.date(),start_date__gte = today.date())
+            if time_filter == 'This week':
+                workshop_list += Workshop.objects.filter(start_date__lte = this_week,start_date__gte = today)
 
-            elif time_filter == 'Next week':
+            if time_filter == 'Next week':
                 next_week = this_week + datetime.timedelta(6)
-                workshop_list = Workshop.objects.filter(start_date__lte = next_week.date(),start_date__gte = this_week.date())
+                workshop_list += Workshop.objects.filter(start_date__lte = next_week,start_date__gte = this_week)
 
-            elif time_filter == 'This month':
-                workshop_list = Workshop.objects.filter(start_date__month = today.month,start_date__year = today.year)
+            if time_filter == 'This month':
+                workshop_list += Workshop.objects.filter(start_date__month = today.month,start_date__year = today.year)
 
-            context = {'workshop_list': workshop_list}
-            return render(request,"openclass/listworkshop_item.html",context)
+        workshop_list = list(set(workshop_list))
+        context = {'workshop_list': workshop_list, 'times' : time_filters, 'tag_names': tag_names}
+        return render(request,"openclass/listworkshop_item.html",context)
     else :
         workshops = Workshop.objects.filter(Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
         )
@@ -111,7 +117,7 @@ def workshops_list(request):
 
 def upcoming_workshops_list(request):
     workshops = Workshop.objects.filter(
-                                    start_date__gte = datetime.datetime.now(),
+                                    start_date__gte=timezone.now(),
                                     status=Workshop.ACCEPTED,
                                     )
     return render(request, "openclass/listworkshop.html", {"workshop_list":workshops})
@@ -225,7 +231,7 @@ def submit_workshop(request):
         workshop_form = WorkshopForm(request.POST, request.FILES)
         if workshop_form.is_valid():
             workshop = workshop_form.save(commit=False)
-            workshop.submission_date = datetime.now()
+            workshop.submission_date = timezone.now()
             workshop.status = Workshop.PENDING
             workshop.animator = request.user.profile
             workshop.save()
