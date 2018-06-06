@@ -230,6 +230,16 @@ class Workshop(models.Model):
         else:
             return False
 
+    def done(self):
+        if self.status == Workshop.ACCEPTED:
+            if timezone.now() > self.end_date():
+                self.status = Workshop.DONE
+                self.save()
+                email.ask_for_feedback(self)
+                return True
+        return False
+
+
     def is_accepted(self):
         if self.status == Workshop.ACCEPTED:
             return True

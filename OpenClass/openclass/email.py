@@ -2,6 +2,9 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse
+from .models import User
+
+# TODO : check if the emails can be sent
 
 def get_url():
     return 'http://localhost:8000'
@@ -31,8 +34,8 @@ def ask_for_feedback(workshop):
             site_url,
             reverse('openclass:feedback', kwargs={'workshop_pk': workshop.pk})
             )
-    to = [u.email \
-            for u in workshop.registration_set.filter(present=True).profile]
+    to = [r.profile.user.email \
+            for r in workshop.registration_set.filter(present=True)]
     send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
 
 def notify_registration_acceptance(workshop, user):
@@ -74,13 +77,29 @@ def notify_new_workshop(workshop):
                 ),
             )
     to = [u.email for u in \
-            Users.objects.filter(profile__preference__notify_new_workshop=True)]
+            User.objects.filter(profile__preference__notify_new_workshop=True)]
     send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
 
 
 def notify_workshop_accepted(workshop):
-    pass
+    site_url = get_url()
+    subject = "Your workshop has been accepted"
+    msg = """Congratulations, your workshop has been accepted.
+            here is the link: %s%s""" % \
+            (
+            site_url,
+            reverse(
+                'openclass:workshops_detail',
+                kwargs={'workshop_pk':workshop.pk}
+                ),
+            )
+    to = [workshop.animator.user.email,]
+    send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
 
 
 def notify_workshop_refused(workshop):
-    pass
+    site_url = get_url()
+    subject = "Your workshop has been refused"
+    msg = """We are really sorry, your workshop has been refused."""
+    to = [workshop.animator.user.email,]
+    send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
