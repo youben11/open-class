@@ -10,6 +10,9 @@ services:
       - "8000:8000"
     depends_on:
       - "db"
+      - "db_redis"
+    command: python /opt/OpenClass/manage.py runserver 0.0.0.0:8000
+    restart: on-failure
   db:
     image: postgres:alpine
     environment:
@@ -17,6 +20,12 @@ services:
       - POSTGRES_USER=openclass
     volumes:
       - pgdata:/var/lib/postgresql/data
+  db_redis:
+    image: redis:alpine
+    volumes:
+      - redis_data:/data
+
 
 volumes:
   pgdata:
+  redis_data:

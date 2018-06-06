@@ -13,11 +13,7 @@ ADD requirements.txt /
 RUN pip install -r requirements.txt
 RUN rm requirements.txt
 #adding the django project
-EXPOSE 8000
 RUN mkdir -p $app_path
 COPY $app_dir_name $app_path
 WORKDIR $app_path
 VOLUME $app_path
-
-#replace it with something that check when the db start
-CMD sleep 10; python manage.py runserver 0.0.0.0:8000
