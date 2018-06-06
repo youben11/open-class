@@ -194,7 +194,10 @@ def signup(request):
                 user.save()
                 token = profile.generate_verification_token()
                 email.send_verification_mail(user, token)
-                return HttpResponse(token)
+                title = "Openclass - Confirmation"
+                msg = 'Check your inbox to confirm your registration'
+                context = {'title': title, 'msg': msg}
+                return render(request, 'openclass/info.html', context)
             else:
                 login(request, user)
                 return redirect(reverse('openclass:profile'))
