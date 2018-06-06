@@ -189,7 +189,7 @@ def signup(request):
             profile.preference = Preference.objects.create(profile=profile)
             profile_form.save_m2m()
             user.save()
-            if settings.EMAIL_VERIFICATION:
+            if settings.EMAIL_ENABLED and settings.EMAIL_VERIFICATION:
                 user.is_active = False
                 user.save()
                 token = profile.generate_verification_token()

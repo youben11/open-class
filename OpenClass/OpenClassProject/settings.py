@@ -141,7 +141,7 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Email Config
-
+EMAIL_ENABLED = True
 # Enable/Disable Email Verification
 EMAIL_VERIFICATION = False
 # https://support.google.com/mail/answer/7126229?visit_id=1-636624958052152112-3563882151&rd=1#cantsignin
