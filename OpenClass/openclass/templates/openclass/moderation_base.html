@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!--  Material Dashboard CSS    -->
     <link href="{% static 'openclass/css/material-dashboard.css' %}" rel="stylesheet" />
+    <link href="{% static 'openclass/css/moderation-dashboard.css' %}" rel="stylesheet" />
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
@@ -20,14 +21,14 @@
   </head>
   <body>
     <div class="wrapper">
-      <div class="sidebar" data-color="red">
+      <div class="sidebar" data-color="blue">
         <!--
           Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
           
           Tip 2: you can also add an image using data-image tag
           -->
         <div class="logo">
-          <a href="http://www.creative-tim.com" class="simple-text">
+          <a href="#" class="simple-text">
           OpenClass
           </a>
         </div>
@@ -48,7 +49,7 @@
             {% else %}
             <li>
             {% endif %}  
-              <a href="./user.html">
+              <a href="{% url 'openclass:moderation_attendance' %}">
                 <i class="material-icons">person</i>
                 <p>Attendance</p>
               </a>
@@ -60,7 +61,7 @@
             {% endif %}  
               <a href="./table.html">
                 <i class="material-icons">content_paste</i>
-                <p>Workshops</p>
+                <p>All Workshops</p>
               </a>
             </li>
             {% if menu_item == 'submitted_workshops' %}
@@ -71,6 +72,26 @@
               <a href="{% url 'openclass:moderation_submitted_workshops' %}">
                 <i class="material-icons">library_books</i>
                 <p>Submitted Workshops</p>
+              </a>
+            </li>
+            {% if menu_item == 'accepted_workshops' %}
+            <li class="active">
+            {% else %}
+            <li>
+            {% endif %}  
+              <a href="{% url 'openclass:moderation_accepted_workshops' %}">
+                <i class="material-icons">done</i>
+                <p>Accepted Workshops</p>
+              </a>
+            </li>
+            {% if menu_item == 'done_workshops' %}
+            <li class="active">
+            {% else %}
+            <li>
+            {% endif %}  
+              <a href="{% url 'openclass:moderation_done_workshops' %}">
+                <i class="material-icons">done_all</i>
+                <p>Done Workshops</p>
               </a>
             </li>
             <li>
@@ -197,7 +218,7 @@
               <script>
                 document.write(new Date().getFullYear())
               </script>
-              <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
+              <a href="#">OpenClass</a>, for a better student daily life
             </p>
           </div>
         </footer>

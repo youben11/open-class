@@ -10,9 +10,9 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card">
-          <div class="card-header" data-background-color="blue">
-            <h4 class="title">Submitted Workshops</h4>
-            <p class="category">Manage the submitted workshops</p>
+          <div class="card-header" data-background-color="green">
+            <h4 class="title">Done Workshops</h4>
+            <p class="category">Manage the accepted workshops</p>
           </div>
           <div class="card-content table-responsive">
             <table class="table">
@@ -21,55 +21,16 @@
                 <th>Title</th>
                 <th>Author</th>
                 <th>Date</th>
-                <th>Action</th>
+                <th>Attendance</th>
               </thead>
               <tbody>
-              {% for s in submissions %}
+              {% for w in done_workshops %}
                 <tr>
-                  <td><a href="">{{s.pk}}</a></td>
-                  <td>{{s.title}}</td>
-                  <td>{{s.animator.user.first_name}} {{s.animator.user.last_name}}</td>
-                  <td class="text-primary">{{s.start_date}}</td>
-                  <td>
-                    <form method="post">
-                      {% if s.start_date > date_now %}
-                      <button type="button" class="btn btn-sm btn-success cd-popup-trigger" data-workshop-id="{{s.pk}}">Accept</button>
-                      {% else %}
-                      <button type="button" class="btn btn-sm cd-popup-trigger" disabled="disabled">Accept</button>
-                      {% endif %}
-                      <button type="button" class="btn btn-sm btn-danger cd-popup-trigger" data-workshop-id="{{s.pk}}">Refuse</button>
-                    </form>
-                  </td>
-                </tr>  
-              {% endfor %}
-            </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-12">
-        <div class="card card-plain">
-          <div class="card-header" data-background-color="red">
-            <h4 class="title">Refused Workshops</h4>
-            <p class="category">History of the refused workshops</p>
-          </div>
-          <div class="card-content table-responsive">
-            <table class="table">
-              <thead class="text-primary">
-                <th>ID</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Decision date</th>
-                <th>Refused by</th>
-              </thead>
-              <tbody>
-              {% for s in refused_workshops %}
-                <tr>
-                  <td><a href="">{{s.pk}}</a></td>
-                  <td>{{s.title}}</td>
-                  <td>{{s.animator.user.first_name}} {{s.animator.user.last_name}}</td>
-                  <td class="text-primary">{{s.decision_date}}</td>
-                  <td>{{s.decision_author.user.username}}</td>
+                  <td><a href="">{{w.pk}}</a></td>
+                  <td>{{w.title}}</td>
+                  <td>{{w.animator.user.first_name}} {{w.animator.user.last_name}}</td>
+                  <td class="text-primary">{{w.start_date}}</td>
+                  <td>{{w.count_presents}}/{{w.count_registrations}}</td>
                 </tr>  
               {% endfor %}
             </tbody>

@@ -40,13 +40,48 @@ def moderation(request):
                 "openclass/moderation_dashboard.html",
                 context
                 )
+
+@login_required
+@user_passes_test(is_moderator)
+def moderation_attendance(request):
+    table_title = "Manage Attendance"
+    menu_item = "attendance"
+    accepted_workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    date_now = timezone.now()
+    context = { 'accepted_workshops': accepted_workshops, 
+                'date_now': date_now, 
+                'menu_item': menu_item, 
+                'table_title': table_title
+              }
+    
+    return render(request, 'openclass/moderation_attendance.html', context)
+
+@login_required
+@user_passes_test(is_moderator)
+def moderation_accepted_workshops(request):
+    menu_item = "accepted_workshops"
+    accepted_workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    date_now = timezone.now()
+    context = {'accepted_workshops': accepted_workshops, 'date_now': date_now, 'menu_item': menu_item}
+    return render(request, 'openclass/moderation_accepted-workshops.html', context)
+
+@login_required
+@user_passes_test(is_moderator)
+def moderation_done_workshops(request):
+    menu_item = "done_workshops"
+    done_workshops = Workshop.objects.filter(status=Workshop.DONE)
+    date_now = timezone.now()
+    context = {'done_workshops': done_workshops, 'date_now': date_now, 'menu_item': menu_item}
+    return render(request, 'openclass/moderation_done-workshops.html', context)
+
 @login_required
 @user_passes_test(is_moderator)
 def moderation_submitted_workshops(request):
     menu_item = "submitted_workshops"
     pending_workshops = Workshop.objects.filter(status=Workshop.PENDING)
+    refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
     date_now = timezone.now()
-    context = {'submissions': pending_workshops, 'date_now': date_now, 'menu_item': menu_item}
+    context = {'submissions': pending_workshops, 'refused_workshops': refused_workshops, 'date_now': date_now, 'menu_item': menu_item}
     return render(request, 'openclass/moderation_submitted-workshops.html', context)
 
 @login_required
@@ -500,3 +535,8 @@ def feedback(request, workshop_pk):
         msg = 'Thank you, your feedback has been submitted'
         context = {'title': title, 'msg': msg}
         return render(request, 'openclass/info.html', context)
+
+def user_questions(request):
+    questions = Question.objects.filter(author=request.user.profile)
+    context = {"questions": questions}
+    return render(request, "openclass/user-questions.html", context)

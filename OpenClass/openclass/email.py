@@ -34,8 +34,8 @@ def ask_for_feedback(workshop):
             site_url,
             reverse('openclass:feedback', kwargs={'workshop_pk': workshop.pk})
             )
-    to = [r.profile.user.email \
-            for r in workshop.registration_set.filter(present=True)]
+    to = [email[0] for email in \
+            workshop.registration_set.filter(present=True).values_list('profile__user__email')]
     send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
 
 def notify_registration_acceptance(workshop, user):
@@ -76,8 +76,8 @@ def notify_new_workshop(workshop):
                 kwargs={'workshop_pk': workshop.pk}
                 ),
             )
-    to = [u.email for u in \
-            User.objects.filter(profile__preference__notify_new_workshop=True)]
+    to = [email[0] for email in \
+            User.objects.filter(profile__preference__notify_new_workshop=True).values_list('email')]
     send_mail(subject, msg, settings.EMAIL_HOST_USER, to)
 
 
