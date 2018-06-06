@@ -5,7 +5,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'openclass/css/profile.css' %}">
 <link rel="stylesheet" href="{% static 'openclass/css/preferences.css' %}">
-<title>Profile</title>
+<title>My Questions</title>
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-lg-3 col-md-3">
@@ -15,22 +15,22 @@
             <div class="card hovercard pl-5">
                 <div class="cardheader">
                   <h3>Your questions</h3>
-                  <h6>List of the workshops you are registered in:</h6>
+                  <h6>List of the questions you asked:</h6>
                 </div>
                 <div class="info">
                     <div class="list-group mb-3 mt-3 mr-5">
                     {% if registrations.count == 0 %}
-                    <p>You didn't trgister to any workshop yet. Visit the <a href="{% url 'openclass:workshops_list' %}">Workshops list</a> now!</p>
+                    <p>You didn't ask any question yet.</p>
                     {% else %}
-                    {% for r in registrations %}
-                    <a href="{% url 'openclass:workshops_detail' r.workshop.pk %}" class="list-group-item list-group-item-action row">
+                    {% for q in questions %}
+                    <li class="list-group-item list-group-item-action row">
                         <div class="col-xs-12 col-lg-8">
-                            <label>Title: </label>{{r.workshop.title}}
-                        </div>    
-                        <div class="col-xs-12 col-lg-4">
-                            <label>Registration date: </label><span>{{r.date_registration}}</span>
+                            <label>Question: </label><span>{{q.question}}</span>
                         </div>
-                    </a>
+                        <div class="col-xs-12 col-lg-4">
+                            <label>Workshop: </label><a href="{% url 'openclass:workshops_detail' q.workshop.pk %}" >{{q.workshop.title}}</a>
+                        </div>    
+                    </li>
                     {% endfor %}
                     {% endif %}
                       </div>                    
