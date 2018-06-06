@@ -416,13 +416,28 @@ def feedback(request, workshop_pk):
                         Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE),
                         pk=workshop_pk
                         )
-    if timezone.now() < workshop.end_date():
-        title = "Openclass - Feedback"
-        msg = 'You can submit your feedback after the completion of the workshop'
-        context = {'title': title, 'msg': msg}
-        return render(request, 'openclass/info.html', context)
     profile = request.user.profile
     context = {}
+    if timezone.now() < workshop.end_date():
+        title = "Openclass - Feedback"
+        msg = 'Attendees can submit their feedback after the completion of the workshop'
+        context = {'title': title, 'msg': msg}
+        return render(request, 'openclass/info.html', context)
+    try:
+        registration = Registration.objects.get(
+                                        workshop=workshop,
+                                        profile=profile
+                                        )
+        if not registration.present:
+            title = "Openclass - Feedback"
+            msg = 'Only attendees can submit a feedback'
+            context = {'title': title, 'msg': msg}
+            return render(request, 'openclass/info.html', context)
+    except:
+        title = "Openclass - Feedback"
+        msg = 'You are not registred to this workshop'
+        context = {'title': title, 'msg': msg}
+        return render(request, 'openclass/info.html', context)
     try:
         feedback = Feedback.objects.get(workshop=workshop, author=profile)
         context['is_feedbacked'] = True
