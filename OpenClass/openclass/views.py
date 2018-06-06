@@ -28,7 +28,8 @@ def moderation(request):
     refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
     done_workshops = Workshop.objects.filter(status=Workshop.DONE)
     workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
-    context = { "workshops":workshops,
+    context = {
+                "workshops":workshops,
                 "submitted_workshops":submitted_workshops,
                 "accepted_workshops":accepted_workshops,
                 "refused_workshops":refused_workshops,
@@ -48,12 +49,13 @@ def moderation_attendance(request):
     menu_item = "attendance"
     accepted_workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
     date_now = timezone.now()
-    context = { 'accepted_workshops': accepted_workshops, 
-                'date_now': date_now, 
-                'menu_item': menu_item, 
+    context = {
+                'accepted_workshops': accepted_workshops,
+                'date_now': date_now,
+                'menu_item': menu_item,
                 'table_title': table_title
               }
-    
+
     return render(request, 'openclass/moderation_attendance.html', context)
 
 @login_required
@@ -62,7 +64,11 @@ def moderation_accepted_workshops(request):
     menu_item = "accepted_workshops"
     accepted_workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
     date_now = timezone.now()
-    context = {'accepted_workshops': accepted_workshops, 'date_now': date_now, 'menu_item': menu_item}
+    context = {
+                'accepted_workshops': accepted_workshops,
+                'date_now': date_now,
+                'menu_item': menu_item
+              }
     return render(request, 'openclass/moderation_accepted-workshops.html', context)
 
 @login_required
@@ -71,7 +77,11 @@ def moderation_done_workshops(request):
     menu_item = "done_workshops"
     done_workshops = Workshop.objects.filter(status=Workshop.DONE)
     date_now = timezone.now()
-    context = {'done_workshops': done_workshops, 'date_now': date_now, 'menu_item': menu_item}
+    context = {
+                'done_workshops': done_workshops,
+                'date_now': date_now,
+                'menu_item': menu_item
+              }
     return render(request, 'openclass/moderation_done-workshops.html', context)
 
 @login_required
@@ -81,7 +91,12 @@ def moderation_submitted_workshops(request):
     pending_workshops = Workshop.objects.filter(status=Workshop.PENDING)
     refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
     date_now = timezone.now()
-    context = {'submissions': pending_workshops, 'refused_workshops': refused_workshops, 'date_now': date_now, 'menu_item': menu_item}
+    context = {
+                'submissions': pending_workshops,
+                'refused_workshops': refused_workshops,
+                'date_now': date_now,
+                'menu_item': menu_item
+              }
     return render(request, 'openclass/moderation_submitted-workshops.html', context)
 
 @login_required
@@ -293,17 +308,29 @@ def submit_workshop(request):
 @login_required
 def user_settings(request):
     if request.method == "POST":
-        user_settings_form = UserSettingsForm(request.POST, instance=request.user)
-        profile_settings_form = ProfileSettingsFrom(request.POST, request.FILES, instance=request.user.profile)
+        user_settings_form = UserSettingsForm(
+                                    request.POST,
+                                    instance=request.user
+                                    )
+        profile_settings_form = ProfileSettingsFrom(
+                                    request.POST,
+                                    request.FILES,
+                                    instance=request.user.profile
+                                    )
         if user_settings_form.is_valid():
             user_settings_form.save()
         if profile_settings_form.is_valid():
             profile_settings_form.save()
     else:
         user_settings_form = UserSettingsForm(instance=request.user)
-        profile_settings_form = ProfileSettingsFrom(instance=request.user.profile)
+        profile_settings_form = ProfileSettingsFrom(
+                                                instance=request.user.profile
+                                                )
 
-    context = {"user_settings_form": user_settings_form, "profile_settings_form": profile_settings_form}
+    context = {
+                "user_settings_form": user_settings_form,
+                "profile_settings_form": profile_settings_form
+              }
     return render(request, "openclass/user-settings.html", context)
 
 @login_required
@@ -330,7 +357,11 @@ def user_attendance(request, workshop_pk, user_pk):
         kwargs = {'workshop_pk': workshop_pk}
         return redirect(reverse('openclass:attendance', kwargs=kwargs))
 
-    context = {"registration": registration, "workshop":workshop, "profile":profile}
+    context = {
+                "registration": registration,
+                "workshop":workshop,
+                "profile":profile
+              }
     return render(request, "openclass/user-attendance.html", context)
 
 @login_required
@@ -386,7 +417,8 @@ def cancel_registration(request):
 @login_required
 def user_registrations(request):
     registrations = request.user.profile.get_registrations
-    return render(request, "openclass/user-registrations.html", {"registrations":registrations})
+    context = {"registrations":registrations}
+    return render(request, "openclass/user-registrations.html", context)
 
 
 @login_required
