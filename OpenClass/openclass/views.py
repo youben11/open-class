@@ -210,7 +210,7 @@ def members_list(request):
 
 @login_required
 def members_detail(request, username):
-    user = User.objects.get(username = username)
+    user = get_object_or_404(User, username=username)
     return render(request, "openclass/profile.html", {"user":user})
 
 def badges_list(request):
