@@ -12,7 +12,12 @@
 						<div class="card">
 								<div class="card-header text-center" id="headingOne">
 								<a href="#"><h3>{{workshop.title}}</h3></a>
-										<label>Date: </label><p>{{workshop.start_date}}</p>
+										<label>Date: </label>
+										<span>{{workshop.start_date}}</span><br>
+										{% if workshop.start_date > date_now %}
+										<span class="text-danger text-md text-uppercase font-weight-bold">This Workshop hasn't started yet</span><br>
+										<span class="text-danger text-md">You can't mark a user as present</span><br>
+										{% endif %}
 								<span>Attendence Management</span>
 							</div>
 							<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
@@ -40,7 +45,7 @@
 															{{r.date_registration}}
 														</td>
 														<td>
-															<a href="{% url 'openclass:user_attendance' workshop.pk r.profile.id %}">
+															<a href="{% url 'openclass:moderation_workshop_user_attendance' workshop.pk r.profile.id %}">
 																<span>
 																	{% if r.present %}
 																	Present

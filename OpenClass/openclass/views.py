@@ -58,6 +58,34 @@ def moderation_attendance(request):
 
 @login_required
 @user_passes_test(is_moderator)
+def moderation_workshop_attendance(request,workshop_pk):
+    workshop = get_object_or_404(Workshop, pk = workshop_pk)
+    registrations = Registration.objects.all().filter(workshop=workshop)
+    date_now = timezone.now()
+    context = {"registrations": registrations,"workshop":workshop, "date_now": date_now}
+    return render(request, "openclass/attendance.html", context)
+
+@login_required
+@user_passes_test(is_moderator)
+def moderation_workshop_user_attendance(request, workshop_pk, user_pk):
+    workshop = get_object_or_404(Workshop, pk = workshop_pk)
+    profile = get_object_or_404(Profile, id = user_pk)
+    registration = Registration.objects.get(workshop=workshop,profile=profile)
+    if request.method=="POST":
+        #?? POST only ??
+        if registration.present:
+            registration.absent()
+        else:
+            registration.confirm_presence()
+
+        kwargs = {'workshop_pk': workshop_pk}
+        return redirect(reverse('openclass:moderation_workshop_attendance', kwargs=kwargs))
+
+    context = {"registration": registration, "workshop":workshop, "profile":profile}
+    return render(request, "openclass/user-attendance.html", context)
+
+@login_required
+@user_passes_test(is_moderator)
 def moderation_accepted_workshops(request):
     menu_item = "accepted_workshops"
     accepted_workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
@@ -280,7 +308,10 @@ def submit_workshop(request):
             workshop.status = Workshop.PENDING
             workshop.animator = request.user.profile
             workshop.save()
-            return HttpResponse("Thanks, Your workshop has been submitted")
+            title = "Workshop Submitted"
+            msg = 'Thank you, your workshop have been submitted'
+            context = {'title': title, 'msg': msg}
+            return render(request, 'openclass/info.html', context)
 
     else:
         workshop_form = WorkshopForm()
@@ -305,33 +336,6 @@ def user_settings(request):
 
     context = {"user_settings_form": user_settings_form, "profile_settings_form": profile_settings_form}
     return render(request, "openclass/user-settings.html", context)
-
-@login_required
-@user_passes_test(is_moderator)
-def attendance(request,workshop_pk):
-    workshop = get_object_or_404(Workshop, pk = workshop_pk)
-    registrations = Registration.objects.all().filter(workshop=workshop)
-    context = {"registrations": registrations,"workshop":workshop}
-    return render(request, "openclass/attendance.html", context)
-
-@login_required
-@user_passes_test(is_moderator)
-def user_attendance(request, workshop_pk, user_pk):
-    workshop = get_object_or_404(Workshop, pk = workshop_pk)
-    profile = get_object_or_404(Profile, id = user_pk)
-    registration = Registration.objects.get(workshop=workshop,profile=profile)
-    if request.method=="POST":
-        #?? POST only ??
-        if registration.present:
-            registration.absent()
-        else:
-            registration.confirm_presence()
-
-        kwargs = {'workshop_pk': workshop_pk}
-        return redirect(reverse('openclass:attendance', kwargs=kwargs))
-
-    context = {"registration": registration, "workshop":workshop, "profile":profile}
-    return render(request, "openclass/user-attendance.html", context)
 
 @login_required
 def register_to_workshop(request):

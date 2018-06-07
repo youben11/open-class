@@ -30,7 +30,7 @@
                   <td>{{w.title}}</td>
                   <td>{{w.animator.user.first_name}} {{w.animator.user.last_name}}</td>
                   <td><a href="#">{{w.start_date}}</a></td>
-                  <td><button class="btn btn-sm btn-primary" data-background-color="blue">Manage</button></td>
+                  <td><a href="{% url 'openclass:moderation_workshop_attendance' w.pk %}" class="btn btn-sm btn-primary" data-background-color="blue">Manage</a></td>
                 </tr>  
               {% endfor %}
             </tbody>
