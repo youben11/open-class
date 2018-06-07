@@ -407,7 +407,7 @@ class MCQuestion(models.Model):
     question = models.CharField(max_length=MAX_LEN_QST, blank=False)
 
     def get_choices(self):
-        choices = self.choice_set.all()
+        choices = self.choices.all()
         return choices
 
     def __str__(self):
@@ -416,7 +416,11 @@ class MCQuestion(models.Model):
 class Choice(models.Model):
     MAX_LEN_CHOICE = 50
 
-    question = models.ForeignKey('MCQuestion', on_delete=models.CASCADE)
+    question = models.ForeignKey(
+                        'MCQuestion',
+                        on_delete=models.CASCADE,
+                        related_name='choices'
+                        )
     choice = models.CharField(max_length=MAX_LEN_CHOICE, blank=False)
 
     class Meta:
@@ -445,6 +449,7 @@ class Profile(models.Model):
         (NAG, 'Not mentioned')
     )
     DEFAULT_PHOTO = "default/default-avatar.png"
+
     badges = models.ManyToManyField('Badge', through='Have_badge')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     interests = models.ManyToManyField('Tag')
@@ -602,7 +607,7 @@ class Profile(models.Model):
         return age
 
     def get_registrations(self):
-        registrations = Registration.objects.all().filter(profile=self)
+        registrations = Registration.objects.filter(profile=self)
         return registrations
 
     def get_workshop_registration(self, workshop):
