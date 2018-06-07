@@ -48,6 +48,10 @@ def moderation_attendance(request):
     table_title = "Manage Attendance"
     menu_item = "attendance"
     accepted_workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    accepted_workshops = accepted_workshops.prefetch_related(
+                                                        'animator',
+                                                        'animator__user'
+                                                        )
     date_now = timezone.now()
     context = {
                 'accepted_workshops': accepted_workshops,
@@ -63,6 +67,10 @@ def moderation_attendance(request):
 def moderation_accepted_workshops(request):
     menu_item = "accepted_workshops"
     accepted_workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    accepted_workshops = accepted_workshops.prefetch_related(
+                                                        'animator',
+                                                        'animator__user'
+                                                        )
     date_now = timezone.now()
     context = {
                 'accepted_workshops': accepted_workshops,
@@ -76,6 +84,10 @@ def moderation_accepted_workshops(request):
 def moderation_done_workshops(request):
     menu_item = "done_workshops"
     done_workshops = Workshop.objects.filter(status=Workshop.DONE)
+    done_workshops = done_workshops.prefetch_related(
+                                                        'animator',
+                                                        'animator__user'
+                                                        )
     date_now = timezone.now()
     context = {
                 'done_workshops': done_workshops,
@@ -89,7 +101,15 @@ def moderation_done_workshops(request):
 def moderation_submitted_workshops(request):
     menu_item = "submitted_workshops"
     pending_workshops = Workshop.objects.filter(status=Workshop.PENDING)
+    pending_workshops = pending_workshops.prefetch_related(
+                                                        'animator',
+                                                        'animator__user'
+                                                        )
     refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
+    refused_workshops = refused_workshops.prefetch_related(
+                                                        'animator',
+                                                        'animator__user'
+                                                        )
     date_now = timezone.now()
     context = {
                 'submissions': pending_workshops,
@@ -165,22 +185,29 @@ def workshops_list(request):
                         )
         # all filters were ORed to make a final filter
         workshop_list = Workshop.objects.filter(filters)
-        workshop_list = list(set(workshop_list))
+        workshop_list = workshop_list.prefetch_related('topics')
 
-        context = {'workshop_list': workshop_list, 'times' : time_filters, 'tag_names': tag_names}
+        context = {
+                    'workshop_list': workshop_list,
+                    'times' : time_filters,
+                    'tag_names': tag_names
+                  }
         return render(request,"openclass/listworkshop_item.html",context)
     else :
-        workshops = Workshop.objects.filter(Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
-        )
+        workshops = Workshop.objects.filter(
+                        Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
+                        ).prefetch_related('topics')
         tags = Tag.objects.all()
-        return render(request, "openclass/listworkshop.html", {"workshop_list":workshops, "tags":tags})
+        context = {"workshop_list":workshops, "tags":tags}
+        return render(request, "openclass/listworkshop.html", context)
 
 def upcoming_workshops_list(request):
     workshops = Workshop.objects.filter(
                                     start_date__gte=timezone.now(),
                                     status=Workshop.ACCEPTED,
-                                    )
-    return render(request, "openclass/listworkshop.html", {"workshop_list":workshops})
+                                    ).prefetch_related('topics')
+    context = {"workshop_list":workshops}
+    return render(request, "openclass/listworkshop.html", context)
 
 def workshops_detail(request, workshop_pk):
     workshop = get_object_or_404(
