@@ -6,6 +6,7 @@ app_name = "openclass"
 
 urlpatterns = [
     path('', views.index, name="index"),
+    path('about', views.about, name="about"),
     path('accounts/', include('django.contrib.auth.urls')),
     path('badges/', views.badges_list, name='badges_list'),
     path('faq/', views.faq, name='faq'),
