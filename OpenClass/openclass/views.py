@@ -174,8 +174,15 @@ def moderation_submitted_workshops(request):
 def moderation_submitted_workshops_decision(request):
     ACCEPT = "accept"
     REFUSE = "refuse"
-    workshop_pk = request.POST['workshop_pk']
-    decision = request.POST['decision']
+    DONE = "done"
+
+    try:
+        workshop_pk = request.POST['workshop_pk']
+        decision = request.POST['decision']
+    except:
+        error = {'status': 'wrong parameters'}
+        return JsonResponse(error)
+
     profile = request.user.profile
 
     try:
@@ -195,6 +202,13 @@ def moderation_submitted_workshops_decision(request):
             response = {'status': 'refused'}
         else:
             response = {'status': "can't refuse"}
+
+    elif decision == DONE:
+        if workshop.done():
+            response = {'status': 'refused'}
+        else:
+            response = {'status': "can't refuse"}
+
     else:
         response = {'status': 'invalid decision'}
 
