@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.utils import timezone
 from django.conf import settings
+from constance import config
 from .upload import *
 from .validators import *
 from . import email
@@ -264,6 +265,7 @@ class Workshop(models.Model):
             if timezone.now() > self.end_date():
                 self.status = Workshop.DONE
                 self.save()
+                self.animator.gain_animation_points()
                 if settings.EMAIL_ENABLED:
                     email.ask_for_feedback(self)
                 return True
@@ -341,6 +343,7 @@ class Registration(models.Model):
         if self.workshop.is_now():
             self.present = True
             self.save()
+            self.profile.gain_attendance_points()
             return True
         else:
             return False
@@ -466,6 +469,14 @@ class Profile(models.Model):
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.user)
+
+    def gain_attendance_points(self):
+        self.score += config.POINTS_ATTENDANCE
+        self.save()
+
+    def gain_animation_points(self):
+        self.score += config.POINTS_ANIMATION
+        self.save()
 
     def generate_verification_token(self):
         try:
