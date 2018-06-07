@@ -184,7 +184,7 @@ def workshops_list(request):
                             start_date__year=today.year
                             )
             # all filters were ORed to make a final filter
-            workshop_list = Workshop.objects.filter(filters)
+            workshop_list = Workshop.objects.filter(filters).distinct()
             workshop_list = workshop_list.prefetch_related('topics')
 
             context = {
