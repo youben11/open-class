@@ -1,0 +1,22 @@
+#svg {
+    /*top: 60%;*/
+    /*left:50%;*/
+    width:100%;
+    height:240px !important;
+    position: relative;
+    /*-webkit-transform:translate3d(-50%,-50%,0);   */
+}
+.line {
+  stroke-dashoffset:0;
+  box-shadow: 10px 10px 1px black;
+}
+.breakpoint {
+  -webkit-transform:scale(0);
+          transform:scale(0);
+  position:absolute;
+  -webkit-transform-origin:50% 50%;
+}
+.active {
+  -webkit-transform:scale(1);
+          transform:scale(1)
+}
