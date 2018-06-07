@@ -302,7 +302,7 @@ class Workshop(models.Model):
     def is_now(self):
         start_date = self.start_date
         end_date = start_date + self.duration
-        if start_date < timezone.now() < end_date:
+        if start_date < timezone.now():
             return True
         else:
             return False
