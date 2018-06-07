@@ -19,6 +19,8 @@ def is_moderator(user):
 def index(request):
     return render(request, "openclass/home.html")
 
+def about(request):
+    return render(request, "openclass/about.html")
 @login_required
 @user_passes_test(is_moderator)
 def moderation(request):
