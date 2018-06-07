@@ -28,7 +28,8 @@ def moderation(request):
     refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
     done_workshops = Workshop.objects.filter(status=Workshop.DONE)
     workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
-    context = { "workshops":workshops,
+    context = {
+                "workshops":workshops,
                 "submitted_workshops":submitted_workshops,
                 "accepted_workshops":accepted_workshops,
                 "refused_workshops":refused_workshops,
@@ -47,13 +48,18 @@ def moderation_attendance(request):
     table_title = "Manage Attendance"
     menu_item = "attendance"
     accepted_workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    accepted_workshops = accepted_workshops.prefetch_related(
+                                                        'animator',
+                                                        'animator__user'
+                                                        )
     date_now = timezone.now()
-    context = { 'accepted_workshops': accepted_workshops, 
-                'date_now': date_now, 
-                'menu_item': menu_item, 
+    context = {
+                'accepted_workshops': accepted_workshops,
+                'date_now': date_now,
+                'menu_item': menu_item,
                 'table_title': table_title
               }
-    
+
     return render(request, 'openclass/moderation_attendance.html', context)
 
 @login_required
@@ -89,8 +95,16 @@ def moderation_workshop_user_attendance(request, workshop_pk, user_pk):
 def moderation_accepted_workshops(request):
     menu_item = "accepted_workshops"
     accepted_workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    accepted_workshops = accepted_workshops.prefetch_related(
+                                                        'animator',
+                                                        'animator__user'
+                                                        )
     date_now = timezone.now()
-    context = {'accepted_workshops': accepted_workshops, 'date_now': date_now, 'menu_item': menu_item}
+    context = {
+                'accepted_workshops': accepted_workshops,
+                'date_now': date_now,
+                'menu_item': menu_item
+              }
     return render(request, 'openclass/moderation_accepted-workshops.html', context)
 
 @login_required
@@ -98,8 +112,16 @@ def moderation_accepted_workshops(request):
 def moderation_done_workshops(request):
     menu_item = "done_workshops"
     done_workshops = Workshop.objects.filter(status=Workshop.DONE)
+    done_workshops = done_workshops.prefetch_related(
+                                                        'animator',
+                                                        'animator__user'
+                                                        )
     date_now = timezone.now()
-    context = {'done_workshops': done_workshops, 'date_now': date_now, 'menu_item': menu_item}
+    context = {
+                'done_workshops': done_workshops,
+                'date_now': date_now,
+                'menu_item': menu_item
+              }
     return render(request, 'openclass/moderation_done-workshops.html', context)
 
 @login_required
@@ -107,9 +129,22 @@ def moderation_done_workshops(request):
 def moderation_submitted_workshops(request):
     menu_item = "submitted_workshops"
     pending_workshops = Workshop.objects.filter(status=Workshop.PENDING)
+    pending_workshops = pending_workshops.prefetch_related(
+                                                        'animator',
+                                                        'animator__user'
+                                                        )
     refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
+    refused_workshops = refused_workshops.prefetch_related(
+                                                        'animator',
+                                                        'animator__user'
+                                                        )
     date_now = timezone.now()
-    context = {'submissions': pending_workshops, 'refused_workshops': refused_workshops, 'date_now': date_now, 'menu_item': menu_item}
+    context = {
+                'submissions': pending_workshops,
+                'refused_workshops': refused_workshops,
+                'date_now': date_now,
+                'menu_item': menu_item
+              }
     return render(request, 'openclass/moderation_submitted-workshops.html', context)
 
 @login_required
@@ -145,52 +180,69 @@ def moderation_submitted_workshops_decision(request):
 
 
 def workshops_list(request):
-    workshop_list = []
-
     if request.is_ajax():
-        tag_objects = []
         tag_names = list(set(request.POST.getlist('tag[]')))
-
-        for tag_name in tag_names:
-            tag_objects.append(Tag.objects.get(name=tag_name))
-
-        for tags in tag_objects:
-            workshop_list += Workshop.objects.filter(topics=tags)
-
         time_filters = list(set(request.POST.getlist('time[]')))
+        if tag_names or time_filters:
+            today = timezone.now().date()
+            this_week = today + datetime.timedelta(6)
+            tomorrow = today + datetime.timedelta(1)
+            # filter according to the tag_names
+            filters = Q(topics__name__in=tag_names)
+            # filter according to the time filters
+            if 'Tomorrow' in time_filters:
+                filters |= Q(start_date__date=tomorrow)
 
-        today = timezone.now().date()
-        this_week = today + datetime.timedelta(6)
-        tomorrow = today + datetime.timedelta(1)
-        for time_filter in time_filters:
-            if time_filter == 'Tomorrow':
-                workshop_list += Workshop.objects.filter(start_date__date = tomorrow)
+            if 'This week' in time_filters:
+                filters |= Q(
+                            start_date__lte=this_week,
+                            start_date__gte=today
+                            )
 
-            if time_filter == 'This week':
-                workshop_list += Workshop.objects.filter(start_date__lte = this_week,start_date__gte = today)
-
-            if time_filter == 'Next week':
+            if 'Next week' in time_filters:
                 next_week = this_week + datetime.timedelta(6)
-                workshop_list += Workshop.objects.filter(start_date__lte = next_week,start_date__gte = this_week)
+                filters |= Q(
+                            start_date__lte=next_week,
+                            start_date__gte=this_week
+                            )
 
-            if time_filter == 'This month':
-                workshop_list += Workshop.objects.filter(start_date__month = today.month,start_date__year = today.year)
+            if 'This month' in time_filters:
+                filters |= Q(
+                            start_date__month=today.month,
+                            start_date__year=today.year
+                            )
+            # all filters were ORed to make a final filter
+            workshop_list = Workshop.objects.filter(filters).distinct()
+            workshop_list = workshop_list.prefetch_related('topics')
 
-        workshop_list = list(set(workshop_list))
-        context = {'workshop_list': workshop_list, 'times' : time_filters, 'tag_names': tag_names}
-        return render(request,"openclass/listworkshop_item.html",context)
+            context = {
+                        'workshop_list': workshop_list,
+                        'times' : time_filters,
+                        'tag_names': tag_names
+                      }
+            return render(request,"openclass/listworkshop_item.html",context)
+        else:
+            workshops = Workshop.objects.filter(
+                                Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
+                                )
+            context = {"workshop_list":workshops}
+            return render(request, "openclass/listworkshop_item.html", context)
+
     else :
-        workshops = Workshop.objects.filter(Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
-        )
+        workshops = Workshop.objects.filter(
+                        Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
+                        ).prefetch_related('topics')
         tags = Tag.objects.all()
-        return render(request, "openclass/listworkshop.html", {"workshop_list":workshops, "tags":tags})
+        context = {"workshop_list":workshops, "tags":tags}
+        return render(request, "openclass/listworkshop.html", context)
 
 def upcoming_workshops_list(request):
     workshops = Workshop.objects.filter(
                                     start_date__gte=timezone.now(),
                                     status=Workshop.ACCEPTED,
-                                    )
-    return render(request, "openclass/listworkshop.html", {"workshop_list":workshops})
+                                    ).prefetch_related('topics')
+    context = {"workshop_list":workshops}
+    return render(request, "openclass/listworkshop.html", context)
 
 def workshops_detail(request, workshop_pk):
     workshop = get_object_or_404(
@@ -215,12 +267,12 @@ def workshops_filter_tag(request):
 
 @login_required
 def members_list(request):
-    users = User.objects.filter()
+    users = User.objects.filter(is_active=True).prefetch_related('profile')
     return render(request, "openclass/member_list.html", {"users":users})
 
 @login_required
 def members_detail(request, username):
-    user = User.objects.get(username = username)
+    user = get_object_or_404(User, username=username)
     return render(request, "openclass/profile.html", {"user":user})
 
 def badges_list(request):
@@ -324,18 +376,62 @@ def submit_workshop(request):
 @login_required
 def user_settings(request):
     if request.method == "POST":
-        user_settings_form = UserSettingsForm(request.POST, instance=request.user)
-        profile_settings_form = ProfileSettingsFrom(request.POST, request.FILES, instance=request.user.profile)
+        user_settings_form = UserSettingsForm(
+                                    request.POST,
+                                    instance=request.user
+                                    )
+        profile_settings_form = ProfileSettingsFrom(
+                                    request.POST,
+                                    request.FILES,
+                                    instance=request.user.profile
+                                    )
         if user_settings_form.is_valid():
             user_settings_form.save()
         if profile_settings_form.is_valid():
             profile_settings_form.save()
     else:
         user_settings_form = UserSettingsForm(instance=request.user)
-        profile_settings_form = ProfileSettingsFrom(instance=request.user.profile)
+        profile_settings_form = ProfileSettingsFrom(
+                                                instance=request.user.profile
+                                                )
 
-    context = {"user_settings_form": user_settings_form, "profile_settings_form": profile_settings_form}
+    context = {
+                "user_settings_form": user_settings_form,
+                "profile_settings_form": profile_settings_form
+              }
     return render(request, "openclass/user-settings.html", context)
+
+@login_required
+@user_passes_test(is_moderator)
+def attendance(request,workshop_pk):
+    workshop = get_object_or_404(Workshop, pk=workshop_pk)
+    registrations = Registration.objects.filter(workshop=workshop)
+    registrations = registrations.prefetch_related('profile', 'profile__user')
+    context = {"registrations": registrations,"workshop":workshop}
+    return render(request, "openclass/attendance.html", context)
+
+@login_required
+@user_passes_test(is_moderator)
+def user_attendance(request, workshop_pk, user_pk):
+    workshop = get_object_or_404(Workshop, pk=workshop_pk)
+    profile = get_object_or_404(Profile, id=user_pk)
+    registration = Registration.objects.get(workshop=workshop,profile=profile)
+    if request.method=="POST":
+        #?? POST only ??
+        if registration.present:
+            registration.absent()
+        else:
+            registration.confirm_presence()
+
+        kwargs = {'workshop_pk': workshop_pk}
+        return redirect(reverse('openclass:attendance', kwargs=kwargs))
+
+    context = {
+                "registration": registration,
+                "workshop":workshop,
+                "profile":profile
+              }
+    return render(request, "openclass/user-attendance.html", context)
 
 @login_required
 def register_to_workshop(request):
@@ -389,8 +485,10 @@ def cancel_registration(request):
 
 @login_required
 def user_registrations(request):
-    registrations = request.user.profile.get_registrations
-    return render(request, "openclass/user-registrations.html", {"registrations":registrations})
+    registrations = request.user.profile.get_registrations()
+    registrations = registrations.prefetch_related('workshop')
+    context = {"registrations":registrations}
+    return render(request, "openclass/user-registrations.html", context)
 
 
 @login_required
@@ -448,6 +546,7 @@ def ask_question(request, workshop_pk):
 def workshop_questions_list(request, workshop_pk):
     workshop = get_object_or_404(Workshop, pk=workshop_pk)
     questions_list = Question.objects.filter(workshop=workshop)
+    questions_list = questions_list.prefetch_related('author', 'author__user')
     context = {"questions_list": questions_list}
 
     # only the animator have permission to see the asked questions
@@ -509,7 +608,7 @@ def feedback(request, workshop_pk):
     mc_questions_prefix = "mc_question_"
     context['mc_questions_prefix'] = mc_questions_prefix
     if request.method == "GET":
-        mc_questions = workshop.mc_questions.all()
+        mc_questions = workshop.mc_questions.all().prefetch_related('choices')
         context['questions'] = mc_questions
         return render(request, "openclass/feedback.html", context)
 
@@ -522,6 +621,7 @@ def feedback(request, workshop_pk):
                         submission_date=timezone.now(),
                         comment=comment
                         )
+        new_choices = []
         for mc_question_pk, choice_pk in request.POST.items():
             if re.match(mc_questions_re, mc_question_pk):
                 mc_question_pk = mc_question_pk.split('_')[-1]
@@ -534,7 +634,8 @@ def feedback(request, workshop_pk):
                         continue
                 except:
                     pass
-                feedback.choices.add(choice_pk)
+                new_choices.append(choice_pk)
+        feedback.choices.add(*new_choices)
         title = 'Feedback submitted'
         msg = 'Thank you, your feedback has been submitted'
         context = {'title': title, 'msg': msg}
@@ -542,5 +643,6 @@ def feedback(request, workshop_pk):
 
 def user_questions(request):
     questions = Question.objects.filter(author=request.user.profile)
+    questions = questions.prefetch_related('workshop')
     context = {"questions": questions}
     return render(request, "openclass/user-questions.html", context)

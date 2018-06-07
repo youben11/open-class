@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.utils import timezone
 from django.conf import settings
+from constance import config
 from .upload import *
 from .validators import *
 from . import email
@@ -264,6 +265,7 @@ class Workshop(models.Model):
             if timezone.now() > self.end_date():
                 self.status = Workshop.DONE
                 self.save()
+                self.animator.gain_animation_points()
                 if settings.EMAIL_ENABLED:
                     email.ask_for_feedback(self)
                 return True
@@ -341,6 +343,7 @@ class Registration(models.Model):
         if self.workshop.is_now():
             self.present = True
             self.save()
+            self.profile.gain_attendance_points()
             return True
         else:
             return False
@@ -407,7 +410,7 @@ class MCQuestion(models.Model):
     question = models.CharField(max_length=MAX_LEN_QST, blank=False)
 
     def get_choices(self):
-        choices = self.choice_set.all()
+        choices = self.choices.all()
         return choices
 
     def __str__(self):
@@ -416,7 +419,11 @@ class MCQuestion(models.Model):
 class Choice(models.Model):
     MAX_LEN_CHOICE = 50
 
-    question = models.ForeignKey('MCQuestion', on_delete=models.CASCADE)
+    question = models.ForeignKey(
+                        'MCQuestion',
+                        on_delete=models.CASCADE,
+                        related_name='choices'
+                        )
     choice = models.CharField(max_length=MAX_LEN_CHOICE, blank=False)
 
     class Meta:
@@ -445,6 +452,7 @@ class Profile(models.Model):
         (NAG, 'Not mentioned')
     )
     DEFAULT_PHOTO = "default/default-avatar.png"
+
     badges = models.ManyToManyField('Badge', through='Have_badge')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     interests = models.ManyToManyField('Tag')
@@ -461,6 +469,14 @@ class Profile(models.Model):
 
     def __str__(self):
         return "[%02d] %s" % (self.pk, self.user)
+
+    def gain_attendance_points(self):
+        self.score += config.POINTS_ATTENDANCE
+        self.save()
+
+    def gain_animation_points(self):
+        self.score += config.POINTS_ANIMATION
+        self.save()
 
     def generate_verification_token(self):
         try:
@@ -602,7 +618,7 @@ class Profile(models.Model):
         return age
 
     def get_registrations(self):
-        registrations = Registration.objects.all().filter(profile=self)
+        registrations = Registration.objects.filter(profile=self)
         return registrations
 
     def get_workshop_registration(self, workshop):
