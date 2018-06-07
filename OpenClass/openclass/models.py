@@ -407,7 +407,7 @@ class MCQuestion(models.Model):
     question = models.CharField(max_length=MAX_LEN_QST, blank=False)
 
     def get_choices(self):
-        choices = self.choice_set.all()
+        choices = self.choices.all()
         return choices
 
     def __str__(self):
@@ -416,7 +416,11 @@ class MCQuestion(models.Model):
 class Choice(models.Model):
     MAX_LEN_CHOICE = 50
 
-    question = models.ForeignKey('MCQuestion', on_delete=models.CASCADE)
+    question = models.ForeignKey(
+                        'MCQuestion',
+                        on_delete=models.CASCADE,
+                        related_name='choices'
+                        )
     choice = models.CharField(max_length=MAX_LEN_CHOICE, blank=False)
 
     class Meta:

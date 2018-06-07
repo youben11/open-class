@@ -339,16 +339,17 @@ def user_settings(request):
 @login_required
 @user_passes_test(is_moderator)
 def attendance(request,workshop_pk):
-    workshop = get_object_or_404(Workshop, pk = workshop_pk)
-    registrations = Registration.objects.all().filter(workshop=workshop)
+    workshop = get_object_or_404(Workshop, pk=workshop_pk)
+    registrations = Registration.objects.filter(workshop=workshop)
+    registrations = registrations.prefetch_related('profile', 'profile__user')
     context = {"registrations": registrations,"workshop":workshop}
     return render(request, "openclass/attendance.html", context)
 
 @login_required
 @user_passes_test(is_moderator)
 def user_attendance(request, workshop_pk, user_pk):
-    workshop = get_object_or_404(Workshop, pk = workshop_pk)
-    profile = get_object_or_404(Profile, id = user_pk)
+    workshop = get_object_or_404(Workshop, pk=workshop_pk)
+    profile = get_object_or_404(Profile, id=user_pk)
     registration = Registration.objects.get(workshop=workshop,profile=profile)
     if request.method=="POST":
         #?? POST only ??
@@ -419,7 +420,8 @@ def cancel_registration(request):
 
 @login_required
 def user_registrations(request):
-    registrations = request.user.profile.get_registrations
+    registrations = request.user.profile.get_registrations()
+    registrations = registrations.prefetch_related('workshop')
     context = {"registrations":registrations}
     return render(request, "openclass/user-registrations.html", context)
 
@@ -479,6 +481,7 @@ def ask_question(request, workshop_pk):
 def workshop_questions_list(request, workshop_pk):
     workshop = get_object_or_404(Workshop, pk=workshop_pk)
     questions_list = Question.objects.filter(workshop=workshop)
+    questions_list = questions_list.prefetch_related('author', 'author__user')
     context = {"questions_list": questions_list}
 
     # only the animator have permission to see the asked questions
@@ -540,7 +543,7 @@ def feedback(request, workshop_pk):
     mc_questions_prefix = "mc_question_"
     context['mc_questions_prefix'] = mc_questions_prefix
     if request.method == "GET":
-        mc_questions = workshop.mc_questions.all()
+        mc_questions = workshop.mc_questions.all().prefetch_related('choices')
         context['questions'] = mc_questions
         return render(request, "openclass/feedback.html", context)
 
@@ -553,6 +556,7 @@ def feedback(request, workshop_pk):
                         submission_date=timezone.now(),
                         comment=comment
                         )
+        new_choices = []
         for mc_question_pk, choice_pk in request.POST.items():
             if re.match(mc_questions_re, mc_question_pk):
                 mc_question_pk = mc_question_pk.split('_')[-1]
@@ -565,7 +569,8 @@ def feedback(request, workshop_pk):
                         continue
                 except:
                     pass
-                feedback.choices.add(choice_pk)
+                new_choices.append(choice_pk)
+        feedback.choices.add(*new_choices)
         title = 'Feedback submitted'
         msg = 'Thank you, your feedback has been submitted'
         context = {'title': title, 'msg': msg}
@@ -573,5 +578,6 @@ def feedback(request, workshop_pk):
 
 def user_questions(request):
     questions = Question.objects.filter(author=request.user.profile)
+    questions = questions.prefetch_related('workshop')
     context = {"questions": questions}
     return render(request, "openclass/user-questions.html", context)
