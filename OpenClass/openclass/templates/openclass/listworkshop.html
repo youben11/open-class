@@ -87,7 +87,6 @@
         },
         error: function(error) {
             alert("ERROR");
-              console.log(error);
         }
       });
     }
@@ -103,7 +102,6 @@
    }
 
    function search_again_time(data) {
-     console.log(tag_filter_list);
     for (var k = 0; k < time_filter_list.length; k++) {
       if (time_filter_list[k] === data){
         time_filter_list.splice(k, 1);
