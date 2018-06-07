@@ -155,44 +155,51 @@ def workshops_list(request):
     if request.is_ajax():
         tag_names = list(set(request.POST.getlist('tag[]')))
         time_filters = list(set(request.POST.getlist('time[]')))
+        if tag_names or time_filters:
+            today = timezone.now().date()
+            this_week = today + datetime.timedelta(6)
+            tomorrow = today + datetime.timedelta(1)
+            # filter according to the tag_names
+            filters = Q(topics__name__in=tag_names)
+            # filter according to the time filters
+            if 'Tomorrow' in time_filters:
+                filters |= Q(start_date__date=tomorrow)
 
-        today = timezone.now().date()
-        this_week = today + datetime.timedelta(6)
-        tomorrow = today + datetime.timedelta(1)
-        # filter according to the tag_names
-        filters = Q(topics__name__in=tag_names)
-        # filter according to the time filters
-        if 'Tomorrow' in time_filters:
-            filters |= Q(start_date__date=tomorrow)
+            if 'This week' in time_filters:
+                filters |= Q(
+                            start_date__lte=this_week,
+                            start_date__gte=today
+                            )
 
-        if 'This week' in time_filters:
-            filters |= Q(
-                        start_date__lte=this_week,
-                        start_date__gte=today
-                        )
+            if 'Next week' in time_filters:
+                next_week = this_week + datetime.timedelta(6)
+                filters |= Q(
+                            start_date__lte=next_week,
+                            start_date__gte=this_week
+                            )
 
-        if 'Next week' in time_filters:
-            next_week = this_week + datetime.timedelta(6)
-            filters |= Q(
-                        start_date__lte=next_week,
-                        start_date__gte=this_week
-                        )
+            if 'This month' in time_filters:
+                filters |= Q(
+                            start_date__month=today.month,
+                            start_date__year=today.year
+                            )
+            # all filters were ORed to make a final filter
+            workshop_list = Workshop.objects.filter(filters)
+            workshop_list = workshop_list.prefetch_related('topics')
 
-        if 'This month' in time_filters:
-            filters |= Q(
-                        start_date__month=today.month,
-                        start_date__year=today.year
-                        )
-        # all filters were ORed to make a final filter
-        workshop_list = Workshop.objects.filter(filters)
-        workshop_list = workshop_list.prefetch_related('topics')
+            context = {
+                        'workshop_list': workshop_list,
+                        'times' : time_filters,
+                        'tag_names': tag_names
+                      }
+            return render(request,"openclass/listworkshop_item.html",context)
+        else:
+            workshops = Workshop.objects.filter(
+                                Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
+                                )
+            context = {"workshop_list":workshops}
+            return render(request, "openclass/listworkshop_item.html", context)
 
-        context = {
-                    'workshop_list': workshop_list,
-                    'times' : time_filters,
-                    'tag_names': tag_names
-                  }
-        return render(request,"openclass/listworkshop_item.html",context)
     else :
         workshops = Workshop.objects.filter(
                         Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)

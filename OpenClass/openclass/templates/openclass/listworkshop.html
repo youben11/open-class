@@ -25,7 +25,7 @@
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
       <div class="card-body">
         {% for tag in tags %}
-            <a href="#" class="filter-tag card-link">{{tag.name}}</a>
+            <a href="#" class="filter-tag card-link" onclick="search_tag(this.text)">{{tag.name}}</a>
         {% endfor %}
       </div>
     </div>
@@ -38,10 +38,10 @@
     </div>
     <div id="collapseThree" class="collapse" aria-labelledby="headingThree">
       <div class="card-body">
-        <a href="#" class="card-link filter-time">Tomorrow</a>
-        <a href="#" class="card-link filter-time">This week</a>
-        <a href="#" class="card-link filter-time">Next week</a>
-        <a href="#" class="card-link filter-time">This month</a>
+        <a href="#" class="card-link filter-time" onclick="search_time(this.text)">Tomorrow</a>
+        <a href="#" class="card-link filter-time" onclick="search_time(this.text)">This week</a>
+        <a href="#" class="card-link filter-time" onclick="search_time(this.text)">Next week</a>
+        <a href="#" class="card-link filter-time" onclick="search_time(this.text)">This month</a>
 
       </div>
     </div>
@@ -67,47 +67,14 @@
     var tag_filter_list = [];
     var time_filter_list = [];
 
-    for (var i = 0; i < time_filters.length; i++) {
-      time_filters[i].onclick = function search() {
-        time_filter_list.push(this.text)
-        ajax()
-      }
+    function search_tag(data) {
+      tag_filter_list.push(data)
+      ajax()
     }
 
-	  for (var i = 0; i < tag_filters.length; i++) {
-      tag_filters[i].onclick = function search() {
-        tag_filter_list.push(this.text);
-        console.log(tag_filter_list);
-        ajax()
-      }
-    }
-
-    function ajax_tag() {
-      $.ajax({
-        type: "POST",
-        url: "{{ request.path }}",
-        data: {'filter': 'TAG','tag': tag_filter_list},
-        success: function(result) {
-            $("#workshopsContainer").html(result)
-            newtagOnClick();
-          }
-        });
-    }
-
-    function newtagOnClick() {
-      tag_filter_front = document.getElementsByClassName('tag-list-item');
-      for (var j = 0; j < tag_filter_front.length; j++) {
-        tag_filter_front[j].onclick = function search_again() {
-          var data = this.text;
-          for (var k = 0; k < tag_filter_list.length; k++) {
-            if (tag_filter_list[k] === data){
-              tag_filter_list.splice(k, 1);
-              k=-1;
-            }
-          }
-          ajax()
-        }
-      }
+    function search_time(data) {
+      time_filter_list.push(data);
+      ajax()
     }
 
     function ajax(){
@@ -117,32 +84,33 @@
         data: {'filter': 'TIME','time': time_filter_list, 'tag': tag_filter_list},
         success: function(result) {
               $("#workshopsContainer").html(result)
-              newtimeOnClick()
-              newtagOnClick()
         },
         error: function(error) {
             alert("ERROR");
-              console.log(error);
         }
       });
     }
 
-    function newtimeOnClick() {
-      tag_filter_front = document.getElementsByClassName('time-list-item');
-      for (var j = 0; j < tag_filter_front.length; j++) {
-        tag_filter_front[j].onclick = function search_again() {
-          var data = this.text;
-          for (var k = 0; k < tag_filter_list.length; k++) {
-            console.log(k);
-            if (time_filter_list[k] === data){
-              time_filter_list.splice(k, 1);
-              k=-1;
-            }
-          }
-          ajax()
-        }
+    function search_again_tag(data) {
+     for (var k = 0; k < tag_filter_list.length; k++) {
+       if (tag_filter_list[k] === data){
+         tag_filter_list.splice(k, 1);
+         k=-1;
+       }
+     }
+     ajax()
+   }
+
+   function search_again_time(data) {
+    for (var k = 0; k < time_filter_list.length; k++) {
+      if (time_filter_list[k] === data){
+        time_filter_list.splice(k, 1);
+        k=-1;
       }
     }
+    ajax()
+  }
+
 
 </script>
 {% endblock %}
