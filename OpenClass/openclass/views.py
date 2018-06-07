@@ -44,6 +44,26 @@ def moderation(request):
 
 @login_required
 @user_passes_test(is_moderator)
+def moderation_workshops(request):
+    table_title = "All Workshops"
+    menu_item = "workshops"
+    workshops = Workshop.objects.all()
+    workshops = workshops.prefetch_related(
+                                                        'animator',
+                                                        'animator__user'
+                                                        )
+    date_now = timezone.now()
+    context = {
+                'workshops': workshops,
+                'date_now': date_now,
+                'menu_item': menu_item,
+                'table_title': table_title
+              }
+
+    return render(request, 'openclass/moderation_workshops.html', context)
+
+@login_required
+@user_passes_test(is_moderator)
 def moderation_attendance(request):
     table_title = "Manage Attendance"
     menu_item = "attendance"

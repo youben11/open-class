@@ -19,6 +19,7 @@ urlpatterns = [
     path('moderation/done_workshops', views.moderation_done_workshops, name='moderation_done_workshops'),
     path('moderation/submitted_workshops', views.moderation_submitted_workshops, name='moderation_submitted_workshops'),
     path('moderation/submitted_workshops/decision', views.moderation_submitted_workshops_decision, name='moderation_submitted_workshops_decision'),
+    path('moderation/workshops/', views.moderation_workshops, name='moderation_workshops'),
     path('profile/', views.profile, name='profile'),
     path('profile/questions', views.user_questions, name='user_questions'),
     path('profile/preferences', views.prefs, name='prefs'),
