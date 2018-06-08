@@ -538,7 +538,7 @@ def ask_question(request, workshop_pk):
     end_date = start_date + workshop.duration
 
     # check if the workshop is already done
-    if workshop.status == Workshop.DONE:
+    if workshop.status == Workshop.DONE or timezone.now() > end_date:
         context = {"is_done": True}
         return render(request, "openclass/ask_question.html", context)
 
