@@ -65,6 +65,7 @@ class WorkshopForm(ModelForm):
                 'seats_number',
                 'required_materials',
                 'start_date',
+                'topics',
                 'duration',
                 'cover_img',
                 ]
