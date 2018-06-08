@@ -41,7 +41,7 @@
         </div>
       <div class="col-xs-12 col-lg-12 col-xl-4 column-title">
         <div class="title-content">
-          <h4 class="mb-5">May 19</h4>
+          <h4 class="mb-5">{{workshop.start_date.date.isoformat}}</h4>
           <h1>{{workshop.title}}</h1>
         </div>
       </div>
@@ -88,16 +88,19 @@
       <div class="row ">
         <div class="col-xs-12 col-lg-12 col-xl-6 col-infos">
           <h3>Description:</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <p>{{workshop.description}}</p>
+          <h3>Objectives:</h3>
+          <p>{{workshop.objectives}}</p>
         </div>
         <div class="col-xs-12 col-lg-12 col-xl-4 col-time">
+          <h3>Duration</h3>
+          <span>{{workshop.duration}} hours</span>
           <h3>Date and time</h3>
-          <span>{{workshop.start_date.isoformat}}</span>
-          <span>8am</span>
+            <span>{{workshop.start_date.date.isoformat}}</span>
+          <span>{{workshop.start_date.time}}</span>
 
           <h3>Location</h3>
           <span>{{workshop.location}}</span>
-          <span>ESI SBA</span>
 
         </div>
       </div>
@@ -119,7 +122,7 @@
         <div class="col-xs-12 col-lg-12 col-xl-6 col-infos">
           <h3>Animator:</h3>
           <div>
-            <div class="row">
+            <div class="row my-5">
             <div class="col-xs-12 col-lg-12 col-xl-4">
               <!-- to avoid error before adding default photo -->
               {% if workshop.animator.photo %}
@@ -128,16 +131,7 @@
           </div>
             <div class="col-xs-12 col-lg-12 col-xl-8">
               <h3>{{workshop.animator.user.first_name}} {{workshop.animator.user.last_name}}</h3>
-              <p class="text-description">Lorem ipsum dolor sit amet,
-                 consectetur adipisicing elit, sed do eiusmod tempor
-                 incididunt ut labore et dolore magna aliqua. Ut enim a
-                 d minim veniam, quis nostrud exercitation ullamco laboris
-                 nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                 dolor in reprehenderit in voluptate velit esse cillum dolore
-                 eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                 non proident, sunt in culpa qui officia deserunt mollit anim
-                id est laborum.
-              </p>
+
 
             </div>
           </div>
