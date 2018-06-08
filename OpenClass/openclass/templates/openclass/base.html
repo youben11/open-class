@@ -54,6 +54,9 @@
                 <li><a class="openclass-nav-link" href="{% url 'openclass:user_registrations' %}">My Registrations</a></li>
                 <li><a class="openclass-nav-link" href="{% url 'openclass:user_questions' %}">My Questions</a></li>
                 <li><a class="openclass-nav-link" href="{% url 'openclass:user_settings' %}">Settings</a></li>
+                {% if request.user.is_staff %}
+                <li><a class="openclass-nav-link" href="{% url 'openclass:user_settings' %}">Settings</a></li>
+                {% endif %}
                 <li><a class="openclass-nav-link" href="{% url 'openclass:logout' %}">Logout</a></li>
               </ul>
             </li>

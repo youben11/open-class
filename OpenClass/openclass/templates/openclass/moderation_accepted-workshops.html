@@ -8,43 +8,8 @@
 <div class="content">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-header" data-background-color="green">
-            <h4 class="title">Accepted Workshops</h4>
-            <p class="category">Manage the accepted workshops</p>
-          </div>
-          <div class="card-content table-responsive">
-            <table class="table">
-              <thead class="text-primary">
-                <th>ID</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Date</th>
-                <th>Action</th>
-              </thead>
-              <tbody>
-              {% for s in accepted_workshops %}
-                <tr>
-                  <td><a href="">{{s.pk}}</a></td>
-                  <td>{{s.title}}</td>
-                  <td>{{s.animator.user.first_name}} {{s.animator.user.last_name}}</td>
-                  <td class="text-primary">{{s.start_date}}</td>
-                  <td>
-                    <form method="post">
-                      {% if s.start_date > date_now %}
-                      Not done yet
-                      {% else %}
-                      <button type="button" class="btn btn-sm btn-success cd-popup-trigger">Mark as Done</button>
-                      {% endif %}
-                    </form>
-                  </td>
-                </tr>  
-              {% endfor %}
-            </tbody>
-            </table>
-          </div>
-        </div>
+      <div id="table" class="col-md-12">
+        {% include 'openclass/moderation_accepted-workshops_table.html' %}
       </div>
     </div>
   </div>
@@ -64,17 +29,13 @@
   btnAccept = document.getElementById("accept-btn");
   btnAccept = document.getElementById("refuse-btn");
   var workshop_pk;
-  var workshop_tr_id;
   var decision;
   $('.cd-popup-trigger').on('click', function(event){
-    console.log(event);
     event.preventDefault();
     $('.cd-popup').addClass('is-visible');
     $('#messageConfirm').text('Are you sure you want to '+ $(this).text().toLowerCase() + ' the workshop "'+$(this).parent().parent().parent().children('td:nth-child(2)').text() +'"?');
-    decision = $(this).text().toLowerCase();
+    decision = 'done';
     workshop_pk = $(this).attr("data-workshop-id");
-    workshop_tr_id = 'w'+workshop_pk.replace(/\s/g,'');
-    console.log(workshop_tr_id);
   });
   
   $('.cd-popup').on('click', function(event){
@@ -104,18 +65,25 @@
       data: {'workshop_pk': workshop_pk,'decision': decision},
       success: function(data) {
         console.log(data);
-        if (data.status == 'accepted' || data.status == 'refused') {
-          $('#'+workshop_tr_id).hide("500");
+        if (data.status == 'done') {
+          console.log('done');
         }
-        else if (data.status == "can't accept") {
-          alert("This workshop can't be accepted")
-        }
-        else if (data.status == "can't refuse") {
-          alert("This workshop can't be refused")
+        else if (data.status == "can't mark as done") {
+          alert("This workshop can't be marked as done")
         }
         else if (data.status == "invalid decision") {
           alert("This decision is invalid")
         }
+      }
+    });
+    $.ajax({
+      type: "GET",
+      url: "{{request.path}}",
+      success: function(data) {
+          $("#table").html(data);
+      },
+      error: function(error) {
+          alert("refresh questions_list error");
       }
     });
   }

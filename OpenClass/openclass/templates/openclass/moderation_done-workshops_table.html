@@ -1,0 +1,28 @@
+        <div class="card">
+          <div class="card-header" data-background-color="green">
+            <h4 class="title">Done Workshops</h4>
+            <p class="category">Manage the accepted workshops</p>
+          </div>
+          <div class="card-content table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>Attendance</th>
+              </thead>
+              <tbody>
+              {% for w in done_workshops %}
+                <tr>
+                  <td><a href="">{{w.pk}}</a></td>
+                  <td>{{w.title}}</td>
+                  <td>{{w.animator.user.first_name}} {{w.animator.user.last_name}}</td>
+                  <td class="text-primary">{{w.start_date}}</td>
+                  <td>{{w.count_presents}}/{{w.count_registrations}}</td>
+                </tr>  
+              {% endfor %}
+            </tbody>
+            </table>
+          </div>
+        </div>
