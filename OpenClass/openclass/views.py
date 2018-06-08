@@ -30,8 +30,7 @@ def moderation(request):
     refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
     done_workshops = Workshop.objects.filter(status=Workshop.DONE)
     workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
-    users = User.objects.all()
-    users = reversed(users[users.count()-4:])
+    users = User.objects.all().order_by('-date_joined')[:4]
     context = {
                 "workshops":workshops,
                 "submitted_workshops":submitted_workshops,
@@ -171,6 +170,8 @@ def moderation_submitted_workshops(request):
                 'date_now': date_now,
                 'menu_item': menu_item
               }
+    if request.is_ajax():
+        return render(request, "openclass/moderation_submitted-workshops_table-accepted.html", context)              
     return render(request, 'openclass/moderation_submitted-workshops.html', context)
 
 @login_required
