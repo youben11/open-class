@@ -1,0 +1,64 @@
+        <div class="card">
+          <div class="card-header" data-background-color="green">
+            <h4 class="title">Accepted Workshops</h4>
+            <p class="category">Manage the accepted workshops</p>
+          </div>
+          <div class="card-content table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>Action</th>
+              </thead>
+              <tbody>
+              {% for s in accepted_workshops %}
+                <tr>
+                  <td><a href="">{{s.pk}}</a></td>
+                  <td>{{s.title}}</td>
+                  <td>{{s.animator.user.first_name}} {{s.animator.user.last_name}}</td>
+                  <td class="text-primary">{{s.start_date}}</td>
+                  <td>
+                    <form method="post">
+                      {% if s.start_date > date_now %}
+                      Not done yet
+                      {% else %}
+                      <button type="button" class="btn btn-sm btn-success cd-popup-trigger" data-workshop-id="{{s.pk}}">Mark as Done</button>
+                      {% endif %}
+                    </form>
+                  </td>
+                </tr>  
+              {% endfor %}
+            </tbody>
+            </table>
+          </div>
+        </div>
+        <script type="text/javascript">
+          var workshop_pk;
+          var decision;
+          $('.cd-popup-trigger').on('click', function(event){
+            event.preventDefault();
+            $('.cd-popup').addClass('is-visible');
+            $('#messageConfirm').text('Are you sure you want to '+ $(this).text().toLowerCase() + ' the workshop "'+$(this).parent().parent().parent().children('td:nth-child(2)').text() +'"?');
+            decision = 'done';
+            workshop_pk = $(this).attr("data-workshop-id");
+          });
+          
+          $('.cd-popup').on('click', function(event){
+            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') ) {
+              event.preventDefault();
+              $(this).removeClass('is-visible');
+            }
+          });
+
+          $('#no-btn').on('click', function(event){
+              $('.cd-popup').removeClass('is-visible');
+          });
+          //close popup when clicking the esc keyboard button
+          $(document).keyup(function(event){
+            if(event.which=='27'){
+              $('.cd-popup').removeClass('is-visible');
+            }
+          });
+        </script>
