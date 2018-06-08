@@ -2,7 +2,6 @@ from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
-from django.forms.models import model_to_dict
 from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
@@ -30,13 +29,16 @@ def moderation(request):
     refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
     done_workshops = Workshop.objects.filter(status=Workshop.DONE)
     workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    users = User.objects.all()
+    users = reversed(users[users.count()-4:])
     context = {
                 "workshops":workshops,
                 "submitted_workshops":submitted_workshops,
                 "accepted_workshops":accepted_workshops,
                 "refused_workshops":refused_workshops,
                 "done_workshops":done_workshops,
-                "menu_item":menu_item
+                "menu_item":menu_item,
+                "users":users
               }
     return render(
                 request,
@@ -61,7 +63,6 @@ def moderation_workshops(request):
                 'menu_item': menu_item,
                 'table_title': table_title
               }
-
     return render(request, 'openclass/moderation_workshops.html', context)
 
 @login_required
@@ -127,6 +128,8 @@ def moderation_accepted_workshops(request):
                 'date_now': date_now,
                 'menu_item': menu_item
               }
+    if request.is_ajax():
+        return render(request, "openclass/moderation_accepted-workshops_table.html", context)              
     return render(request, 'openclass/moderation_accepted-workshops.html', context)
 
 @login_required
@@ -205,9 +208,9 @@ def moderation_submitted_workshops_decision(request):
 
     elif decision == DONE:
         if workshop.done():
-            response = {'status': 'refused'}
+            response = {'status': 'done'}
         else:
-            response = {'status': "can't refuse"}
+            response = {'status': "can't mark as done"}
 
     else:
         response = {'status': 'invalid decision'}
@@ -303,12 +306,13 @@ def workshops_filter_tag(request):
 
 @login_required
 def members_list(request):
-    users = User.objects.filter(is_active=True).prefetch_related('profile')
+    filters = Q(is_active=True, is_superuser=False)
+    users = User.objects.filter(filters).prefetch_related('profile')
     return render(request, "openclass/member_list.html", {"users":users})
 
 @login_required
 def members_detail(request, username):
-    user = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username, is_superuser=False)
     return render(request, "openclass/profile.html", {"user":user})
 
 def badges_list(request):
@@ -534,7 +538,7 @@ def ask_question(request, workshop_pk):
     end_date = start_date + workshop.duration
 
     # check if the workshop is already done
-    if workshop.status == Workshop.DONE:
+    if workshop.status == Workshop.DONE or timezone.now() > end_date:
         context = {"is_done": True}
         return render(request, "openclass/ask_question.html", context)
 

@@ -1,41 +1,25 @@
                 <div class="card">
                   <div class="card-header" data-background-color="blue">
-                    <h4 class="title">Employees Stats</h4>
-                    <p class="category">New employees on 15th September, 2016</p>
+                    <h4 class="title">Recently Registered Users</h4>
+                    <p class="category">4 last users</p>
                   </div>
                   <div class="card-content table-responsive">
                     <table class="table table-hover">
                       <thead class="text-warning">
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Salary</th>
-                        <th>Country</th>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
                       </thead>
                       <tbody>
+                        {% for u in users %}
                         <tr>
-                          <td>1</td>
-                          <td>Dakota Rice</td>
-                          <td>$36,738</td>
-                          <td>Niger</td>
+                          <td>{{u.pk}}</td>
+                          <td>{{u.username}}</td>
+                          <td>{{u.first_name}}</td>
+                          <td>{{u.last_name}}</td>
                         </tr>
-                        <tr>
-                          <td>2</td>
-                          <td>Minerva Hooper</td>
-                          <td>$23,789</td>
-                          <td>Curaçao</td>
-                        </tr>
-                        <tr>
-                          <td>3</td>
-                          <td>Sage Rodriguez</td>
-                          <td>$56,142</td>
-                          <td>Netherlands</td>
-                        </tr>
-                        <tr>
-                          <td>4</td>
-                          <td>Philip Chaney</td>
-                          <td>$38,735</td>
-                          <td>Korea, South</td>
-                        </tr>
+                        {% endfor %}
                       </tbody>
                     </table>
                   </div>
