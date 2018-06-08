@@ -2,7 +2,6 @@ from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
-from django.forms.models import model_to_dict
 from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
@@ -308,12 +307,13 @@ def workshops_filter_tag(request):
 
 @login_required
 def members_list(request):
-    users = User.objects.filter(is_active=True).prefetch_related('profile')
+    filters = Q(is_active=True, is_superuser=False)
+    users = User.objects.filter(filters).prefetch_related('profile')
     return render(request, "openclass/member_list.html", {"users":users})
 
 @login_required
 def members_detail(request, username):
-    user = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username, is_superuser=False)
     return render(request, "openclass/profile.html", {"user":user})
 
 def badges_list(request):
@@ -539,7 +539,7 @@ def ask_question(request, workshop_pk):
     end_date = start_date + workshop.duration
 
     # check if the workshop is already done
-    if workshop.status == Workshop.DONE:
+    if workshop.status == Workshop.DONE or timezone.now() > end_date:
         context = {"is_done": True}
         return render(request, "openclass/ask_question.html", context)
 
