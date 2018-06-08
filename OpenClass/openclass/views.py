@@ -30,13 +30,16 @@ def moderation(request):
     refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
     done_workshops = Workshop.objects.filter(status=Workshop.DONE)
     workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    users = User.objects.all()
+    users = reversed(users[users.count()-4:])
     context = {
                 "workshops":workshops,
                 "submitted_workshops":submitted_workshops,
                 "accepted_workshops":accepted_workshops,
                 "refused_workshops":refused_workshops,
                 "done_workshops":done_workshops,
-                "menu_item":menu_item
+                "menu_item":menu_item,
+                "users":users
               }
     return render(
                 request,
@@ -61,7 +64,6 @@ def moderation_workshops(request):
                 'menu_item': menu_item,
                 'table_title': table_title
               }
-
     return render(request, 'openclass/moderation_workshops.html', context)
 
 @login_required
@@ -127,6 +129,8 @@ def moderation_accepted_workshops(request):
                 'date_now': date_now,
                 'menu_item': menu_item
               }
+    if request.is_ajax():
+        return render(request, "openclass/moderation_accepted-workshops_table.html", context)              
     return render(request, 'openclass/moderation_accepted-workshops.html', context)
 
 @login_required
@@ -205,9 +209,9 @@ def moderation_submitted_workshops_decision(request):
 
     elif decision == DONE:
         if workshop.done():
-            response = {'status': 'refused'}
+            response = {'status': 'done'}
         else:
-            response = {'status': "can't refuse"}
+            response = {'status': "can't mark as done"}
 
     else:
         response = {'status': 'invalid decision'}
