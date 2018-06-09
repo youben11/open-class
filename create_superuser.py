@@ -5,10 +5,8 @@ email = 'admin@example.com'
 password = 'openclassadmin'
 
 try:
+    User.objects.get(username='admin')
+    print ("User 'admin' already exist")
+except User.DoesNotExist:
     User.objects.create_superuser('admin', email, password)
-except:
-    try:
-        User.objects.get(username='admin')
-        print ("User 'admin' already exist")
-    except:
-        pass
+    print ("User 'admin created with default password'")

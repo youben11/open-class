@@ -12,9 +12,8 @@ echo "Updating Database Tables"
 echo "The Database has been updated"
 
 # create admin user
-echo "Creating the admin user"
+echo "Superuser..."
 cat /create_superuser.py | ./manage.py shell
-echo "Admin user created"
 
 # run the server
 echo "Starting the server..."
