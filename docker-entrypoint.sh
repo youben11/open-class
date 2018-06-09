@@ -7,13 +7,13 @@ sleep 10
 
 # create tables
 echo "Creating Database and Tables"
-./manage makemigrations
-./manage migrate
+./manage.py makemigrations
+./manage.py migrate
 echo "DB and Tables created"
 
 # create admin user
 echo "Creating the admin user"
-echo /create_superuser.py | ./manage.py shell
+cat /create_superuser.py | ./manage.py shell
 echo "Admin user created"
 
 # run the server
