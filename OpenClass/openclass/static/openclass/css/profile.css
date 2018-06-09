@@ -256,3 +256,8 @@ body {
 .tabs {
     margin-top: 10px;
 }
+
+.score {
+    color: #006988 !important;
+    font-size: 14px !important;
+}

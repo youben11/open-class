@@ -65,11 +65,13 @@ class WorkshopForm(ModelForm):
                 'seats_number',
                 'required_materials',
                 'start_date',
+                'topics',
                 'duration',
                 'cover_img',
                 ]
         widgets = {
                 'start_date': forms.DateInput(attrs={'type':'date'}),
+                'duration': forms.TextInput(attrs={'placeholder':'HH:MM:SS'})
                 }
 
 

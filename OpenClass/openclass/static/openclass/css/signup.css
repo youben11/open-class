@@ -16,7 +16,7 @@ select {
 	font-size: 13px;
     width: 79%;
     height: 37px;
-    border: none;
+    border: 1px solid rgba(255,255,255,0.2);
     padding: 0px;
     padding-left: 8px;
     -webkit-border-top-right-radius: 3px;
@@ -299,6 +299,9 @@ ul {
 	min-height: 74px;
 	height: auto;
 	background: #161618 !important;
-	border: none;
+    border: 1px solid rgba(255,255,255,0.2);
     width: 79%;
+}
+#id_interests-selectized {
+	border: none !important;
 }

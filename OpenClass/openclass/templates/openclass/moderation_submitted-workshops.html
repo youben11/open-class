@@ -8,44 +8,8 @@
 <div class="content">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-header" data-background-color="blue">
-            <h4 class="title">Submitted Workshops</h4>
-            <p class="category">Manage the submitted workshops</p>
-          </div>
-          <div class="card-content table-responsive">
-            <table class="table">
-              <thead class="text-primary">
-                <th>ID</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Date</th>
-                <th>Action</th>
-              </thead>
-              <tbody>
-              {% for s in submissions %}
-                <tr>
-                  <td><a href="">{{s.pk}}</a></td>
-                  <td>{{s.title}}</td>
-                  <td>{{s.animator.user.first_name}} {{s.animator.user.last_name}}</td>
-                  <td class="text-primary">{{s.start_date}}</td>
-                  <td>
-                    <form method="post">
-                      {% if s.start_date > date_now %}
-                      <button type="button" class="btn btn-sm btn-success cd-popup-trigger" data-workshop-id="{{s.pk}}">Accept</button>
-                      {% else %}
-                      <button type="button" class="btn btn-sm cd-popup-trigger" disabled="disabled">Accept</button>
-                      {% endif %}
-                      <button type="button" class="btn btn-sm btn-danger cd-popup-trigger" data-workshop-id="{{s.pk}}">Refuse</button>
-                    </form>
-                  </td>
-                </tr>  
-              {% endfor %}
-            </tbody>
-            </table>
-          </div>
-        </div>
+      <div id="table1" class="col-md-12">
+        {% include 'openclass/moderation_submitted-workshops_table-accepted.html' %}
       </div>
       <div class="col-md-12">
         <div class="card card-plain">
@@ -147,6 +111,16 @@
         else if (data.status == "invalid decision") {
           alert("This decision is invalid")
         }
+      }
+    });
+    $.ajax({
+      type: "GET",
+      url: "{{request.path}}",
+      success: function(data) {
+          $("#table1").html(data);
+      },
+      error: function(error) {
+          alert("refresh questions_list error");
       }
     });
   }

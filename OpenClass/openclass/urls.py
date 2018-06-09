@@ -1,13 +1,15 @@
 from django.urls import path, include
 from . import views
+from django.contrib.auth.views import login, logout
 
 
 app_name = "openclass"
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('about', views.about, name="about"),
+    path('about/', views.about, name="about"),
     path('accounts/', include('django.contrib.auth.urls')),
+    # path('accounts/logout', logout, name="logout"),
     path('badges/', views.badges_list, name='badges_list'),
     path('faq/', views.faq, name='faq'),
     path('members/', views.members_list, name='members_list'),

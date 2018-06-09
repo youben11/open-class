@@ -39,10 +39,10 @@
                 <li><a class="openclass-nav-link" href="{% url 'openclass:upcoming_workshops_list' %}">Upcoming Workshops</a></li>
               </ul>
             </li>
-            <li><a class="openclass-nav-link" href="#" title="">Awards</a></li>
-            <li><a class="openclass-nav-link" href="#" title="">FAQ</a></li>
-            <li><a class="openclass-nav-link" href="#" title="">About</a></li>
-            <li><a class="openclass-nav-link" href="#" title="">Contact</a></li>
+            <li><a class="openclass-nav-link" href="{% url 'openclass:badges_list' %}" title="">Awards</a></li>
+            <li><a class="openclass-nav-link" href="{% url 'openclass:faq' %}" title="">FAQ</a></li>
+            <li><a class="openclass-nav-link" href="{% url 'openclass:about' %}" title="">About</a></li>
+            <li><a class="openclass-nav-link" href="{% url 'openclass:index' %}" title="">Contact</a></li>
             {% if request.user.is_authenticated %}
             <li class="has-children">
               <a class="openclass-nav-link" href="{% url 'openclass:profile' %}">
@@ -55,7 +55,7 @@
                 <li><a class="openclass-nav-link" href="{% url 'openclass:user_questions' %}">My Questions</a></li>
                 <li><a class="openclass-nav-link" href="{% url 'openclass:user_settings' %}">Settings</a></li>
                 {% if request.user.is_staff %}
-                <li><a class="openclass-nav-link" href="{% url 'openclass:user_settings' %}">Settings</a></li>
+                <li><a class="openclass-nav-link" href="{% url 'openclass:moderation' %}">Moderation</a></li>
                 {% endif %}
                 <li><a class="openclass-nav-link" href="{% url 'openclass:logout' %}">Logout</a></li>
               </ul>
@@ -87,8 +87,8 @@
               <li><a href="{% url 'openclass:index' %}">Home</a></li>
               <li><a href="{% url 'openclass:workshops_list' %}">Workshops</a></li>
               <li><a href="{% url 'openclass:faq' %}">FAQ</a></li>
-              <li><a href="#0">About</a></li>
-              <li><a href="#0">Contact</a></li>
+              <li><a href="{% url 'openclass:about' %}">About</a></li>
+              <li><a href="{% url 'openclass:index' %}">Contact</a></li>
               <li><a href="#0">Terms of use</a></li>
             </ul>
           </div>
@@ -101,7 +101,7 @@
               <li><a href="{% url 'openclass:members_list' %}">Members</a></li>
               <li><a href="#0">Animators</a></li>
               <li><a href="{% url 'openclass:user_settings' %}">Settings</a></li>
-              <li><a href="#0">Logout</a></li>
+              <li><a href="{% url 'openclass:logout' %}">Logout</a></li>
             </ul>
           </div>
           <!-- end s-footer__archives -->
