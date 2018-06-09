@@ -17,5 +17,8 @@ RUN mkdir -p $APP_PATH
 COPY $APP_DIR_NAME $APP_PATH
 WORKDIR $APP_PATH
 VOLUME $APP_PATH
+#adding entrypoint scripts
+ADD docker-entrypoint.sh /
+ADD create_superuser.py /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
