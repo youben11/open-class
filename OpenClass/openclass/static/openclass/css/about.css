@@ -1,0 +1,22 @@
+h1,h2,h3{
+  color: white;
+}
+.about-title{
+  text-align: center;
+}
+.website-decripption{
+  text-align: center;
+  margin-top: 5rem;
+
+}
+.team-header{
+  text-align: center;
+}
+.card-custom{
+  width: 25rem;
+  margin-bottom: 5rem;
+}
+
+.row-1{
+  margin-top: 5rem;
+}
