@@ -11,7 +11,6 @@ services:
     depends_on:
       - "db"
       - "db_redis"
-    command: python /opt/OpenClass/manage.py runserver 0.0.0.0:8000
     restart: on-failure
   db:
     image: postgres:alpine
