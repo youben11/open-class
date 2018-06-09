@@ -1,3 +1,5 @@
+#!/bin/sh
+
 cd $APP_PATH
 
 # check if the database is ready
