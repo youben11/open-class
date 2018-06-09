@@ -6,10 +6,10 @@ cd $APP_PATH
 sleep 10
 
 # create tables
-echo "Creating Database and Tables"
+echo "Updating Database Tables"
 ./manage.py makemigrations
 ./manage.py migrate
-echo "DB and Tables created"
+echo "The Database has been updated"
 
 # create admin user
 echo "Creating the admin user"
