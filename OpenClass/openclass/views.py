@@ -128,7 +128,7 @@ def moderation_accepted_workshops(request):
                 'menu_item': menu_item
               }
     if request.is_ajax():
-        return render(request, "openclass/moderation_accepted-workshops_table.html", context)              
+        return render(request, "openclass/moderation_accepted-workshops_table.html", context)
     return render(request, 'openclass/moderation_accepted-workshops.html', context)
 
 @login_required
@@ -170,7 +170,7 @@ def moderation_submitted_workshops(request):
                 'menu_item': menu_item
               }
     if request.is_ajax():
-        return render(request, "openclass/moderation_submitted-workshops_table-accepted.html", context)              
+        return render(request, "openclass/moderation_submitted-workshops_table-accepted.html", context)
     return render(request, 'openclass/moderation_submitted-workshops.html', context)
 
 @login_required
@@ -363,7 +363,7 @@ def signup(request):
                 user.save()
                 token = profile.generate_verification_token()
                 email.send_verification_mail(user, token)
-                title = "Openclass - Confirmation"
+                title = "Confirmation"
                 msg = 'Check your inbox to confirm your registration'
                 context = {'title': title, 'msg': msg}
                 return render(request, 'openclass/info.html', context)
@@ -618,7 +618,7 @@ def feedback(request, workshop_pk):
     profile = request.user.profile
     context = {}
     if timezone.now() < workshop.end_date():
-        title = "Openclass - Feedback"
+        title = "Feedback"
         msg = 'Attendees can submit their feedback after the completion of the workshop'
         context = {'title': title, 'msg': msg}
         return render(request, 'openclass/info.html', context)
@@ -628,12 +628,12 @@ def feedback(request, workshop_pk):
                                         profile=profile
                                         )
         if not registration.present:
-            title = "Openclass - Feedback"
+            title = "Feedback"
             msg = 'Only attendees can submit a feedback'
             context = {'title': title, 'msg': msg}
             return render(request, 'openclass/info.html', context)
     except:
-        title = "Openclass - Feedback"
+        title = "Feedback"
         msg = 'You are not registred to this workshop'
         context = {'title': title, 'msg': msg}
         return render(request, 'openclass/info.html', context)
