@@ -6,7 +6,7 @@ cd $APP_PATH
 echo "Waiting for Postgres DB"
 while ! pg_isready -h $PG_HOSTNAME > /dev/null 2>&1;
 do
-  echo "."
+  echo -n "."
   sleep 1
 done
 echo "Postgres DB is ready"
