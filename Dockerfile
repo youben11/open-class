@@ -12,6 +12,8 @@ RUN apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-de
 ADD requirements.txt /
 RUN pip install -r requirements.txt
 RUN rm requirements.txt
+#installing postgres to test if db ready
+RUN apk add postgresql
 #adding the django project
 RUN mkdir -p $APP_PATH
 COPY $APP_DIR_NAME $APP_PATH

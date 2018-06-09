@@ -43,3 +43,4 @@ The Docker Daemon should start 3 containers when you run `docker-compose` : web,
 All this containers are connected together in a local virtual LAN and can't be accessed from the outside unless a port is binded.
 
 ## Configuration
+The first time that the server is started, the admin account is created with a username='admin' and a password='openclassadmin', you should change the password via the admin panel (example: http://localhost/admin/)

@@ -12,6 +12,8 @@ services:
       - "db"
       - "db_redis"
     restart: on-failure
+    environment:
+      - PG_HOSTNAME=db
   db:
     image: postgres:alpine
     environment:
