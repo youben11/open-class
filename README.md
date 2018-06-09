@@ -29,4 +29,6 @@ It should take some time the first time your run this command (it depends on you
 ### How it works ?
 At the time that you start the server, your machine should have port 80 listening to receive HTTP requests.
 
+![deployment diagram](https://github.com/youben11/open-class/blob/master/imgs/deployment.png)
+
 ### Configuration
