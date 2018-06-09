@@ -1,7 +1,7 @@
 FROM python:3.6-alpine
 
-ENV app_dir_name OpenClass
-ENV app_path /opt/$app_dir_name
+ENV APP_DIR_NAME OpenClass
+ENV APP_PATH /opt/$APP_DIR_NAME
 #installing postgres requirements
 RUN apk update \
   && apk add --virtual build-deps gcc python3-dev musl-dev \
@@ -13,7 +13,9 @@ ADD requirements.txt /
 RUN pip install -r requirements.txt
 RUN rm requirements.txt
 #adding the django project
-RUN mkdir -p $app_path
-COPY $app_dir_name $app_path
-WORKDIR $app_path
-VOLUME $app_path
+RUN mkdir -p $APP_PATH
+COPY $APP_DIR_NAME $APP_PATH
+WORKDIR $APP_PATH
+VOLUME $APP_PATH
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
