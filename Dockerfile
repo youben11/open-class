@@ -20,6 +20,6 @@ VOLUME $APP_PATH
 #adding entrypoint scripts
 ADD docker-entrypoint.sh /
 ADD create_superuser.py /
-RUN chmod +x docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
