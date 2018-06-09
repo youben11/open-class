@@ -4,7 +4,7 @@
 {% block headercontent %}
 <link rel="stylesheet" href="{% static 'openclass/css/badges.css' %}">
 <link rel="stylesheet" href="{% static 'openclass/css/openclass.css' %}">
-<title>Badges</title>
+<title>Badges - {{config.SITE_NAME}}</title>
 {% endblock %}
 
 {% block content %}
@@ -19,9 +19,23 @@
             </div>
             <h4 class="title"><a href="">{{b.name}}</a></h4>
             <p class="description">{{b.description}}</p>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
           </div>
           {% endfor %}
         </div>
     </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+  var i = 0;
+  $('.progress-bar').each(function() {
+    if (i<=5) {
+      i += Math.floor(Math.random()*2)
+    }
+    $(this).addClass('w-'+(25*i));
+  });
+</script>
 {% endblock %}

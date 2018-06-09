@@ -1,7 +1,8 @@
 {% extends 'openclass/base.html' %}
 {% load staticfiles %}
-
-
+{% block contentheader %}
+	<title>Attendance - {{config.SITE_NAME}}</title>
+{% endblock %}
 {% block content %}
 <div class="container">
 	<div class="row">
