@@ -30,8 +30,12 @@
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
+  var i = 0;
   $('.progress-bar').each(function() {
-    $(this).css('width':'75%');
+    if (i<=5) {
+      i += Math.floor(Math.random()*2)
+    }
+    $(this).addClass('w-'+(25*i));
   });
 </script>
 {% endblock %}
