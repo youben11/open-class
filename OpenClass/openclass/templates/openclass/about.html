@@ -1,20 +1,95 @@
 {% extends 'openclass/base.html' %}
 {% load staticfiles %}
+{% block headercontent %}
 
+<link rel="stylesheet" href="{% static 'openclass/css/about.css' %}">
+{% endblock %}
 {% block content %}
 <div class="container">
-  <div class="row">
-    <div class="col-12 col-lg-10 col-xl-8">
-      <p class="website-decripption">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  <div class="row"  style="display:flex;justify-content:center;align-items:center;">
+
+    <h1 class="about-title">About OpenClass</h1>
     </div>
+
+
+  <div class="row" style="display:flex;justify-content:center;align-items:center;">
+        <p class="website-decripption">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+
+  <div class="row" style="display:flex;justify-content:center;align-items:center;">
+
+    <h2 class="team-header">Core Team</h2>
+
   </div>
-  <div class="row">
-    <div class="card" style="width: 18rem;">
-      <img class="card-img-top" src="..." alt="Card image cap">
-      <div class="card-body">
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  <div class="row row-1">
+        <div class="col-12 col-lg-10 col-xl-4">
+          <div class="card card-custom">
+          <img class="card-img-top" src="{% static 'openclass/img/team/nadir.png' %}" alt="Card image cap">
+          <div class="card-body">
+            <h4>Nadir Bounoua</h4>
+            <h5>Developer</h5>
+            <p class="card-text"></p>
+          </div>
+        </div>
+        </div>
+      <div class="col-12 col-lg-10 col-xl-4">
+
+      <div class="card card-custom">
+        <img class="card-img-top" src="{% static 'openclass/img/team/ayoub.jpg' %}" alt="Card image cap">
+        <div class="card-body">
+          <h4>Ayoub Benaissa</h4>
+          <h5>Developer</h5>
+          <p class="card-text"></p>
+        </div>
       </div>
     </div>
+     <div class="col-12 col-lg-10 col-xl-4">
+       <div class="card card-custom">
+          <img class="card-img-top" src="{% static 'openclass/img/team/bilal.jpg' %}" alt="Card image cap">
+          <div class="card-body">
+            <h4>Bilal Retiat</h4>
+            <h5>Developer</h5>
+            <p class="card-text"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class="row" style="display:flex;justify-content:center;align-items:center;">
+    <div class="col-12 col-lg-10 col-xl-4">
+      <div class="card card-custom">
+      <img class="card-img-top" src="{% static 'openclass/img/team/aziz.png' %}" alt="Card image cap">
+      <div class="card-body">
+        <h4>Abdelaziz Attouche</h4>
+        <h5>Developer</h5>
+        <p class="card-text"></p>
+      </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-10 col-xl-4">
+     <div class="card card-custom">
+        <img class="card-img-top" src="{% static 'openclass/img/team/ahmed.jpg' %}" alt="Card image cap">
+        <div class="card-body">
+          <h4>Ahmed Derkaoui</h4>
+          <h5>Developer</h5>
+          <p class="card-text"></p>
+        </div>
+      </div>
   </div>
+
+  </div>
+
+  <div class="row"  style="display:flex;justify-content:center;align-items:center;">
+
+    <h1 class="about-title">Want to work with us ?</h1>
+    </div>
+
+
+  <div class="row" style="display:flex;justify-content:center;align-items:center;">
+        <p class="website-decripption"></p>
+    </div>
+
+
 </div>
+
 {% endblock %}
