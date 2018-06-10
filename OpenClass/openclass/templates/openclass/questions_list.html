@@ -1,8 +1,27 @@
+
+<div class="col-xs-12 col-lg-12 col-xl-6 col-infos">
+
 {% if questions_list %}
-    <h1>Questions list:</h1>
+<h3>Question list:</h3>
     {% for question in questions_list %}
         <p class="message">{{ question.author.user.username }}: {{ question.question }}</p>
     {% endfor %}
 {% else %}
     <p>there are no questions for the moment</p>
 {% endif %}
+<script type="text/javascript">
+function refresh_questions_list() {
+    $.ajax({
+        type: "GET",
+        url: "{{ request.path }}",
+        success: function(data) {
+            $("#Q").html(data)
+        },
+        error: function(error) {
+        //    alert("refresh questions_list error");
+        }
+    });
+}
+setInterval("refresh_questions_list()", 10000);
+</script>
+</div>

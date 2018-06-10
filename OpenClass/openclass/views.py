@@ -2,6 +2,7 @@ from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
+from django.forms.models import model_to_dict
 from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
@@ -29,15 +30,13 @@ def moderation(request):
     refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
     done_workshops = Workshop.objects.filter(status=Workshop.DONE)
     workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
-    users = User.objects.all().order_by('-date_joined')[:4]
     context = {
                 "workshops":workshops,
                 "submitted_workshops":submitted_workshops,
                 "accepted_workshops":accepted_workshops,
                 "refused_workshops":refused_workshops,
                 "done_workshops":done_workshops,
-                "menu_item":menu_item,
-                "users":users
+                "menu_item":menu_item
               }
     return render(
                 request,
@@ -62,6 +61,7 @@ def moderation_workshops(request):
                 'menu_item': menu_item,
                 'table_title': table_title
               }
+
     return render(request, 'openclass/moderation_workshops.html', context)
 
 @login_required
@@ -127,8 +127,6 @@ def moderation_accepted_workshops(request):
                 'date_now': date_now,
                 'menu_item': menu_item
               }
-    if request.is_ajax():
-        return render(request, "openclass/moderation_accepted-workshops_table.html", context)
     return render(request, 'openclass/moderation_accepted-workshops.html', context)
 
 @login_required
@@ -169,8 +167,6 @@ def moderation_submitted_workshops(request):
                 'date_now': date_now,
                 'menu_item': menu_item
               }
-    if request.is_ajax():
-        return render(request, "openclass/moderation_submitted-workshops_table-accepted.html", context)
     return render(request, 'openclass/moderation_submitted-workshops.html', context)
 
 @login_required
@@ -209,9 +205,9 @@ def moderation_submitted_workshops_decision(request):
 
     elif decision == DONE:
         if workshop.done():
-            response = {'status': 'done'}
+            response = {'status': 'refused'}
         else:
-            response = {'status': "can't mark as done"}
+            response = {'status': "can't refuse"}
 
     else:
         response = {'status': 'invalid decision'}
@@ -223,7 +219,8 @@ def workshops_list(request):
     if request.is_ajax():
         tag_names = list(set(request.POST.getlist('tag[]')))
         time_filters = list(set(request.POST.getlist('time[]')))
-        if tag_names or time_filters:
+        title_filter = request.POST['title']
+        if tag_names or time_filters or title_filter:
             today = timezone.now().date()
             this_week = today + datetime.timedelta(6)
             tomorrow = today + datetime.timedelta(1)
@@ -251,6 +248,8 @@ def workshops_list(request):
                             start_date__month=today.month,
                             start_date__year=today.year
                             )
+            if title_filter:
+                filters |= Q(title__icontains=title_filter)
             # all filters were ORed to make a final filter
             workshop_list = Workshop.objects.filter(filters).distinct()
             workshop_list = workshop_list.prefetch_related('topics')
@@ -307,13 +306,12 @@ def workshops_filter_tag(request):
 
 @login_required
 def members_list(request):
-    filters = Q(is_active=True, is_superuser=False)
-    users = User.objects.filter(filters).prefetch_related('profile')
+    users = User.objects.filter(is_active=True).prefetch_related('profile')
     return render(request, "openclass/member_list.html", {"users":users})
 
 @login_required
 def members_detail(request, username):
-    user = get_object_or_404(User, username=username, is_superuser=False)
+    user = get_object_or_404(User, username=username)
     return render(request, "openclass/profile.html", {"user":user})
 
 def badges_list(request):
@@ -363,7 +361,7 @@ def signup(request):
                 user.save()
                 token = profile.generate_verification_token()
                 email.send_verification_mail(user, token)
-                title = "Confirmation"
+                title = "Openclass - Confirmation"
                 msg = 'Check your inbox to confirm your registration'
                 context = {'title': title, 'msg': msg}
                 return render(request, 'openclass/info.html', context)
@@ -539,7 +537,7 @@ def ask_question(request, workshop_pk):
     end_date = start_date + workshop.duration
 
     # check if the workshop is already done
-    if workshop.status == Workshop.DONE or timezone.now() > end_date:
+    if workshop.status == Workshop.DONE:
         context = {"is_done": True}
         return render(request, "openclass/ask_question.html", context)
 
@@ -618,7 +616,7 @@ def feedback(request, workshop_pk):
     profile = request.user.profile
     context = {}
     if timezone.now() < workshop.end_date():
-        title = "Feedback"
+        title = "Openclass - Feedback"
         msg = 'Attendees can submit their feedback after the completion of the workshop'
         context = {'title': title, 'msg': msg}
         return render(request, 'openclass/info.html', context)
@@ -628,12 +626,12 @@ def feedback(request, workshop_pk):
                                         profile=profile
                                         )
         if not registration.present:
-            title = "Feedback"
+            title = "Openclass - Feedback"
             msg = 'Only attendees can submit a feedback'
             context = {'title': title, 'msg': msg}
             return render(request, 'openclass/info.html', context)
     except:
-        title = "Feedback"
+        title = "Openclass - Feedback"
         msg = 'You are not registred to this workshop'
         context = {'title': title, 'msg': msg}
         return render(request, 'openclass/info.html', context)

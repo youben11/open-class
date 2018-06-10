@@ -14,7 +14,7 @@
       <div class="input-group mb-2">
         <div class="input-group-prepend">
         </div>
-        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Location">
+        <input type="text" class="form-control pl-2" id="inlineFormInputGroup" onchange="search_title()" placeholder="Search workshop">
       </div>
   <div class="card">
     <div class="card-header" id="headingTwo">
@@ -64,6 +64,7 @@
     var tag_filter_front;
     var time_filter_front;
 
+    var input_value;
     var tag_filter_list = [];
     var time_filter_list = [];
 
@@ -81,7 +82,7 @@
       $.ajax({
         type: "POST",
         url: "{{ request.path }}",
-        data: {'filter': 'TIME','time': time_filter_list, 'tag': tag_filter_list},
+        data: {'filter': 'TIME','time': time_filter_list, 'tag': tag_filter_list, 'title':input_value},
         success: function(result) {
               $("#workshopsContainer").html(result)
         },
@@ -111,6 +112,14 @@
     ajax()
   }
 
+
+
+
+  function search_title() {
+    var input = document.getElementById('inlineFormInputGroup');
+    input_value=input.value.toLowerCase();
+    ajax()
+  }
 
 </script>
 {% endblock %}

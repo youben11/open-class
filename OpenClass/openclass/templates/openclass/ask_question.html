@@ -1,40 +1,26 @@
-{% extends 'openclass/base.html' %}
-{% load staticfiles %}
-
-{% block headercontent %}
-<link rel="stylesheet" href="{% static 'openclass/css/badges.css' %}">
-<link rel="stylesheet" href="{% static 'openclass/css/signup.css' %}">
-<title>Ask a Question - {{config.SITE_NAME}}</title>
-{% endblock %}
-
-{% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12 col-md-10 offset-md-1">
-            <h2>
+<div class="col-xs-12 col-lg-12 col-xl-6 col-infos">
+            <h3>Questions:</h3>
+            <h4>
             {% if is_done %}
             this whorkshop is already done
             {% elif not_accepted %}
-            this whorkshop isn't accepted 
+            this whorkshop isn't accepted
             {% elif not_started %}
-            this whorkshop did't start yet 
+            this whorkshop did't start yet
             {% elif not_registered %}
-            you are not registered to this workshop 
+            you are not registered to this workshop
             {% elif not_present %}
-            you are not present 
+            you are not present
             {% else %}
-            </h2>
+          </h4>
             <div class="col-xs-12 col-md-8 offset-md-2">
-                
-            <form name="AskQuestionForm" method="post">
+
+            <form name="AskQuestionForm" method="post"  action="{{ request.path }}">
                 {% csrf_token %}
                 {{question_form.as_p}}
                 <input type="text" name="form_name" hidden="hidden" value="ask_question">
                 <button type="submit">Ask</button>
             </form>
             </div>
-        </div>
-    </div>
 </div>
 {% endif %}
-{% endblock %}
