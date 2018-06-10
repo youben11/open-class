@@ -1,10 +1,10 @@
 # What is OpenClass?
 
-OpenClass is a web app that promote information sharing through organised workshops.
+OpenClass is a web app that promote information sharing through organized workshops.
 
 ![home](/imgs/home.png)
 
-## Instalation
+## Installation
 OpenClass was developed to be mainly deployed using Docker, the following instructions will guide you to deploy OpenClass on a machine that has Docker already installed. Please visit this [link](https://docs.docker.com/install/) if you don't have Docker installed yet.
 
 #### Get the source code
@@ -43,3 +43,7 @@ The Docker Daemon should start 3 containers when you run `docker-compose` : web,
 All this containers are connected together in a local virtual LAN and can't be accessed from the outside unless a port is binded.
 
 ## Configuration
+The first time that the server is started, the admin account is created with a username='admin' and a password='openclassadmin', you should change the password via the admin panel (example: http://localhost/admin/).
+
+##### IMPORTANT !
+Don't forget to change the admin's password.

@@ -3,18 +3,23 @@
 cd $APP_PATH
 
 # check if the database is ready
-sleep 10
+echo "Waiting for Postgres DB"
+while ! pg_isready -h $PG_HOSTNAME > /dev/null 2>&1;
+do
+  echo -n "."
+  sleep 1
+done
+echo "Postgres DB is ready"
 
 # create tables
-echo "Creating Database and Tables"
+echo "Updating Database Tables"
 ./manage.py makemigrations
 ./manage.py migrate
-echo "DB and Tables created"
+echo "The Database has been updated"
 
 # create admin user
-echo "Creating the admin user"
+echo "Superuser..."
 cat /create_superuser.py | ./manage.py shell
-echo "Admin user created"
 
 # run the server
 echo "Starting the server..."
