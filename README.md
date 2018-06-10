@@ -1,10 +1,10 @@
 # What is OpenClass?
 
-OpenClass is a web app that promote information sharing through organised workshops.
+OpenClass is a web app that promote information sharing through organized workshops.
 
 ![home](/imgs/home.png)
 
-## Instalation
+## Installation
 OpenClass was developed to be mainly deployed using Docker, the following instructions will guide you to deploy OpenClass on a machine that has Docker already installed. Please visit this [link](https://docs.docker.com/install/) if you don't have Docker installed yet.
 
 #### Get the source code
