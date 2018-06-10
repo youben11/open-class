@@ -8,7 +8,7 @@
 	background: #333;
 	border-radius: .4em;
 	padding: 0.5em;
-
+  margin-top: 1em;
 }
 .message::after {
 	content: '';
