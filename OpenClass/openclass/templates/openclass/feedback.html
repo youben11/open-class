@@ -1,23 +1,14 @@
-{% extends 'openclass/base.html' %}
-{% load staticfiles %}
 
-{% block headercontent %}
-<link rel="stylesheet" href="{% static 'openclass/css/openclass.css' %}">
-<link rel="stylesheet" href="{% static 'openclass/css/poll.css' %}">
-<title>Feedback - {{config.SITE_NAME}}</title>
-{% endblock %}
-
-{% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12 col-md-4 offset-md-4 container-custom">
+<div class="col-xs-12 col-lg-12 col-xl-6 col-infos">
           {% if is_feedbacked %}
-          <h3>You already sent your feedback</h3>
+          <h3>Feedback:</h3>
+          <h4>You already sent your feedback</h4>
           {% else %}
-          <form class="poll" method="post">
+          <h3>Feedback:</h3>
+          <form class="poll mt-3" method="post" action="{{ request.path }}">
             {% csrf_token %}
-            {% for q in questions %}                
-                <h3>{{q.question}}</h3>
+            {% for q in questions %}
+                <h4>{{q.question}}</h4>
                 <div>
                     <ul>
                       <fieldset id="question{{q.pk}}">
@@ -34,7 +25,4 @@
           </form>
           {% endif %}
 
-        </div>
-    </div>
 </div>
-{% endblock %}
