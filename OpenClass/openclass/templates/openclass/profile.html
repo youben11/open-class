@@ -32,14 +32,14 @@
                             {% for workshop in user.profile.workshops_attended %}
                               <a href="{% url 'openclass:workshops_detail' workshop.pk %}" class="list-group-item list-group-item-action">{{workshop.title}}</a>
                             {% endfor %}
-                            {% if request.user == user %}
-                              {% if user.profile.workshops_attended.count == 0 %}
+                            {% if user.profile.workshops_attended.count == 0 %}
+                              {% if request.user == user %}
                                 <p>You didn't attend to any workshop yet. Visit the <a href="{% url 'openclass:workshops_list' %}">Workshops List</a> now!</p>
                               {% else %}
-                                <a href="#"><span>View more</span></a>
-                              {% endif %}  
-                            {% else %}
                                 <p>@{{user.username}} didn't attend to any workshop yet.</p>
+                              {% endif %}
+                            {% else %}
+                              <a href="#"><span>View more</span></a>
                             {% endif %}
                             </div>
                           </div>
@@ -59,14 +59,14 @@
                             {% for workshop in user.profile.workshops_animated %}
                               <a href="{% url 'openclass:workshops_detail' workshop.pk %}" class="list-group-item list-group-item-action">{{workshop.title}}</a>
                             {% endfor %}
-                            {% if request.user == user %}
-                              {% if user.profile.workshops_animated.count == 0 %}
+                            {% if user.profile.workshops_animated.count == 0 %}
+                              {% if request.user == user %}
                               <p>You didn't animate any workshop yet. <a href="{% url 'openclass:submit_workshop' %}">Submit a Workshop now!</a></p>
                               {% else %}
-                                <a href="#"><span>View more</span></a>
-                              {% endif %}  
+                              <p>@{{user.username}} didn't animate any workshop yet.</p>
+                              {% endif %}
                             {% else %}
-                                <p>@{{user.username}} didn't animate to any workshop yet.</p>
+                                <a href="#"><span>View more</span></a>
                             {% endif %}
                             </div>
                           </div>
