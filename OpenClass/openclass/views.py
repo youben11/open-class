@@ -219,7 +219,7 @@ def workshops_list(request):
     if request.is_ajax():
         tag_names = list(set(request.POST.getlist('tag[]')))
         time_filters = list(set(request.POST.getlist('time[]')))
-        title_filter = request.POST['title']
+        title_filter = request.POST.get('title',"")
         if tag_names or time_filters or title_filter:
             today = timezone.now().date()
             this_week = today + datetime.timedelta(6)
