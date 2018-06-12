@@ -82,7 +82,7 @@
       $.ajax({
         type: "POST",
         url: "{{ request.path }}",
-        data: {'filter': 'TIME','time': time_filter_list, 'tag': tag_filter_list, 'title':input_value},
+        data: {'time': time_filter_list, 'tag': tag_filter_list, 'title':input_value},
         success: function(result) {
               $("#workshopsContainer").html(result)
         },

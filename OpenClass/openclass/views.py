@@ -30,13 +30,15 @@ def moderation(request):
     refused_workshops = Workshop.objects.filter(status=Workshop.REFUSED)
     done_workshops = Workshop.objects.filter(status=Workshop.DONE)
     workshops = Workshop.objects.filter(status=Workshop.ACCEPTED)
+    users = User.objects.all().order_by('-date_joined')[:4]
     context = {
                 "workshops":workshops,
                 "submitted_workshops":submitted_workshops,
                 "accepted_workshops":accepted_workshops,
                 "refused_workshops":refused_workshops,
                 "done_workshops":done_workshops,
-                "menu_item":menu_item
+                "menu_item":menu_item,
+                "users":users
               }
     return render(
                 request,
@@ -127,6 +129,8 @@ def moderation_accepted_workshops(request):
                 'date_now': date_now,
                 'menu_item': menu_item
               }
+    if request.is_ajax():
+        return render(request, "openclass/moderation_accepted-workshops_table.html", context)
     return render(request, 'openclass/moderation_accepted-workshops.html', context)
 
 @login_required
@@ -167,6 +171,8 @@ def moderation_submitted_workshops(request):
                 'date_now': date_now,
                 'menu_item': menu_item
               }
+    if request.is_ajax():
+        return render(request, "openclass/moderation_submitted-workshops_table-accepted.html", context)
     return render(request, 'openclass/moderation_submitted-workshops.html', context)
 
 @login_required
@@ -205,9 +211,9 @@ def moderation_submitted_workshops_decision(request):
 
     elif decision == DONE:
         if workshop.done():
-            response = {'status': 'refused'}
+            response = {'status': 'done'}
         else:
-            response = {'status': "can't refuse"}
+            response = {'status': "can't mark as done"}
 
     else:
         response = {'status': 'invalid decision'}
@@ -219,7 +225,7 @@ def workshops_list(request):
     if request.is_ajax():
         tag_names = list(set(request.POST.getlist('tag[]')))
         time_filters = list(set(request.POST.getlist('time[]')))
-        title_filter = request.POST['title']
+        title_filter = request.POST.get('title',"")
         if tag_names or time_filters or title_filter:
             today = timezone.now().date()
             this_week = today + datetime.timedelta(6)
@@ -306,12 +312,13 @@ def workshops_filter_tag(request):
 
 @login_required
 def members_list(request):
-    users = User.objects.filter(is_active=True).prefetch_related('profile')
+    filters = Q(is_active=True, is_superuser=False)
+    users = User.objects.filter(filters).prefetch_related('profile')
     return render(request, "openclass/member_list.html", {"users":users})
 
 @login_required
 def members_detail(request, username):
-    user = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username, is_superuser=False)
     return render(request, "openclass/profile.html", {"user":user})
 
 def badges_list(request):
@@ -361,7 +368,7 @@ def signup(request):
                 user.save()
                 token = profile.generate_verification_token()
                 email.send_verification_mail(user, token)
-                title = "Openclass - Confirmation"
+                title = "Confirmation"
                 msg = 'Check your inbox to confirm your registration'
                 context = {'title': title, 'msg': msg}
                 return render(request, 'openclass/info.html', context)
@@ -537,7 +544,7 @@ def ask_question(request, workshop_pk):
     end_date = start_date + workshop.duration
 
     # check if the workshop is already done
-    if workshop.status == Workshop.DONE:
+    if workshop.status == Workshop.DONE  or timezone.now() > end_date:
         context = {"is_done": True}
         return render(request, "openclass/ask_question.html", context)
 
@@ -616,7 +623,7 @@ def feedback(request, workshop_pk):
     profile = request.user.profile
     context = {}
     if timezone.now() < workshop.end_date():
-        title = "Openclass - Feedback"
+        title = "Feedback"
         msg = 'Attendees can submit their feedback after the completion of the workshop'
         context = {'title': title, 'msg': msg}
         return render(request, 'openclass/info.html', context)
@@ -626,12 +633,12 @@ def feedback(request, workshop_pk):
                                         profile=profile
                                         )
         if not registration.present:
-            title = "Openclass - Feedback"
+            title = "Feedback"
             msg = 'Only attendees can submit a feedback'
             context = {'title': title, 'msg': msg}
             return render(request, 'openclass/info.html', context)
     except:
-        title = "Openclass - Feedback"
+        title = "Feedback"
         msg = 'You are not registred to this workshop'
         context = {'title': title, 'msg': msg}
         return render(request, 'openclass/info.html', context)
