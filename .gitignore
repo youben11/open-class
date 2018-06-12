@@ -8,5 +8,10 @@ __pycache__/
 # Project Database
 OpenClass/db.sqlite3
 
+# docs
+docs/build
+_templates
+_static
+
 # TODO
 TODO
