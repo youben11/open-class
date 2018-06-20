@@ -49,4 +49,4 @@ The first time that the server is started, the admin account is created with a u
 Don't forget to change the admin's password.
 
 ## Want to contribute?
-If you are willing to work with us on this project, please visit [the project section](/projects) where you will find cards of functionalities that we aim to implement. take one of them and work on it, then submit a pull request. Thank you :D
+If you are willing to work with us on this project, please visit [this project board](https://github.com/youben11/open-class/projects/1) where you will find cards of functionalities that we aim to implement. take one of them and work on it, then submit a pull request. Thank you :D
