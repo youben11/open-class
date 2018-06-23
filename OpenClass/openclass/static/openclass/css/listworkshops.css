@@ -11,8 +11,6 @@
 
 }
 
-
-
 .inscription-progress{
   padding-top: 10px;
 }
@@ -59,4 +57,13 @@ h4, .h4 {
 
 .img-background{
   width: 40vw;
+}
+
+.input-group {
+  background: #333; 
+}
+
+::placeholder {
+  color:#fff !important;
+  opacity: 1 !important; /* Firefox */
 }

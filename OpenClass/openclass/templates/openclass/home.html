@@ -123,6 +123,7 @@
                 </div> 
                 <!-- END Card -->  
             </div>
+            <!-- END Column -->
             <div class="card-box col-md-4 col-sm-6">   
                 <!-- START Card -->   
                 <div class="card text-center" data-background="image" data-src="{% static 'openclass/img/workshops/workshop2.jpg' %}">
@@ -138,6 +139,7 @@
                 </div> 
                 <!-- END Card -->  
             </div>
+            <!-- END Column -->
             <div class="card-box col-md-4 col-sm-6">
                 <!-- START Card -->   
                 <div class="card text-center" data-background="image" data-src="{% static 'openclass/img/workshops/workshop3.jpg' %}">
@@ -153,8 +155,17 @@
                 </div> 
                 <!-- END Card -->                                    
             </div>
+            <!-- END Column -->
         </div>
+        <!-- END Row -->
+        <div class="row">
+          <div class="col-lg-12 text-center">
+              <br><a href="{% url 'openclass:workshops_list' %}" class="btn btn-primary">Visit the Workshop List</a>
+          </div>
+        </div>
+        <!-- END Row -->
       </div>
+      <!-- END Container -->
     </section>
 
     <!-- Awards Grid -->
