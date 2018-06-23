@@ -1,7 +1,32 @@
+/* General */
+
+
 .container-custom {
   background: rgba(255, 255, 255,0.92);
   padding: 10px;
 }
+
+.openclass-text-blue {
+	color: #0078ff;
+}
+
+.openclass-text-green {
+	color: #139e8c;
+}
+
+.openclass-text-orange {
+	color: #e77626;
+}
+
+.openclass-text-purple {
+	color: #b03eff;
+}
+
+.openclass-text-red {
+	color: #df3c3e;
+}
+
+/* Questions List */
 .message {
 	position: relative;
 	color: #fff;
@@ -10,6 +35,7 @@
 	padding: 0.5em;
   margin-top: 1em;
 }
+
 .message::after {
 	content: '';
 	position: absolute;

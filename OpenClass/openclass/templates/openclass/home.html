@@ -18,7 +18,7 @@
 
     <!-- Custom fonts for this template -->
     <!-- <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
@@ -26,6 +26,7 @@
 
     <!-- Custom styles for this template -->
     <link href="{% static 'openclass/css/home.css' %}" rel="stylesheet">
+    <link href="{% static 'openclass/css/openclass.css' %}" rel="stylesheet">
 
   </head>
 
@@ -165,28 +166,31 @@
             <h3 class="section-subheading text-muted">Learn new things and earn <a href="#">Badges!</a></h3>
           </div>
         </div>
-        <div class="row">
+        <div class="row text-center">
           <div class="col-md-4 col-sm-6 portfolio-item">
-              <img class="img-fluid" src="{% static 'openclass/img/portfolio/01-thumbnail.jpg' %}" alt="">
+            <i class="fa fa-award openclass-text-red display-1"></i>
             <div class="portfolio-caption">
-              <h4>Badge</h4>
-              <p class="text-muted">Description</p>
+              <br>
+              <h4>Attendance Level 1</h4>
+              <p class="text-muted">You attentended to at least 1 workshop</p>
             </div>
           </div>
           <div class="col-md-4 col-sm-6 portfolio-item">
-              <img class="img-fluid" src="{% static 'openclass/img/portfolio/02-thumbnail.jpg' %}" alt="">
+            <i class="fa fa-award openclass-text-blue display-1"></i>
             <div class="portfolio-caption">
-              <h4>Badge</h4>
-              <p class="text-muted">Description</p>
+              <br>
+              <h4>Animation Level 1</h4>
+              <p class="text-muted">You animated at least 1 workshop</p>
             </div>
           </div>
           <div class="col-md-4 col-sm-6 portfolio-item">
-              <img class="img-fluid" src="{% static 'openclass/img/portfolio/03-thumbnail.jpg' %}" alt="">
+            <i class="fa fa-award openclass-text-green display-1"></i>
             <div class="portfolio-caption">
-              <h4>Badge</h4>
-              <p class="text-muted">Description</p>
+              <br>
+              <h4>Fidelity Level 1</h4>
+              <p class="text-muted">You are an active member for more than one month</p>
             </div>
-          </div>        
+          </div>
         </div>
       </div>
     </section>
@@ -197,7 +201,8 @@
         <div class="row">
           <div class="col-lg-12 text-center">
             <h2 class="section-heading text-uppercase">About</h2>
-            <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+            <h3 class="section-subheading text-muted">OpenClass is a web app that promote information sharing through organized workshops.</h3>
+            <p><a href="https://github.com/youben11/open-class" target="_blank"><i class="fab fa-github" style="font-size: 34px;"></i> Contribute on GitHub</a></p>
           </div>
         </div>
         <div class="row">
@@ -341,7 +346,8 @@
         </div>
         <div class="row">
           <div class="col-lg-8 mx-auto text-center">
-            <p class="large text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde.</p>
+            <p class="large text-muted">Want to be part of the team?</p>
+            <p><a href="https://github.com/youben11/open-class" target="_blank"><i class="fab fa-github" style="font-size: 34px;"></i>Become a contributor!</a></p>
           </div>
         </div>
       </div>
@@ -353,7 +359,7 @@
         <div class="row">
           <div class="col-lg-12 text-center">
             <h2 class="section-heading text-uppercase">Contact Us</h2>
-            <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+            <h3 class="section-subheading text-muted">Share with us your opinion and suggestions!</h3>
           </div>
         </div>
         <div class="row">
