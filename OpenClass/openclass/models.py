@@ -701,3 +701,22 @@ class FAQ(models.Model):
 
     question = models.CharField(max_length=MAX_LEN_QUESTION)
     answer = models.TextField(blank=False)
+
+
+class Link(models.Model):
+    LINK_NO_TYPE = 0
+    LINK_LINKEDIN = 1
+    LINK_GITHUB = 2
+    LINK_FACEBOOK = 3
+    LINK_TWITTER = 4
+    LINK_TYPE = (
+        (LINK_NO_TYPE, ' '),
+        (LINK_LINKEDIN, 'LinkedIn'),
+        (LINK_GITHUB, 'Github'),
+        (LINK_FACEBOOK, 'Facebook'),
+        (LINK_TWITTER, 'Twitter'),
+    )
+
+    profile = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    type = models.PositiveIntegerField(choices=LINK_TYPE, null=False)
+    url = models.URLField(null=False)
