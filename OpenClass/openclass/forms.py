@@ -1,7 +1,9 @@
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile, Workshop, Question, Preference
+from .models import Profile, Workshop, Question, Preference, Link
 from .validators import UserFormValidator
 
 
@@ -79,3 +81,28 @@ class QuestionForm(ModelForm):
     class Meta:
         model = Question
         fields = ['question']
+
+
+class LinkForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.profile = kwargs.pop('profile', None)
+        super(LinkForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Link
+        fields = ['type', 'url']
+
+    def clean_type(self):
+        type = self.cleaned_data.get('type', False)
+        if type:
+            try:
+                profile = self.profile
+                link = Link.objects.get(profile=profile, type=type)
+                raise ValidationError(
+                            _("you can't have two link of the same type"),
+                            code='invalid'
+                            )
+            except Link.DoesNotExist:
+                pass
+        return type

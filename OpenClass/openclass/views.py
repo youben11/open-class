@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
 from django.forms.models import model_to_dict
+from django.forms import modelformset_factory
 from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
@@ -421,6 +422,8 @@ def submit_workshop(request):
 
 @login_required
 def user_settings(request):
+    LinkFormSet = modelformset_factory(Link, form=LinkForm)
+
     if request.method == "POST":
         user_settings_form = UserSettingsForm(
                                     request.POST,
@@ -431,19 +434,29 @@ def user_settings(request):
                                     request.FILES,
                                     instance=request.user.profile
                                     )
+        form_kwargs = {'profile': request.user.profile}
+        link_formset = LinkFormSet(request.POST, form_kwargs=form_kwargs)
+
         if user_settings_form.is_valid():
             user_settings_form.save()
         if profile_settings_form.is_valid():
             profile_settings_form.save()
+        if link_formset.is_valid():
+            links = link_formset.save(commit=False)
+            for link in links:
+                link.profile = request.user.profile
+                link.save()
     else:
         user_settings_form = UserSettingsForm(instance=request.user)
         profile_settings_form = ProfileSettingsFrom(
                                                 instance=request.user.profile
                                                 )
+        link_formset = LinkFormSet()
 
     context = {
                 "user_settings_form": user_settings_form,
-                "profile_settings_form": profile_settings_form
+                "profile_settings_form": profile_settings_form,
+                "link_formset": link_formset,
               }
     return render(request, "openclass/user-settings.html", context)
 

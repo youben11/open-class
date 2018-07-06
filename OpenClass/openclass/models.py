@@ -718,5 +718,9 @@ class Link(models.Model):
     )
 
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE)
-    type = models.PositiveIntegerField(choices=LINK_TYPE, null=False)
+    type = models.PositiveIntegerField(
+                            choices=LINK_TYPE,
+                            null=False,
+                            default=LINK_NO_TYPE,
+                            )
     url = models.URLField(null=False)

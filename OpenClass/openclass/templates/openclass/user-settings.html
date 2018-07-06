@@ -36,6 +36,7 @@
                                 {% csrf_token %}
                                 {{user_settings_form.as_table}}
                                 {{profile_settings_form.as_table}}
+                                {{link_formset}}
                                 <button id="signup-btn" type="submit">Submit</button>
                             </form>
                         </div>
