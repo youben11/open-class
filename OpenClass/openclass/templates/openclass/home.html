@@ -35,7 +35,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">OpenClass</a>
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">{{config.SITE_NAME}}</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Menu
           <i class="fab fa-bars"></i>
@@ -84,13 +84,13 @@
       <div class="overlay">
         <div class="container">
           <div class="intro-text">
-            <div class="intro-lead-in">Welcome to OpenClass!</div>
+            <div class="intro-lead-in">Welcome to {{config.SITE_NAME}}!</div>
             <div class="intro-heading text-uppercase">Where you'll learn</div>
             {% if request.user.is_authenticated %}
             <a class="btn btn-xl text-uppercase text-white js-scroll-trigger" href="{% url 'openclass:profile' %}">Welcome @{{request.user.username}}</a>
             <p>Not @{{request.user.username}}? <a href="{% url 'openclass:logout' %}">Logout</a></p>
             {% else %}
-            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="{% url 'openclass:signup' %}">Join OpenClass</a>
+            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="{% url 'openclass:signup' %}">Join {{config.SITE_NAME}}</a>
             <p>Already a user? <a href="{% url 'openclass:login' %}">Login</a></p>
             {% endif %}
           </div>
@@ -118,7 +118,7 @@
                     </div> 
                     <div class="filter"></div>
                     <div class="footer btn-center">
-                        <a class="btn btn-neutral btn-round btn-fill">OpenClass</a> 
+                        <a class="btn btn-neutral btn-round btn-fill">{{config.SITE_NAME}}</a>
                     </div>                            
                 </div> 
                 <!-- END Card -->  
@@ -134,7 +134,7 @@
                     </div> 
                     <div class="filter"></div>
                     <div class="footer btn-center">
-                        <a class="btn btn-neutral btn-round btn-fill">OpenClass</a> 
+                        <a class="btn btn-neutral btn-round btn-fill">{{config.SITE_NAME}}</a>
                     </div>                            
                 </div> 
                 <!-- END Card -->  
@@ -150,7 +150,7 @@
                     </div> 
                     <div class="filter"></div>
                     <div class="footer btn-center">
-                        <a class="btn btn-neutral btn-round btn-fill">OpenClass</a> 
+                        <a class="btn btn-neutral btn-round btn-fill">{{config.SITE_NAME}}</a>
                     </div>                            
                 </div> 
                 <!-- END Card -->                                    
@@ -212,7 +212,7 @@
         <div class="row">
           <div class="col-lg-12 text-center">
             <h2 class="section-heading text-uppercase">About</h2>
-            <h3 class="section-subheading text-muted">OpenClass is a web app that promote information sharing through organized workshops.</h3>
+            <h3 class="section-subheading text-muted">{{config.SITE_DESCRIPTION}}</h3>
             <p><a href="https://github.com/youben11/open-class" target="_blank"><i class="fab fa-github" style="font-size: 34px;"></i> Contribute on GitHub</a></p>
           </div>
         </div>
@@ -414,7 +414,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-4">
-            <span class="copyright">Copyright &copy; OpenClass 2018</span>
+            <span class="copyright">Copyright &copy; {{config.SITE_NAME}} 2018</span>
           </div>
           <div class="col-md-4">
             <ul class="list-inline social-buttons">

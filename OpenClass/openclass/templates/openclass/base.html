@@ -26,7 +26,7 @@
     <header class="header">
       <div class="header__content row text-center">
         <a class="openclass-navbar-logo" href="{% url 'openclass:index' %}">
-        OpenClass
+        {{config.SITE_NAME}}
         </a>
         <a class="header__toggle-menu" href="#0" title="Menu"><span>Menu</span></a>
         <nav class="header__nav-wrap navbar navbar-expand-lg">
@@ -82,7 +82,7 @@
       <div class="s-footer__main">
         <div class="row">
           <div class="col-two md-four mob-full s-footer__sitelinks">
-            <h4>OpenClass</h4>
+            <h4>{{config.SITE_NAME}}</h4>
             <ul class="s-footer__linklist">
               <li><a href="{% url 'openclass:index' %}">Home</a></li>
               <li><a href="{% url 'openclass:workshops_list' %}">Workshops</a></li>
@@ -118,8 +118,8 @@
           </div>
           <!-- end s-footer__social -->
           <div class="col-five md-full end s-footer__subscribe">
-            <h4>OpenClass</h4>
-            <p>OpenClass is a web app that promote information sharing through organized workshops.</p>
+            <h4>{{config.SITE_NAME}}</h4>
+            <p>{{config.SITE_DESCRIPTION}}</p>
           </div>
           <!-- end s-footer__subscribe -->
         </div>
@@ -129,7 +129,7 @@
         <div class="row">
           <div class="col-full">
             <div class="s-footer__copyright">
-              <span>© Copyright OpenClass 2018</span>
+              <span>© Copyright {{config.SITE_NAME}} 2018</span>
             </div>
           </div>
         </div>
