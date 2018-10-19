@@ -11,7 +11,7 @@
     <h1 class="about-title">About OpenClass</h1>
     </div>
   <div class="row text-white" style="display:flex;justify-content:center;align-items:center;">
-        <p class="website-decripption">OpenClass is a web app that promote information sharing through organized workshops.</p>
+        <p class="website-decripption">{{ config.SITE_DESCRIPTION }}</p>
     </div>
   <div class="row" style="display:flex;justify-content:center;align-items:center;">
     <h2 class="team-header">Core Team</h2>
@@ -19,30 +19,30 @@
   <div class="row row-1 text-center">
         <div class="col-12 col-lg-10 col-xl-4">
           <div class="card card-custom">
-          <img class="card-img-top" src="{% static 'openclass/img/team/nadir.png' %}" alt="Card image cap">
+          <img class="card-img-top" src="{{ MEDIA_URL }}{{ config.CORE_TEAM_MEMBER_N0_PHOTO }}" alt="Card image cap">
           <div class="card-body">
-            <h4>Nadir Bounoua</h4>
-            <h5>Developer</h5>
+            <h4>{{ config.CORE_TEAM_MEMBER_N0_NAME }}</h4>
+            <h5>{{ config.CORE_TEAM_MEMBER_N0_DESCRIPTION }}</h5>
             <p class="card-text"></p>
           </div>
         </div>
         </div>
       <div class="col-12 col-lg-10 col-xl-4">
       <div class="card card-custom">
-        <img class="card-img-top" src="{% static 'openclass/img/team/ayoub.jpg' %}" alt="Card image cap">
+        <img class="card-img-top" src="{{ MEDIA_URL }}{{ config.CORE_TEAM_MEMBER_N1_PHOTO }}" alt="Card image cap">
         <div class="card-body">
-          <h4>Ayoub Benaissa</h4>
-          <h5>Developer</h5>
+          <h4>{{ config.CORE_TEAM_MEMBER_N1_NAME }}</h4>
+          <h5>{{ config.CORE_TEAM_MEMBER_N1_DESCRIPTION }}</h5>
           <p class="card-text"></p>
         </div>
       </div>
     </div>
      <div class="col-12 col-lg-10 col-xl-4">
        <div class="card card-custom">
-          <img class="card-img-top" src="{% static 'openclass/img/team/bilal.jpg' %}" alt="Card image cap">
+          <img class="card-img-top" src="{{ MEDIA_URL }}{{ config.CORE_TEAM_MEMBER_N2_PHOTO }}" alt="Card image cap">
           <div class="card-body">
-            <h4>Bilal Retiat</h4>
-            <h5>Developer</h5>
+            <h4>{{ config.CORE_TEAM_MEMBER_N2_NAME }}</h4>
+            <h5>{{ config.CORE_TEAM_MEMBER_N2_DESCRIPTION }}</h5>
             <p class="card-text"></p>
           </div>
         </div>
@@ -51,20 +51,20 @@
   <div class="row text-center" style="display:flex;justify-content:center;align-items:center;">
     <div class="col-12 col-lg-10 col-xl-4">
       <div class="card card-custom">
-      <img class="card-img-top" src="{% static 'openclass/img/team/aziz.png' %}" alt="Card image cap">
+      <img class="card-img-top" src="{{ MEDIA_URL }}{{ config.CORE_TEAM_MEMBER_N3_PHOTO }}" alt="Card image cap">
       <div class="card-body">
-        <h4>Abdelaziz Attouche</h4>
-        <h5>Developer</h5>
+        <h4>{{ config.CORE_TEAM_MEMBER_N3_NAME }}</h4>
+        <h5>{{ config.CORE_TEAM_MEMBER_N3_DESCRIPTION }}</h5>
         <p class="card-text"></p>
       </div>
       </div>
     </div>
     <div class="col-12 col-lg-10 col-xl-4">
      <div class="card card-custom">
-        <img class="card-img-top" src="{% static 'openclass/img/team/ahmed.jpg' %}" alt="Card image cap">
+        <img class="card-img-top" src="{{ MEDIA_URL }}{{ config.CORE_TEAM_MEMBER_N4_PHOTO }}" alt="Card image cap">
         <div class="card-body">
-          <h4>Ahmed Derkaoui</h4>
-          <h5>Developer</h5>
+          <h4>{{ config.CORE_TEAM_MEMBER_N4_NAME }}</h4>
+          <h5>{{ config.CORE_TEAM_MEMBER_N4_DESCRIPTION }}</h5>
           <p class="card-text"></p>
         </div>
       </div>
@@ -74,7 +74,7 @@
     <h1 class="about-title">Want to work with us ?</h1>
   </div>
     <div class="row text-white" style="display:flex;justify-content:center;align-items:center;">
-    <p><a href="https://github.com/youben11/open-class" target="_blank"><i class="fa fa-github" style="font-size: 34px;"></i> Contribute on GitHub</a></p>
+    <p><a href="{{ config.PROJECT_GITHUB_URL }}" target="_blank"><i class="fa fa-github" style="font-size: 34px;"></i> Contribute on GitHub</a></p>
     </div>
   <div class="row" style="display:flex;justify-content:center;align-items:center;">
         <p class="website-decripption"></p>
