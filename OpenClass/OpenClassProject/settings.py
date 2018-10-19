@@ -139,7 +139,7 @@ LOGOUT_REDIRECT_URL = 'openclass:index'
 
 #Media
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Email Config

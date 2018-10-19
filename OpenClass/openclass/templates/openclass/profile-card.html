@@ -4,7 +4,7 @@
                 <div class="cardheader"></div>
                 <div class="avatar">
                   {% if user.profile.photo %} 
-                    <img alt="" src="/{{user.profile.photo.url}}">
+                    <img alt="" src="{{user.profile.photo.url}}">
                   {% else %}
                     <img alt="" src="{% static 'openclass/img/avatars/default-avatar.png' %}">
                   {% endif %}

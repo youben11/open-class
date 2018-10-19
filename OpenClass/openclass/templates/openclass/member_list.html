@@ -43,7 +43,7 @@
                         <tr>
                           <td>
                             {% if p.profile.photo %}
-                            <a href = "{% url 'openclass:members_detail' p.username %}" > <img class="member-list img-responsive" src="/{{p.profile.photo.url}}"> </a>
+                            <a href = "{% url 'openclass:members_detail' p.username %}" > <img class="member-list img-responsive" src="{{p.profile.photo.url}}"> </a>
                             {% else %}
                             <a href = "{% url 'openclass:members_detail' p.username %}" > <img class="member-list img-responsive" src="{% static 'openclass/img/avatars/default-avatar.png' %}"> </a>
                             {% endif %}	
