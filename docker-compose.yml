@@ -1,19 +1,20 @@
 version: '2'
 
 services:
-  web:
+  django_app:
     build: .
     image: openclass:0.3
     volumes:
       - ./OpenClass:/opt/OpenClass
-    ports:
-      - "80:8000"
+      - static_volume:/opt/OpenClass/static
+      - media_volume:/opt/OpenClass/media
     depends_on:
       - "db"
       - "db_redis"
     restart: on-failure
     environment:
       - PG_HOSTNAME=db
+
   db:
     image: postgres:alpine
     environment:
@@ -21,12 +22,26 @@ services:
       - POSTGRES_USER=openclass
     volumes:
       - pgdata:/var/lib/postgresql/data
+
   db_redis:
     image: redis:alpine
     volumes:
       - redis_data:/data
 
+  nginx:
+    image: nginx:alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/opt/OpenClass/static
+      - media_volume:/opt/OpenClass/media
+    depends_on:
+      - django_app
+
 
 volumes:
   pgdata:
   redis_data:
+  static_volume:
+  media_volume:

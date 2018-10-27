@@ -21,6 +21,9 @@ echo "The Database has been updated"
 echo "Superuser..."
 cat /create_superuser.py | ./manage.py shell
 
+# collect static files
+./manage.py collectstatic --no-input
+
 # run the server
 echo "Starting the server..."
-./manage.py runserver 0.0.0.0:8000
+gunicorn OpenClassProject.wsgi --bind 0.0.0.0:8000
