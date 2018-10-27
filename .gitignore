@@ -15,3 +15,7 @@ _static
 
 # TODO
 TODO
+
+# media and collected static files
+OpenClass/static
+OpenClass/media
