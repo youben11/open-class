@@ -3,3 +3,4 @@ psycopg2
 Pillow>=5.1
 redis
 django-constance
+gunicorn
