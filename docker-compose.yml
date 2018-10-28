@@ -8,6 +8,10 @@ services:
       - migrations:/opt/OpenClass/openclass/migrations
       - static_volume:/opt/OpenClass/static
       - media_volume:/opt/OpenClass/media
+    networks:
+      - frontend
+      - backend_postgres
+      - backend_redis
     depends_on:
       - "db"
       - "db_redis"
@@ -22,11 +26,15 @@ services:
       - POSTGRES_USER=openclass
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend_postgres
 
   db_redis:
     image: redis:alpine
     volumes:
       - redis_data:/data
+    networks:
+      - backend_redis
 
   nginx:
     image: nginx:alpine
@@ -38,6 +46,8 @@ services:
       - media_volume:/opt/OpenClass/media
     depends_on:
       - django_app
+    networks:
+      - frontend
 
 
 volumes:
@@ -46,3 +56,8 @@ volumes:
   redis_data:
   static_volume:
   media_volume:
+
+networks:
+  frontend:
+  backend_postgres:
+  backend_redis:
