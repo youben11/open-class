@@ -2,8 +2,9 @@
 __pycache__/
 *.py[cod]
 
-# pycharm
+# IDEs and text editors
 .idea
+.vscode
 
 # Project Database
 OpenClass/db.sqlite3
