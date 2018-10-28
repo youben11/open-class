@@ -5,7 +5,7 @@ services:
     build: .
     image: openclass:0.3
     volumes:
-      - ./OpenClass:/opt/OpenClass
+      - migrations:/opt/OpenClass/openclass/migrations
       - static_volume:/opt/OpenClass/static
       - media_volume:/opt/OpenClass/media
     depends_on:
@@ -41,6 +41,7 @@ services:
 
 
 volumes:
+  migrations:
   pgdata:
   redis_data:
   static_volume:
