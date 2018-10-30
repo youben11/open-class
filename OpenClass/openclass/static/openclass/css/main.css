@@ -2141,6 +2141,7 @@ body.search-is-visible {
  * ## main navigation
  * ------------------------------------------------------------------- */
 .header__nav-wrap {
+   width: 100%;
    margin-top: 0px;
    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
    padding-top: 10px;
@@ -2285,7 +2286,7 @@ body.search-is-visible {
  * responsive:
  * main navigation
  * ------------------------------------------------------------------- */
-@media only screen and (min-width:801px) {
+@media only screen and (min-width:800px) {
    .header__nav li.has-children:hover > a::after, 
    .header__nav li.has-children:focus > a::after {
       -webkit-transform: rotate(225deg);
@@ -4231,12 +4232,19 @@ footer h4::after {
 /* NavBar customization by Nadir Bounoua */
 
 .openclass-navbar-logo {
-   font-size: 20px;
-   color: #ffffff;
+   font-size: 20px !important;
+   color: #ffffff !important;
    font-family: 'Kaushan Script', 'Helvetica Neue', Helvetica, Arial, cursive;
-   margin-left: 5%;
-   margin-top: 1vh;
+   margin-left: 5% !important;
+   margin-top: 1vh !important;
+   text-decoration: none !important;
 }
+
+.openclass-navbar-logo:hover {
+   color: #0054a5 !important;
+}
+
+
 @media only screen and (max-width: 800px) {
    .openclass-navbar-logo {
       font-size: 20px;
@@ -4257,7 +4265,7 @@ footer h4::after {
 }
 
 .openclass-nav {
-   margin-left: 25% !important;
+   margin-left: 10% !important;
    font-size: 16px !important;
 }
 
@@ -4265,3 +4273,7 @@ footer h4::after {
    color: #fff !important; 
 }
 /*# sourceMappingURL=main.css.map */
+/*input filter members list data table*/
+#member_list_filter label input {
+   height: 10px !important;
+}
