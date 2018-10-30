@@ -191,6 +191,7 @@
 
         }
       </script>
+      {% if request.user.is_authenticated %}
       <div id="Q" class="row mb-2">
       {% if workshop.animator == request.user.profile and workshop.is_now %}
 
@@ -226,6 +227,7 @@
       {%endif%}
 
   </div>
+  {% endif %}
 </div>
 </div>
 
