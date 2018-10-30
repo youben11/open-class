@@ -18,7 +18,9 @@ def is_moderator(user):
     return user.is_staff
 
 def index(request):
-    return render(request, "openclass/home.html")
+    best_workshops = Workshop.objects.all()
+    context = {"best_workshops": best_workshops}
+    return render(request, "openclass/home.html", context)
 
 def about(request):
     return render(request, "openclass/about.html")
