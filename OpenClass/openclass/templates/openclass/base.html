@@ -25,11 +25,11 @@
   <body>
     <header class="header">
       <div class="header__content row text-center">
+        <a class="header__toggle-menu" href="#0" title="Menu"><span>Menu</span></a>
+        <nav class="header__nav-wrap navbar navbar-expand-lg">
         <a class="openclass-navbar-logo" href="{% url 'openclass:index' %}">
         {{config.SITE_NAME}}
         </a>
-        <a class="header__toggle-menu" href="#0" title="Menu"><span>Menu</span></a>
-        <nav class="header__nav-wrap navbar navbar-expand-lg">
           <h2 class="header__nav-heading h6">Site Navigation</h2>
           <ul class="header__nav openclass-nav">
             <li class="has-children">
@@ -47,9 +47,7 @@
             <li><a class="openclass-nav-link" href="{% url 'openclass:index' %}" title="">Contact</a></li>
             {% if request.user.is_authenticated %}
             <li class="has-children">
-              <a class="openclass-nav-link" href="{% url 'openclass:profile' %}">
-              @{{ request.user.username }}
-              </a>
+              <a class="openclass-nav-link" id="profile-name" href="{% url 'openclass:profile' %}">@{{ request.user.username }}</a>
               <ul class="sub-menu">
                 <li><a class="openclass-nav-link" href="{% url 'openclass:profile' %}">Profile</a></li>
                 <li><a class="openclass-nav-link" href="{% url 'openclass:prefs' %}">Preferences</a></li>
@@ -144,6 +142,13 @@
     <script src="{% static 'openclass/js/plugins.js' %}"></script>
     <script src="{% static 'openclass/js/main.js' %}"></script>
     <script src="{% static 'openclass/js/forms-validators.js' %}"></script>
+    <script type="text/javascript">
+    var pv = document.getElementById('profile-name');
+    pv.title = pv.innerHTML;
+    console.log(pv.innerHTML.length);
+    pv.innerHTML = pv.innerHTML.substring(0, 10)+'...';
+  </script>
+
     {% block scripts %}
     {% endblock %}
   </body>
