@@ -453,7 +453,7 @@ def user_settings(request):
         profile_settings_form = ProfileSettingsFrom(
                                                 instance=request.user.profile
                                                 )
-        link_formset = LinkFormSet()
+        link_formset = LinkFormSet(queryset=Link.objects.filter(profile=request.user.profile))
 
     context = {
                 "user_settings_form": user_settings_form,

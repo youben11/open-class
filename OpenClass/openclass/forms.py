@@ -91,18 +91,18 @@ class LinkForm(ModelForm):
 
     class Meta:
         model = Link
-        fields = ['type', 'url']
+        fields = ['link_type', 'url']
 
-    def clean_type(self):
-        type = self.cleaned_data.get('type', False)
-        if type:
+    def clean_link_type(self):
+        link_type = self.cleaned_data.get('link_type', False)
+        if link_type:
             try:
                 profile = self.profile
-                link = Link.objects.get(profile=profile, type=type)
+                link = Link.objects.get(profile=profile, link_type=link_type)
                 raise ValidationError(
                             _("you can't have two link of the same type"),
                             code='invalid'
                             )
             except Link.DoesNotExist:
                 pass
-        return type
+        return link_type
