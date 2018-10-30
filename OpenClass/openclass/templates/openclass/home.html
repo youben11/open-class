@@ -55,10 +55,7 @@
               <a class="nav-link js-scroll-trigger" href="#about">About</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#team">Team</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+              <a class="nav-link js-scroll-trigger" href="#contact-us">Contact</a>
             </li>
             {% if request.user.is_authenticated %}
             <li class="nav-item">
@@ -99,11 +96,11 @@
     </header>
 
     <!-- workshops -->
-    <section id="workshops">
+    <section>
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase">Workshops</h2>
+            <h2 id="workshops" class="section-heading text-uppercase">Workshops</h2>
             <!--h3 class="section-subheading text-muted">You can find all the workshops <a href="{% url 'openclass:workshops_list' %}">here!</a></h3-->
           </div>
         </div>
@@ -160,11 +157,11 @@
     </section>
 
     <!-- Awards Grid -->
-    <section class="bg-light" id="awards">
+    <section class="bg-light">
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase">Awards</h2>
+            <h2 id="awards" class="section-heading text-uppercase">Awards</h2>
             <h3 class="section-subheading text-muted">Learn new things and earn <a href="#">Badges!</a></h3>
           </div>
         </div>
@@ -198,11 +195,11 @@
     </section>
 
     <!-- About -->
-    <section id="about">
+    <section>
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase">About</h2>
+            <h2 id="about" class="section-heading text-uppercase">About</h2>
             <h3 class="section-subheading text-muted">{{config.SITE_DESCRIPTION}}</h3>
             <p><a href="https://github.com/youben11/open-class" target="_blank"><i class="fab fa-github" style="font-size: 34px;"></i> Contribute on GitHub</a></p>
           </div>
@@ -215,152 +212,12 @@
       </div>
     </section>
 
-    <!-- Team -->
-    <section class="bg-light" id="team">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase">Our Team</h2>
-            <h3 class="section-subheading text-muted">Developers of OpenClass.</h3>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-4">
-            <div class="team-member">
-              <img class="mx-auto rounded-circle" src="{% static 'openclass/img/team/nadir.png' %}" alt="">
-              <h4>Ahmed Nadir Bounoua</h4>
-              <p class="text-muted">Developer</p>
-              <ul class="list-inline social-buttons">
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-twitter"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-facebook"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-linkedin"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="team-member">
-              <img class="mx-auto rounded-circle" src="{% static 'openclass/img/team/ayoub.jpg' %}" alt="">
-              <h4>Ayoub Benaissa</h4>
-              <p class="text-muted">Developer</p>
-              <ul class="list-inline social-buttons">
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-twitter"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-facebook"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-linkedin"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="team-member">
-              <img class="mx-auto rounded-circle" src="{% static 'openclass/img/team/bilal.jpg' %}" alt="">
-              <h4>Bilal Retiat</h4>
-              <p class="text-muted">Developer</p>
-              <ul class="list-inline social-buttons">
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-twitter"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-facebook"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-linkedin"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="team-member">
-              <img class="mx-auto rounded-circle" src="{% static 'openclass/img/team/aziz.png' %}" alt="">
-              <h4>Abdelaziz Attouche</h4>
-              <p class="text-muted">Developer</p>
-              <ul class="list-inline social-buttons">
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-twitter"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-facebook"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-linkedin"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="team-member">
-              <img class="mx-auto rounded-circle" src="{% static 'openclass/img/team/ahmed.jpg' %}" alt="">
-              <h4>Ahmed Derkaoui</h4>
-              <p class="text-muted">Developer</p>
-              <ul class="list-inline social-buttons">
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-twitter"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-facebook"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fab fa-linkedin"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-8 mx-auto text-center">
-            <p class="large text-muted">Want to be part of the team?</p>
-            <p><a href="https://github.com/youben11/open-class" target="_blank"><i class="fab fa-github" style="font-size: 34px;"></i>Become a contributor!</a></p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Contact -->
     <section id="contact">
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase">Contact Us</h2>
+            <h2 id="contact-us" class="section-heading text-uppercase">Contact Us</h2>
             <h3 class="section-subheading text-muted">Share with us your opinion and suggestions!</h3>
           </div>
         </div>
