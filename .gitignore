@@ -20,3 +20,6 @@ TODO
 # media and collected static files
 OpenClass/static
 OpenClass/media
+
+# migrations
+OpenClass/openclass/migrations
