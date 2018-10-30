@@ -13,57 +13,54 @@
 </script>
 {% endblock %}
 {% block content %}
-
 <div class="container container-custom">
-
-  <div class="row my-4">
-    <div class="col-xs-12 col-lg-12 col-xl-12">
-
-      <h1 class="content-center  my-4">Welcome to the workshop submitting form !</h1>
-
-  </div>
-</div>
-  <div class="row my-4">
-    <div class="col-xs-12 col-lg-12 col-xl-12">
-
-      <p class="content-center">Hey !, if you reached this page, tha, we already thank you so much for the effort and the desire to share knowledge with our dear community memebers, we believe that your workshop is gonna be benifical for our community and for you especially. You will find below a form to provide us with your workshop informations, Good Luck !</p>
-
-  </div>
-</div>
-  <div class="row my-2">
-    <div class="col-xs-12 col-lg-12 col-xl-12">
-
-      <h2 class="content-center  my-2">Workshop page example:</h2>
-
+{% if request.user.profile.animated.count == 0 %}
+  <div class="row">
+    <h1 class="content-center my-4">Welcome to the workshop submitting form !</h1>
+    <div class="col-xs-12 col-lg-6 col-xl-6">
+    <div class="row my-4">
+      <div class="col-xs-12 col-lg-12 col-xl-12">
+        <p class="content-center">Hey !, if you reached this page, tha, we already thank you so much for the effort and the desire to share knowledge with our dear community memebers, we believe that your workshop is gonna be benifical for our community and for you especially. You will find below a form to provide us with your workshop informations, Good Luck !</p>
+      </div>
     </div>
-
-  </div>
-  <div class="row my-2">
-    <div class="col-xs-12 col-lg-12 col-xl-6">
-      <div class="card">
-        <div class="card-body">
-          <img class="card-img-top" src="{% static 'openclass/img/workshop_screenshot.png' %}" alt="Card image cap">
+    <div class="row">
+      <div class="col-xs-12 col-lg-12 col-xl-12">
+        <h2 class="content-center my-2">Workshop page example:</h2>
+      </div>
+    </div>
+    <div class="row my-2">
+      <div class="col-xs-6">
+        <p>You will find here an example of how your workshop page will look like, please choose an image of a 2:1 ratio for a good presentation of your workshop.</p>
+        <div class="card">
+          <div class="card-body">
+            <img class="card-img-top" src="{% static 'openclass/img/workshop_screenshot.png' %}" alt="Card image cap">
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-xs-12 col-lg-12 col-xl-6">
-      <p>You will find here an example of how your workshop page will look like, please choose an image of a 2:1 ratio for a good presentation of your workshop.</p>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xs-12 col-lg-3 col-xl-3">
     </div>
     <div class="col-xs-12 col-lg-6 col-xl-6">
-      <div class="text-left"><h3>Submit a Workshop</h3></div>
-    <form class="my-4" method="post" enctype="multipart/form-data" >
-      {% csrf_token %}
-      {{ workshop_form.as_p }}
-      <input type="submit"/>
-    </form>
-
+      <h3>Submit a Workshop</h3>
+      <form class="my-4" method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+        {{ workshop_form.as_p }}
+        <input type="submit"/>
+      </form>
     </div>
   </div>
+{% else %}
+  <div class="row">
+    <div class="col-xs-12 col-lg-6 col-xl-6">
+      <h3>Submit a Workshop</h3>    
+      <form class="my-4" method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+        {{ workshop_form.as_p }}
+        <input type="submit"/>
+      </form>
+    </div>
+  </div>
+{% endif %}
+
 </div>
 </div>
 
