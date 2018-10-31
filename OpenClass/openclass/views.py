@@ -453,7 +453,7 @@ def user_settings(request):
         profile_settings_form = ProfileSettingsFrom(
                                                 instance=request.user.profile
                                                 )
-        link_formset = LinkFormSet(queryset=Link.objects.filter(profile=request.user.profile))
+        link_formset = LinkFormSet()
 
     context = {
                 "user_settings_form": user_settings_form,
@@ -707,3 +707,19 @@ def user_questions(request):
     questions = questions.prefetch_related('workshop')
     context = {"questions": questions}
     return render(request, "openclass/user-questions.html", context)
+
+@login_required
+def scoreboard(request):
+    if request.method == 'GET':
+        filters = Q(is_active=True, is_superuser=False)
+        users = Profile.objects.order_by('-score')
+        if users[0]:
+            first = users[0]
+            if users[1]:
+                second = users[1]
+                if users[2]:
+                    third = users[2]
+                    return render(request, "openclass/scoreboard.html", {"users":users,'first':first,'second':second,'third':third})
+                return render(request, "openclass/scoreboard.html", {"users":users,'first':first,'second':second})
+            return render(request, "openclass/scoreboard.html", {"users":users,'first':first})
+        return render(request, "openclass/scoreboard.html", {"users":users})

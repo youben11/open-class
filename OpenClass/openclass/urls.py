@@ -40,6 +40,7 @@ urlpatterns = [
     path('workshops/register/',views.register_to_workshop, name='register_to_workshop'),
     path('workshops/tag/', views.workshops_filter_tag, name='workshops_filter_tag'),
     path('workshops/upcoming/', views.upcoming_workshops_list, name='upcoming_workshops_list'),
+    path('scoreboard/', views.scoreboard, name='scoreboard')
     #path('workshops/date/<str:filter>/', views.workshops_filter_date, name='workshops_filter_date')
 
 

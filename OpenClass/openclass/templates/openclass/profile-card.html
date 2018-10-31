@@ -23,16 +23,16 @@
                     {% endif %}
                     <div class="desc score">{{user.profile.score}} pts</div>
                     {% for link in user.profile.link_set.all %}
-                        {% if link.type == 1 %}
+                        {% if link.link_type == 1 %}
                             <a href="{{ link.url }}"><i class="fa fa-linkedin-square" aria-hidden="true" style="font-size: 30px"></i></a>
                         {% endif %}
-                        {% if link.type == 2 %}
+                        {% if link.link_type == 2 %}
                             <a href="{{ link.url }}"><i class="fa fa-github-square" aria-hidden="true" style="font-size: 30px"></i></a>
                         {% endif %}
-                        {% if link.type == 3 %}
+                        {% if link.link_type == 3 %}
                            <a href="{{ link.url }}"><i class="fa fa-facebook-square" aria-hidden="true" style="font-size: 30px"></i></a>
                         {% endif %}
-                        {% if link.type == 4 %}
+                        {% if link.link_type == 4 %}
                             <a href="{{ link.url }}"><i class="fa fa-twitter-square" aria-hidden="true" style="font-size: 30px"></i></a>
                         {% endif %}
                     {% endfor %}

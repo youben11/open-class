@@ -59,9 +59,7 @@
             </li>
             {% if request.user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="{% url 'openclass:profile' %}">
-              @{{ request.user.username }}
-              </a>
+              <a id="profile-name" class="nav-link js-scroll-trigger" href="{% url 'openclass:profile' %}">@{{ request.user.username }}</a>
             </li>
             {% else %}
             <li class="nav-item">
@@ -309,7 +307,13 @@
 
     <!-- Custom scripts for this template -->
     <script src="{% static 'openclass/js/home.js' %}"></script>
-
+    <script type="text/javascript">
+      var pv = document.getElementById('profile-name');
+      pv.title = pv.innerHTML;
+      if (pv.innerHTML.length > 10) {
+        pv.innerHTML = pv.innerHTML.substring(0, 10)+'...';
+      }    
+    </script>
   </body>
 
 </html>
