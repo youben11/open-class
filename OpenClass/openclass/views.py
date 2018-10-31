@@ -436,8 +436,8 @@ def user_settings(request):
                                     request.FILES,
                                     instance=request.user.profile
                                     )
-        form_kwargs = {'profile': request.user.profile}
-        link_formset = LinkFormSet(request.POST, form_kwargs=form_kwargs)
+        # form_kwargs = {'profile': request.user.profile}
+        link_formset = LinkFormSet(request.POST)
 
         if user_settings_form.is_valid():
             user_settings_form.save()
