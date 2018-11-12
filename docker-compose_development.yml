@@ -19,7 +19,7 @@ services:
     restart: on-failure
     environment:
       - PG_HOSTNAME=db
-      - DJANGO_SETTINGS_MODULE=OpenClassProject.settings.local
+      - DJANGO_SETTINGS_MODULE=OpenClassProject.settings.development
 
   db:
     image: postgres:alpine
