@@ -26,4 +26,4 @@ cat /create_superuser.py | ./manage.py shell
 
 # run the server
 echo "Starting the server..."
-gunicorn OpenClassProject.wsgi --bind 0.0.0.0:8000
+gunicorn OpenClassProject.wsgi --bind 0.0.0.0:8000 --reload
