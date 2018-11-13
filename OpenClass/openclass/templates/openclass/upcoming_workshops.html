@@ -1,0 +1,76 @@
+{% extends 'openclass/base.html' %}
+{% load staticfiles %}
+{% block headercontent %}
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css"> -->
+<link rel="stylesheet" href="{% static 'openclass/css/listworkshops.css' %}"/>
+
+{% endblock %}
+{% block content %}
+<script src="{% static 'openclass/js/csrf.js' %}"></script>
+<title>Workshop List - {{config.SITE_NAME}}</title>
+<div class="container">
+  <div class="row px-1">
+    <div class="col-12 col-lg-3 col-xl-3 col-filter px-0">
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+        </div>
+        <input type="text" class="form-control pl-4" id="inlineFormInputGroup" onchange="search_title()" placeholder="Search workshop">
+      </div>
+  <div class="card">
+    <div class="card-header" id="headingTwo">
+        <h4 class="collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Category
+        </h4>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
+      <div class="card-body">
+        {% for tag in tags %}
+            <a href="#" class="filter-tag card-link" onclick="search_tag(this.text)">{{tag.name}}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingThree">
+        <h4 class="collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          Date
+        </h4>
+    </div>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree">
+      <div class="card-body">
+        <a href="#" class="card-link filter-time" onclick="search_time(this.text)">Tomorrow</a>
+        <a href="#" class="card-link filter-time" onclick="search_time(this.text)">This week</a>
+        <a href="#" class="card-link filter-time" onclick="search_time(this.text)">Next week</a>
+        <a href="#" class="card-link filter-time" onclick="search_time(this.text)">This month</a>
+
+      </div>
+    </div>
+  </div>
+</div>
+  <div id="workshopsContainer" class="col-12 col-lg-9 col-xl-9">
+    {% include 'openclass/listworkshop_item.html' %}
+  </div>
+
+
+
+</div>
+</div>
+<script type="text/javascript" src="{% static 'openclass/js/bootstrap-material-design.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'openclass/js/pooper.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'openclass/js/workshops_filter.js' %}"></script>
+<script type="text/javascript">
+  function ajax(){
+    $.ajax({
+        type: "POST",
+        url: "{% url 'openclass:workshops_list_filter' %}",
+        data: {'time': time_filter_list, 'tag': tag_filter_list, 'title':input_value, 'upcoming': 'upcoming'},
+        success: function(result) {
+            $("#workshopsContainer").html(result)
+        },
+        error: function(error) {
+            alert("ERROR");
+        }
+    });
+  }
+</script>
+{% endblock %}

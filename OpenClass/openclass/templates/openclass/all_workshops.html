@@ -57,69 +57,20 @@
 </div>
 <script type="text/javascript" src="{% static 'openclass/js/bootstrap-material-design.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'openclass/js/pooper.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'openclass/js/workshops_filter.js' %}"></script>
 <script type="text/javascript">
-  	var tag_filters = document.getElementsByClassName('filter-tag');
-    var time_filters = document.getElementsByClassName('filter-time');
-    var tag_container = document.getElementById('tag-list');
-    var tag_filter_front;
-    var time_filter_front;
-
-    var input_value;
-    var tag_filter_list = [];
-    var time_filter_list = [];
-
-    function search_tag(data) {
-      tag_filter_list.push(data)
-      ajax()
-    }
-
-    function search_time(data) {
-      time_filter_list.push(data);
-      ajax()
-    }
-
-    function ajax(){
-      $.ajax({
+  function ajax(){
+    $.ajax({
         type: "POST",
-        url: "{{ request.path }}",
+        url: "{% url 'openclass:workshops_list_filter' %}",
         data: {'time': time_filter_list, 'tag': tag_filter_list, 'title':input_value},
         success: function(result) {
-              $("#workshopsContainer").html(result)
+            $("#workshopsContainer").html(result)
         },
         error: function(error) {
             alert("ERROR");
         }
-      });
-    }
-
-    function search_again_tag(data) {
-     for (var k = 0; k < tag_filter_list.length; k++) {
-       if (tag_filter_list[k] === data){
-         tag_filter_list.splice(k, 1);
-         k=-1;
-       }
-     }
-     ajax()
-   }
-
-   function search_again_time(data) {
-    for (var k = 0; k < time_filter_list.length; k++) {
-      if (time_filter_list[k] === data){
-        time_filter_list.splice(k, 1);
-        k=-1;
-      }
-    }
-    ajax()
+    });
   }
-
-
-
-
-  function search_title() {
-    var input = document.getElementById('inlineFormInputGroup');
-    input_value=input.value.toLowerCase();
-    ajax()
-  }
-
 </script>
 {% endblock %}
