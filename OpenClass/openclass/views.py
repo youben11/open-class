@@ -731,11 +731,11 @@ def scoreboard(request):
     if request.method == 'GET':
         filters = Q(is_active=True, is_superuser=False)
         users = Profile.objects.order_by('-score')
-        if users[0]:
+        if users.count() > 1:
             first = users[0]
-            if users[1]:
+            if users.count() > 2:
                 second = users[1]
-                if users[2]:
+                if users.count() > 3:
                     third = users[2]
                     return render(request, "openclass/scoreboard.html", {"users":users,'first':first,'second':second,'third':third})
                 return render(request, "openclass/scoreboard.html", {"users":users,'first':first,'second':second})

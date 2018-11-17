@@ -7,7 +7,7 @@
 <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
 <script type="text/javascript">
   $(document).ready(function() {
-    jQuery('#member_list').DataTable();
+    jQuery('#scoreboard_list').DataTable();
   } );
 </script>
 <script src="{% static 'openclass/js/scoreboard.js' %}"></script>
@@ -29,7 +29,7 @@
               <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
                   <div class="list-group text-center table-responsive">
-                    <table id="member_list" class="table" data-page-length='25'>
+                    <table id="scoreboard_list" class="table" data-page-length='25'>
                       <thead>
                         <tr>
                           <th scope="col" data-orderable='false'>Avatar</th>
@@ -41,48 +41,48 @@
                       </thead>
                       <tbody>
                         {% for p in users %}
-                        {% if user.pk == p.user.pk %}
-                        <tr style="background-color: #eaeaeb;">
-                        {% else %}
-                        <tr>
-                        {% endif %} 
-                          <td>
-                            {% if p.photo %}
-                            <a href = "{% url 'openclass:members_detail' p.user.username %}" > <img class="member-list img-responsive" src="{{p.photo.url}}"> </a>
-                            {% else %}
-                            <a href = "{% url 'openclass:members_detail' p.user.username %}" > <img class="member-list img-responsive" src="{% static 'openclass/img/avatars/default-avatar.png' %}"> </a>
-                            {% endif %}	
-                          </td>
-                          <th scope="row">
-                            <a href = "{% url 'openclass:members_detail' p.user.username %}" >@{{p.user.username}} </a>
-                          </th>
-                          <td>
-                            {{p.user.first_name}}
-                          </td>
-                          <td>
-                            {{p.user.last_name}}
-                          </td>
-                          <td>
-                            <center>{{p.score}}</center>
-                            <center>
-                            {% if first is not None %}
-                              {% if first.pk == p.pk %}
-                                <img class="member-list img-responsive" src="{% static 'openclass/img/medals/medal-first-place.png' %}">
+                          {% if user.pk == p.user.pk %}
+                          <tr style="background-color: #eaeaeb;">
+                          {% else %}
+                          <tr>
+                          {% endif %} 
+                            <td>
+                              {% if p.photo %}
+                              <a href = "{% url 'openclass:members_detail' p.user.username %}" > <img class="member-list img-responsive" src="{{p.photo.url}}"> </a>
+                              {% else %}
+                              <a href = "{% url 'openclass:members_detail' p.user.username %}" > <img class="member-list img-responsive" src="{% static 'openclass/img/avatars/default-avatar.png' %}"> </a>
+                              {% endif %}	
+                            </td>
+                            <th scope="row">
+                              <a href = "{% url 'openclass:members_detail' p.user.username %}" >@{{p.user.username}} </a>
+                            </th>
+                            <td>
+                              {{p.user.first_name}}
+                            </td>
+                            <td>
+                              {{p.user.last_name}}
+                            </td>
+                            <td>
+                              <center>{{p.score}}</center>
+                              <center>
+                              {% if first is not None %}
+                                {% if first.pk == p.pk %}
+                                  <img class="member-list img-responsive" src="{% static 'openclass/img/medals/medal-first-place.png' %}">
+                                {% endif %}
                               {% endif %}
-                            {% endif %}
-                            {% if second is not None %}
-                              {% if second.pk == p.pk %}
-                                <img class="member-list img-responsive" src="{% static 'openclass/img/medals/medal-second-place.png' %}">
+                              {% if second is not None %}
+                                {% if second.pk == p.pk %}
+                                  <img class="member-list img-responsive" src="{% static 'openclass/img/medals/medal-second-place.png' %}">
+                                {% endif %}
                               {% endif %}
-                            {% endif %}
-                            {% if third is not None %}
-                              {% if third.pk == p.pk %}
-                                <img class="member-list img-responsive" src="{% static 'openclass/img/medals/medal-third-place.png' %}">
+                              {% if third is not None %}
+                                {% if third.pk == p.pk %}
+                                  <img class="member-list img-responsive" src="{% static 'openclass/img/medals/medal-third-place.png' %}">
+                                {% endif %}
                               {% endif %}
-                            {% endif %}
-                          </center>
-                          </td>
-                        </tr>
+                            </center>
+                            </td>
+                          </tr>
                         {% endfor %}
                       </tbody>
                       <!-- <tfoot>
