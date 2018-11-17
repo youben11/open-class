@@ -23,3 +23,6 @@ OpenClass/media
 
 # migrations
 OpenClass/openclass/migrations
+
+# django settings secret key
+config/django/django_secret_key.txt

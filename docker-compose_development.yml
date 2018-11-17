@@ -1,0 +1,65 @@
+version: '2'
+
+services:
+  django_app:
+    build: .
+    image: openclass:0.3
+    volumes:
+      - ./OpenClass:/opt/OpenClass
+      - migrations:/opt/OpenClass/openclass/migrations
+      - static_volume:/opt/OpenClass/static
+      - media_volume:/opt/OpenClass/media
+    networks:
+      - frontend
+      - backend_postgres
+      - backend_redis
+    depends_on:
+      - "db"
+      - "db_redis"
+    restart: on-failure
+    environment:
+      - PG_HOSTNAME=db
+      - DJANGO_SETTINGS_MODULE=OpenClassProject.settings.development
+
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_PASSWORD=openclass
+      - POSTGRES_USER=openclass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend_postgres
+
+  db_redis:
+    image: redis:alpine
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend_redis
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/opt/OpenClass/static
+      - media_volume:/opt/OpenClass/media
+    depends_on:
+      - django_app
+    networks:
+      - frontend
+
+
+volumes:
+  migrations:
+  pgdata:
+  redis_data:
+  static_volume:
+  media_volume:
+
+networks:
+  frontend:
+  backend_postgres:
+  backend_redis:

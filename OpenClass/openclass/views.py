@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse, HttpRequest
+from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
@@ -224,11 +224,13 @@ def moderation_submitted_workshops_decision(request):
     return JsonResponse(response)
 
 
-def workshops_list(request):
+def workshops_list_filter(request):
     if request.is_ajax():
         tag_names = list(set(request.POST.getlist('tag[]')))
         time_filters = list(set(request.POST.getlist('time[]')))
         title_filter = request.POST.get('title',"")
+        upcoming_filter = request.POST.get('upcoming', "")
+        context = {}
         if tag_names or time_filters or title_filter:
             today = timezone.now().date()
             this_week = today + datetime.timedelta(6)
@@ -260,37 +262,53 @@ def workshops_list(request):
             if title_filter:
                 filters |= Q(title__icontains=title_filter)
             # all filters were ORed to make a final filter
-            workshop_list = Workshop.objects.filter(filters).distinct()
-            workshop_list = workshop_list.prefetch_related('topics')
 
-            context = {
-                        'workshop_list': workshop_list,
-                        'times' : time_filters,
-                        'tag_names': tag_names
-                      }
-            return render(request,"openclass/listworkshop_item.html",context)
+            # keep only upcoming workshops
+            if upcoming_filter:
+                filters &= Q(
+                    start_date__gte=timezone.now(),
+                    status=Workshop.ACCEPTED
+                )
+
+            context["times"] = time_filters
+            context["tag_names"] = tag_names
         else:
-            workshops = Workshop.objects.filter(
-                                Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
-                                )
-            context = {"workshop_list":workshops}
-            return render(request, "openclass/listworkshop_item.html", context)
+            # no filters are selected
+            # return upcoming workshops or all workshops
+            if upcoming_filter:
+                filters = Q(
+                    start_date__gte=timezone.now(),
+                    status=Workshop.ACCEPTED,
+                )
+            else:
+                filters = Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
 
-    else :
+        workshop_list = Workshop.objects.filter(filters).distinct()
+        workshop_list = workshop_list.prefetch_related('topics')
+        context["workshop_list"] = workshop_list
+        return render(request, "openclass/listworkshop_item.html", context)
+    else:
+        raise Http404
+
+
+def all_workshops(request):
         workshops = Workshop.objects.filter(
                         Q(status=Workshop.ACCEPTED) | Q(status=Workshop.DONE)
                         ).prefetch_related('topics')
         tags = Tag.objects.all()
         context = {"workshop_list":workshops, "tags":tags}
-        return render(request, "openclass/listworkshop.html", context)
+        return render(request, "openclass/all_workshops.html", context)
+
 
 def upcoming_workshops_list(request):
     workshops = Workshop.objects.filter(
                                     start_date__gte=timezone.now(),
                                     status=Workshop.ACCEPTED,
                                     ).prefetch_related('topics')
-    context = {"workshop_list":workshops}
-    return render(request, "openclass/listworkshop.html", context)
+    tags = Tag.objects.all()
+    context = {"workshop_list": workshops, "tags": tags}
+    return render(request, "openclass/upcoming_workshops.html", context)
+
 
 def workshops_detail(request, workshop_pk):
     workshop = get_object_or_404(
