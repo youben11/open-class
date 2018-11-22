@@ -4277,3 +4277,7 @@ footer h4::after {
 #member_list_filter label input {
    height: 10px !important;
 }
+
+#scoreboard_list_filter label input {
+  height: 10px !important;
+}

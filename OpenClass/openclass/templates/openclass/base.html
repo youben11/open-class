@@ -41,7 +41,13 @@
 
               </ul>
             </li>
-            <li><a class="openclass-nav-link" href="{% url 'openclass:badges_list' %}" title="">Awards</a></li>
+            <li class="has-children">
+              <a class="openclass-nav-link" href="#0" title="">Awards</a>
+              <ul class="sub-menu">
+                <li><a class="openclass-nav-link" href="{% url 'openclass:badges_list' %}" title="">Awards</a></li>
+                <li><a class="openclass-nav-link" href="{% url 'openclass:leaderboard' %}">Leaderboard</a></li>
+              </ul>
+            </li>
             <li><a class="openclass-nav-link" href="{% url 'openclass:faq' %}" title="">FAQ</a></li>
             <li><a class="openclass-nav-link" href="{% url 'openclass:about' %}" title="">About</a></li>
             <li><a class="openclass-nav-link" href="{% url 'openclass:index' %}" title="">Contact</a></li>
@@ -143,12 +149,12 @@
     <script src="{% static 'openclass/js/main.js' %}"></script>
     <script src="{% static 'openclass/js/forms-validators.js' %}"></script>
     <script type="text/javascript">
-    var pv = document.getElementById('profile-name');
-    pv.title = pv.innerHTML;
-    console.log(pv.innerHTML.length);
-    pv.innerHTML = pv.innerHTML.substring(0, 10)+'...';
-  </script>
-
+      var pv = document.getElementById('profile-name');
+      pv.title = pv.innerHTML;
+      if (pv.innerHTML.length > 10) {
+        pv.innerHTML = pv.innerHTML.substring(0, 10)+'...';
+      }    
+    </script>
     {% block scripts %}
     {% endblock %}
   </body>
