@@ -729,8 +729,8 @@ def user_questions(request):
 @login_required
 def scoreboard(request):
     if request.method == 'GET':
-        filters = Q(is_active=True, is_superuser=False)
-        users = Profile.objects.order_by('-score')
+        filters = Q(user__is_active=True, user__is_superuser=False)
+        users = Profile.objects.filter(filters).order_by('-score')
         if users.count() > 1:
             first = users[0]
             if users.count() > 2:
