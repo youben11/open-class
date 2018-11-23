@@ -35,7 +35,7 @@
           </div>
         </div>
           <div class="col-xs-12 col-lg-12 col-xl-4 col-progress-btn">
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_authenticated and request.user.profile != workshop.animator %}
             <div>
               {% if is_canceled %}
               <div id="errorMessage" class="alert alert-danger mt-3" role="alert">
