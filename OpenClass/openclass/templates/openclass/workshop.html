@@ -157,7 +157,10 @@
             url: "{% url 'openclass:register_to_workshop' %}",
             dataType: "json",
             traditional: true,
-            data: {'workshop_pk': {{workshop.pk}}},
+            data: {
+              workshop_pk: '{{ workshop.pk }}',
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
             success: function(data) {
                 if (data['status'] === "registered"){
                   $("#register-btn").hide();
@@ -177,7 +180,10 @@
             url: "{% url 'openclass:cancel_registration' %}",
             dataType: "json",
             traditional: true,
-            data: {'workshop_pk': {{workshop.pk}}},
+            data: {
+              workshop_pk: '{{ workshop.pk }}',
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
             success: function(data) {
                 if (data['status'] === "canceled"){
                   $("#cancel-btn").hide();
