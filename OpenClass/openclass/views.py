@@ -726,18 +726,21 @@ def user_questions(request):
     context = {"questions": questions}
     return render(request, "openclass/user-questions.html", context)
 
+
 @login_required
 def scoreboard(request):
-    if request.method == 'GET':
-        filters = Q(user__is_active=True, user__is_superuser=False)
-        users = Profile.objects.filter(filters).order_by('-score')
-        if users.count() >= 1:
-            first = users[0]
-            if users.count() >= 2:
-                second = users[1]
-                if users.count() >= 3:
-                    third = users[2]
-                    return render(request, "openclass/scoreboard.html", {"users":users,'first':first,'second':second,'third':third})
-                return render(request, "openclass/scoreboard.html", {"users":users,'first':first,'second':second})
-            return render(request, "openclass/scoreboard.html", {"users":users,'first':first})
-        return render(request, "openclass/scoreboard.html", {"users":users})
+    filters = Q(user__is_active=True, user__is_superuser=False)
+    users = Profile.objects.filter(filters).order_by('-score')
+
+    # select the top3, then pad the list with None
+    top_three = list(users[:3])
+    top_three += [None for _ in range(len(top_three), 3)]
+    first, second, third = top_three
+
+    context = {
+        "users": users,
+        'first': first,
+        'second': second,
+        'third': third,
+    }
+    return render(request, "openclass/scoreboard.html", context)
